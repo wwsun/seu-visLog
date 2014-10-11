@@ -85,7 +85,7 @@ function updateSvg(sourceFile) {
 }
 
 var overviewData = "data/overview.json",
-    outsiteData = "data/web.json";
+    outsiteData = "data/out.json";
 
 updateSvg(overviewData);
 
