@@ -10,7 +10,7 @@ var colors = d3.scale.category20();
 //1.init
 var force = d3.layout.force()
     .size([width,height])
-    .linkDistance([100])
+    .linkDistance([150])
     .charge([-100]);
 
 
@@ -44,8 +44,12 @@ function updateSvg(sourceFile) {
             .data(dataset.nodes)
             .enter()
             .append("circle")
-            .attr("r", 10)
-            .style("fill", "#009966")
+            .attr("r", function(d){
+                return d.size+3;
+            })
+            .style("fill", function(d){
+                return colors(d.group);
+            })
             .call(force.drag);
 
 
@@ -85,7 +89,7 @@ function updateSvg(sourceFile) {
 }
 
 var overviewData = "data/overview.json",
-    outsiteData = "data/out.json";
+    outsiteData = "data/outsite.json";
 
 updateSvg(overviewData);
 

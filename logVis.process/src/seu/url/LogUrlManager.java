@@ -48,9 +48,20 @@ public class LogUrlManager {
 	/**
 	 * 
 	 * @param input		3rd.txt
-	 * @param output	4th.txt
+	 * @param output	4th.txt - 仅保留入站的host，和请求页面的host
+     *        (request_host, referer_host)
 	 */
 	public void getHostOfRequestAndReferer(String input, String output){
 		LogFilter.getRequestAndRefererHost(input, output);
 	}
+
+    /**
+     *
+     * @param input     4th_count.txt   (request_host, referer_host, dup_count)
+     * @param output    5th.txt         (referer_host, dup_count, referer_domain)
+     *        then      (request_host, referer_host, dup_count, referer_domain) -> JSON file
+     */
+    public void getOutsiteHostDistribution(String input, String output){
+        LogFilter.getOutsiteHostDistribution(input, output);
+    }
 }
