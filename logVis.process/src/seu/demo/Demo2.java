@@ -11,6 +11,7 @@ public class Demo2 {
 
     public static void main(String[] args) {
         LogToJSONConverter jsonCon = LogToJSONConverter.GetInstance();
-        jsonCon.csvToJSON("5th.csv","outsite.json");
+        //jsonCon.csvToJSON("5th.csv","outsite.json");
+        jsonCon.dataToJSON("4th_count.txt", "outsite2.json");
     }
 }

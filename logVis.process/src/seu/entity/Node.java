@@ -1,9 +1,14 @@
-package seu;
+package seu.entity;
 
 /**
  * Created by Weiwei on 10/13/2014.
  */
 public class Node {
+
+    private String name;
+    private int weight;
+    private String domain;
+    private int group; // 0 - www.made-in-china.com
 
     public String getName() {
         return name;
@@ -29,9 +34,11 @@ public class Node {
         this.domain = domain;
     }
 
-    private String name;
-    private int weight;
-    private String domain;
+    public int getGroup() {
+        return group;
+    }
 
-
+    public void setGroup(int group) {
+        this.group = group;
+    }
 }

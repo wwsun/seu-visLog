@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="http://bootswatch.com/yeti/bootstrap.min.css">
 
     <link rel="stylesheet" href="assets/css/layout-well.css">
+
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.3/css/jquery.dataTables.css">
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js"></script>
     <script src="js/d3/d3.js"></script>
 </head>
 <body>
@@ -49,7 +53,8 @@
                     <h3 class="panel-title">Jump In/Out</h3>
                 </div>
                 <div class="panel-body">
-                    Panel content
+                    <p id="jumpin"></p>
+                    <p id="jumpout"></p>
                 </div>
             </div>
         </div>
@@ -59,8 +64,8 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Conversion Rate</h3>
                 </div>
-                <div class="panel-body">
-                    Panel content
+                <div class="panel-body" id="piechart">
+
                 </div>
             </div>
         </div>
@@ -70,13 +75,35 @@
                     <h3 class="panel-title">User Interests</h3>
                 </div>
                 <div class="panel-body">
-                    Panel content
+                    <p id="clickinfo"></p>
                 </div>
             </div>
         </div>
 
     </div>
     <!--/.row-->
+
+    <div class="row">
+        <table id="example" class="display" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>name</th>
+                <th>size</th>
+                <th>group</th>
+
+            </tr>
+            </thead>
+
+            <tfoot>
+            <tr>
+                <th>name</th>
+                <th>size</th>
+                <th>group</th>
+
+            </tr>
+            </tfoot>
+        </table>
+    </div>
 
 </div>
 <!--/.container-->

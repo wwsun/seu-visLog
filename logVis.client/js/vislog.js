@@ -3,17 +3,62 @@
  */
 
 var width = 1100;
-var height = 500;
+var height = 700;
 
 var colors = d3.scale.category20();
 
 //1.init
 var force = d3.layout.force()
     .size([width,height])
-    .linkDistance([150])
+    .linkDistance([100])
     .charge([-100]);
 
+var pie = d3.layout.pie();
 
+
+
+
+function drawPie(dataset){
+
+    var outerRadius = 150;
+    var innerRadius = 0;
+
+    if(d3.select("#pie")) {
+        removeSvg("pie");
+    }
+
+    var svg = d3.select("#piechart").append("svg").attr("width", 300).attr("height",300).attr("id","pie");
+
+    var arc = d3.svg.arc()
+        .innerRadius(innerRadius)
+        .outerRadius(outerRadius);
+
+
+    var arcs = svg.selectAll("g.arc")
+        .data(pie(dataset))
+        //.transition()
+        .enter()
+        .append("g")
+        .attr("class", "arc")
+        .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
+
+    //Draw arc paths
+    arcs.append("path")
+        .attr("fill", function(d, i) {
+            return colors(i);
+        })
+        .attr("d", arc);
+
+    //Labels
+    arcs.append("text")
+        .attr("transform", function(d) {
+            return "translate(" + arc.centroid(d) + ")";
+        })
+        .attr("text-anchor", "middle")
+        .text(function(d) {
+            return d.value;
+        });
+}
 
 //3. load data
 function updateSvg(sourceFile) {
@@ -37,7 +82,9 @@ function updateSvg(sourceFile) {
             .enter()
             .append("line")
             .style("stroke", "#ccc")
-            .style("stroke-width", 1);
+            .style("stroke-width", function(d){
+                return d.value;
+            });
 
         //5.create nodes
         var nodes = svg.selectAll("circle")
@@ -45,7 +92,7 @@ function updateSvg(sourceFile) {
             .enter()
             .append("circle")
             .attr("r", function(d){
-                return d.size+3;
+                return 7;
             })
             .style("fill", function(d){
                 return colors(d.group);
@@ -55,6 +102,10 @@ function updateSvg(sourceFile) {
 
         nodes.append("title").text(function (d) {
             return d.name;
+        });
+
+        edges.append("title").text(function (d) {
+            return d.value;
         });
 
 
@@ -82,28 +133,57 @@ function updateSvg(sourceFile) {
 
         nodes.on("click", function (d) {
             //if(d3.event.isDefaultPrevented()) return; //click suppressed
-            console.log("You clicked " + d.name);
+            //console.log("You clicked " + d.name);
+            d3.select("#jumpin").text(d.name);
+            d3.select("#jumpout").text(d.group);
+
+            //virtual dataset
+
+            var dataset = [];
+
+            for(var i=0; i< 5; i++){
+                var newData = Math.floor(Math.random()*10);
+                dataset.push(newData);
+            }
+            drawPie(dataset);
+
+            d3.select("#clickinfo").text("You clicked " + d.name);
         });
 
     });
 }
 
 var overviewData = "data/overview.json",
-    outsiteData = "data/outsite.json";
+    outsiteData = "data/outsite2.json";
 
 updateSvg(overviewData);
 
 function loadOverview() {
-    removeSvg();
+    removeSvg("forcesvg");
     updateSvg(overviewData);
 }
 
 function loadOutsite() {
-    removeSvg();
+    removeSvg("forcesvg");
     updateSvg(outsiteData);
+    loadOutsiteDataTable();//load data table
 }
 
-function removeSvg() {
-    var svg = document.getElementById("forcesvg");
-    svg.parentNode.removeChild(svg);
+function removeSvg(elementId) {
+    var svg = document.getElementById(elementId);
+    if(svg){
+        svg.parentNode.removeChild(svg);
+    }
+}
+
+function loadOutsiteDataTable() {
+
+    $('#example').dataTable( {
+        "ajax": "data/nodes.txt",
+        "columns": [
+            { "data": "name" },
+            { "data": "size" },
+            { "data": "group" }
+        ]
+    } );
 }

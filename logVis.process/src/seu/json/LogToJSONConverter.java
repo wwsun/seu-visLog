@@ -25,7 +25,18 @@ public class LogToJSONConverter {
      * @param output    -   outsite.json
      */
     public void csvToJSON(String input, String output){
-        JSONCreater.csvToJSON(input, output);
+        //JSONCreater.csvToJSON(input, output);
     }
 
+
+    /**
+     *
+     * @param input     -   4th.count.txt
+     * @param output    -   outsite2.json
+     *                  node: name, group
+     *                  link: source, target, value
+     */
+    public void dataToJSON(String input, String output) {
+        JSONCreater.dataToJSON(input, output);
+    }
 }
