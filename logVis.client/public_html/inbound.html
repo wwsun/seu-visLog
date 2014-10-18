@@ -2,27 +2,25 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>logVis: A server log visualization tool</title>
-    <link rel="stylesheet" href="http://bootswatch.com/yeti/bootstrap.min.css">
+    <title>logVis: The inbound flow analysis</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
 
-    <link rel="stylesheet" href="assets/css/layout-well.css">
+    <link rel="stylesheet" href="../assets/css/layout-well.css">
 
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.3/css/jquery.dataTables.css">
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="http://cdn.datatables.net/1.10.3/js/jquery.dataTables.min.js"></script>
-    <script src="js/d3/d3.js"></script>
+    <script src="../js/d3/d3.js"></script>
 </head>
 <body>
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.html">logVis</a>
+            <a class="navbar-brand" href="../index.html">logVis</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="index.html">Home</a></li>
-                <li><a href="public_html/inbound.html">Inbound</a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li class="active"><a href="inbound.html">Inbound</a></li>
                 <li><a href="">About</a></li>
             </ul>
         </div>
@@ -32,10 +30,9 @@
 <div class="container">
 
     <div class="row btn-group">
-        <button type="button" class="btn btn-default" onclick="loadOverview()">Overview</button>
-        <button type="button" class="btn btn-default" onclick="loadOutsite()">Outsite</button>
-        <button type="button" class="btn btn-default">Product</button>
-        <button type="button" class="btn btn-default">Supplier</button>
+        <button type="button" class="btn btn-primary" onclick="loadInboundOverview()">Overview</button>
+        <button type="button" class="btn btn-default" onclick="jumpInHandler()">Indegree</button>
+        <button type="button" class="btn btn-default" onclick="jumpOutHandler()">Outdegree</button>
     </div>
 
     <br>
@@ -84,30 +81,8 @@
     </div>
     <!--/.row-->
 
-    <div class="row">
-        <table id="example" class="display" cellspacing="0" width="100%">
-            <thead>
-            <tr>
-                <th>name</th>
-                <th>size</th>
-                <th>group</th>
-
-            </tr>
-            </thead>
-
-            <tfoot>
-            <tr>
-                <th>name</th>
-                <th>size</th>
-                <th>group</th>
-
-            </tr>
-            </tfoot>
-        </table>
-    </div>
-
 </div>
 <!--/.container-->
-<script src="js/vislog.js"></script>
+<script src="../js/inbound.js"></script>
 </body>
 </html>
