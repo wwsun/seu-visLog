@@ -8,7 +8,7 @@ var height = 700;
 var colors = d3.scale.category20();
 
 //init: force layout and svg canvas
-var force = d3.layout.force().size([width, height]).linkDistance([150]).charge([-100]);
+var force = d3.layout.force().size([width, height]).linkDistance([70]).charge([-100]);
 var svg = d3.select("#svgwrapper").append("svg").attr("width", width).attr("height", height).attr("id", "force");
 
 //create the svg
@@ -16,9 +16,9 @@ function createSvg(datafile) {
     d3.json(datafile, function (dataset) {
         force.nodes(dataset.nodes).links(dataset.links).start();
         var edges = svg.selectAll("line").data(dataset.links).enter()
-            .append("line").style("stroke", "#ccc").style("stroke-width", 3);
+            .append("line").style("stroke", "#ccc").style("stroke-width", 1);
         var nodes = svg.selectAll("circle").data(dataset.nodes).enter()
-            .append("circle").attr("r", 10).style("fill", function (d) {
+            .append("circle").attr("r", 5).style("fill", function (d) {
                 return colors(d.group)
             }).call(force.drag);
         nodes.append("title").text(function (d) {
@@ -57,7 +57,8 @@ function forceTick(force, edges, nodes) {
 }
 
 //page-load-init
-var inboundOverview = "../data/test/inbound.test.json";
+//var inboundOverview = "../data/test/inbound.test.json";
+var inboundOverview = "../data/outsite2.json";
 createSvg(inboundOverview);
 
 //handle the click of button 'overview'
@@ -101,4 +102,11 @@ function jumpOutHandler(){
         var red = Math.floor(colorScale(d.jumpout));
         return "rgb(" + red + ",0,0)";
     });
+}
+
+function degreeHandler(){
+    var nodes = svg.selectAll("circle");
+    nodes.attr("r", function (d) {
+        return Math.floor(Math.sqrt(d.weight));
+    })
 }
