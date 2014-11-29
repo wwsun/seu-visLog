@@ -154,7 +154,7 @@ function updateSvg(sourceFile) {
 }
 
 var overviewData = "data/overview.json",
-    outsiteData = "data/outsite2.json";
+    outsiteData = "data/outsite3.json";
 
 updateSvg(overviewData);
 
