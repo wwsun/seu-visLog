@@ -1,7 +1,3 @@
-#client-side
-/logVis.client/.idea/
-
-#log-process
-/logVis.process/bin/
-/logVis.process/.classpath
-/logVis.process/.project
+/.idea/
+/target/
+/src/main/resources/public/
