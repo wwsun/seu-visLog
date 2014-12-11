@@ -17,7 +17,7 @@ visLog is a visualization project for web server logs. The project is a cooperat
 1. Before you start the project you should connect to the MongoDB cluster first
 2. Using the following command to run the project in the project root folder
 
-		mvn compile exec:java -Dexec.mainClass=course.BlogController
+		mvn compile exec:java -Dexec.mainClass=me.wwsun.SiteController
 
 3. Open your browser, and visit the link of:
 		
