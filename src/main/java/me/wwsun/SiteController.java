@@ -26,6 +26,7 @@ public class SiteController {
 
     private final Configuration cfg;
     private final InboundDAO inboundDAO;
+    private final SessionDAO sessionDAO;
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
@@ -41,6 +42,7 @@ public class SiteController {
         final DB siteDatabase = mongoClient.getDB("sample");
 
         inboundDAO = new InboundDAO(siteDatabase);
+        sessionDAO = new SessionDAO(siteDatabase);
 
         //init of freemarker
         cfg = createFreemarkerConfiguration();
