@@ -11,7 +11,24 @@ import java.util.Set;
 public class Graph {
 
     private Set<String> nodes;
+    private Set<String> reqNodes;
     private List<DBObject> links;
+
+    public Graph() {}
+
+    public Graph(Set<String> nodes, Set<String> reqNodes, List<DBObject> links) {
+        this.nodes = nodes;
+        this.reqNodes = reqNodes;
+        this.links = links;
+    }
+
+    public Set<String> getReqNodes() {
+        return reqNodes;
+    }
+
+    public void setReqNodes(Set<String> reqNodes) {
+        this.reqNodes = reqNodes;
+    }
 
     public Set<String> getNodes() {
         return nodes;
@@ -27,5 +44,11 @@ public class Graph {
 
     public void setLinks(List<DBObject> links) {
         this.links = links;
+    }
+
+    public void addLayer(Graph nextLayer) {
+        this.nodes.addAll(nextLayer.getNodes());
+        this.links.addAll(nextLayer.getLinks());
+        this.reqNodes = nextLayer.reqNodes;
     }
 }

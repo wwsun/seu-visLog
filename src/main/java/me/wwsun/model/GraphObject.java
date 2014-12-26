@@ -11,6 +11,13 @@ public class GraphObject {
     private List<DBObject> nodeList;
     private List<DBObject> linkList;
 
+    public GraphObject() {}
+
+    public GraphObject(List<DBObject> nodeList, List<DBObject> linkList) {
+        this.nodeList = nodeList;
+        this.linkList = linkList;
+    }
+
     public List<DBObject> getNodeList() {
         return nodeList;
     }
