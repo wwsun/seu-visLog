@@ -27,7 +27,7 @@ public class Demo2 {
         final DB siteDatabase = mongoClient.getDB("sample");
 
         LinkDAO linkDAO = new LinkDAO(siteDatabase);
-        DBObject overviewGraph = linkDAO.getEffectiveLinks();
+        DBObject overviewGraph = linkDAO.getLinksByNodeName("www.made-in-china.com/", 2, 100);
 
         Path mainPage = null;
         try {
