@@ -19,7 +19,7 @@ public class JumpDAO {
         Integer sessionNums = null;
         if (cursor.hasNext()) {
             DBObject obj = cursor.next();
-            sessionNums = Integer.valueOf(obj.get("num").toString());
+            sessionNums = Integer.valueOf(obj.get("sum").toString());
         }
         return sessionNums;
     }

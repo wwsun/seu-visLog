@@ -1,9 +1,9 @@
 package me.wwsun;
 
 import com.mongodb.*;
-import com.mongodb.util.JSON;
 import me.wwsun.model.Graph;
 import me.wwsun.model.GraphObject;
+import me.wwsun.util.FileUtil;
 
 import java.util.*;
 
@@ -16,7 +16,58 @@ public class LinkDAO {
     private final String urlPattern = "(\\w+.\\w?)+";
     private final String HOMEPAGE = "www.made-in-china.com/";
 
-    public LinkDAO(final DB SiteDatabase) { links = SiteDatabase.getCollection("links"); }
+    public LinkDAO(final DB siteDatabase) { links = siteDatabase.getCollection("links"); }
+
+    public void getNodesDetail(Set<String> nodeSet, final int LIMIT) {
+
+        DBObject nodeDetailList = new BasicDBObject();
+        for (String nodeName : nodeSet) {
+            List<DBObject> refList = getTopReferers(nodeName, LIMIT);
+            List<DBObject> reqList = getTopTargets(nodeName, LIMIT);
+
+            DBObject detail = new BasicDBObject();
+            detail.put("topReferrals", refList);
+            detail.put("topTargets", reqList);
+            detail.put("visitTrend", "".toCharArray());
+            detail.put("sourceCategories", new BasicDBObject());
+
+            //DBObject nodeDetail = new BasicDBObject();
+            nodeDetailList.put(nodeName, detail);
+
+        }
+        System.out.println("Size of node-detail list: "+nodeSet.size());
+
+        FileUtil.outputAsJSON(nodeDetailList, "node-detail");
+    }
+
+    public List<DBObject> getTopReferers(String nodeName, final int LIMIT) {
+        QueryBuilder builder = QueryBuilder.start("referer").is(new BasicDBObject("$regex", urlPattern))
+                .and("request").is(nodeName);
+        DBCursor cursor = links.find(builder.get(), new BasicDBObject("_id", false).append("request", false))
+                .sort(new BasicDBObject("sum", -1)).limit(LIMIT);
+
+        List<DBObject> list = new ArrayList<>();
+        while(cursor.hasNext()) {
+            list.add(cursor.next());
+        }
+        cursor.close();
+        return list;
+    }
+
+    public List<DBObject> getTopTargets(String nodeName, final int LIMIT) {
+        QueryBuilder builder = QueryBuilder.start("referer").is(nodeName)
+                .and("request").is(new BasicDBObject("$regex", urlPattern));
+        DBCursor cursor = links.find(builder.get(), new BasicDBObject("_id", false).append("referer", false))
+                .sort(new BasicDBObject("sum", -1)).limit(LIMIT);
+
+        List<DBObject> list = new ArrayList<>();
+        while(cursor.hasNext()) {
+            list.add(cursor.next());
+        }
+        cursor.close();
+        return list;
+    }
+
 
     public DBObject getOverviewGraph(int type, int threshold) {
         Graph initGraph = getGraphByNodeName(HOMEPAGE, 2, 100);
@@ -25,6 +76,9 @@ public class LinkDAO {
         System.out.println("Links of next layer: " + nextLayer.getLinks().size());
         System.out.println("Nodes of next layer: " + nextLayer.getNodes().size());
         initGraph.addLayer(nextLayer);
+
+        //inter the node set, query each node and combine the node detail
+        getNodesDetail(initGraph.getNodes(), 10);
 
         Graph d3Graph = transferToD3Graph(initGraph);
 
@@ -179,6 +233,7 @@ public class LinkDAO {
                                 QueryBuilder.start("request").is(nodeName).get())
                         .and("sum").is(new BasicDBObject("$gt", threshold));
                 break;
+
             default:
                 System.out.println("Only 0, 1, 2 are supported by type");
         }

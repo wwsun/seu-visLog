@@ -24,14 +24,14 @@ public class SessionDAO {
     public DBObject getSessionsByDate(String date) {
         QueryBuilder builder = QueryBuilder.start("date").is(date);
         DBCursor cursor = sessions.find(builder.get(), new BasicDBObject("hour", true)
-                .append("num", true).append("_id", false)).sort(new BasicDBObject("hour", 1));  //ASC
+                .append("sum", true).append("_id", false)).sort(new BasicDBObject("hour", 1));  //ASC
 
         List<Integer> dupList = new ArrayList<>();
         List<Integer> hourList = new ArrayList<>();
 
         while(cursor.hasNext()) {
             DBObject obj = cursor.next();
-            Integer dup = Integer.valueOf(obj.get("num").toString());
+            Integer dup = Integer.valueOf(obj.get("sum").toString());
             Integer hour = Integer.valueOf(obj.get("hour").toString());
             dupList.add(dup);
             hourList.add(hour);
