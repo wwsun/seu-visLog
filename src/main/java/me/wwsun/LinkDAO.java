@@ -2,10 +2,12 @@ package me.wwsun;
 
 import com.mongodb.*;
 import me.wwsun.model.Graph;
-import me.wwsun.model.GraphObject;
 import me.wwsun.util.FileUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Weiwei on 12/24/2014.
@@ -14,7 +16,7 @@ public class LinkDAO {
     private DBCollection links;
 
     private final String urlPattern = "(\\w+.\\w?)+";
-    private final String HOMEPAGE = "www.made-in-china.com/";
+    //private final String HOMEPAGE = "www.made-in-china.com/";
 
     public LinkDAO(final DB siteDatabase) { links = siteDatabase.getCollection("links"); }
 
@@ -68,31 +70,6 @@ public class LinkDAO {
         return list;
     }
 
-
-    public DBObject getOverviewGraph(int type, int threshold) {
-        Graph initGraph = getGraphByNodeName(HOMEPAGE, 2, 100);
-
-        Graph nextLayer = getNextLayerByReferNodeName(initGraph.getReqNodes(), 30);
-        System.out.println("Links of next layer: " + nextLayer.getLinks().size());
-        System.out.println("Nodes of next layer: " + nextLayer.getNodes().size());
-        initGraph.addLayer(nextLayer);
-
-        //inter the node set, query each node and combine the node detail
-        getNodesDetail(initGraph.getNodes(), 10);
-
-        Graph d3Graph = transferToD3Graph(initGraph);
-
-        List<DBObject> nodeObjectList = formNodeObjectList(initGraph.getNodes());
-
-
-        //GraphObject graph = new GraphObject(nodeObjectList, initGraph.getLinks());
-        GraphObject graph = new GraphObject(nodeObjectList, d3Graph.getLinks());
-        System.out.println("Total Links: " + graph.getLinkList().size());
-        System.out.println("Total Nodes: " + graph.getNodeList().size());
-        return formOutputJSONObject(graph);
-    }
-
-
     /**
      *
      * @param nodeName central node name that you want to form the graph
@@ -100,7 +77,7 @@ public class LinkDAO {
      * @param threshold the filter condition
      * @return a graph
      */
-    private Graph getGraphByNodeName(String nodeName, int type, int threshold) {
+    public Graph getGraphByNodeName(String nodeName, int type, int threshold) {
         DBCursor cursor = getDbObjects(nodeName, type, threshold);
 
         //1. get nodeSet, linkList of initial graph
@@ -127,7 +104,7 @@ public class LinkDAO {
     }
 
     public Graph getNextLayerByReferNodeName(Set<String> reqNodeSet, int threshold) {
-        Graph nextLayerOfCurrentNode = new Graph();
+        Graph nextLayerOfCurrentNode;
         Set<String> nextLayerNodes = new LinkedHashSet<>();
         Set<String> nextLayerReqNodes = new LinkedHashSet<>();
         List<DBObject> nextLayerLinks = new ArrayList<>();
@@ -156,57 +133,6 @@ public class LinkDAO {
         return link;
     }
 
-    private List<DBObject> formNodeObjectList(Set<String> nodeSet) {
-        List<DBObject> nodeList = new ArrayList<>();
-        for (String str : nodeSet) {
-            DBObject object = new BasicDBObject();
-
-            if(str.contains("made-in-china"))
-                object.put("category", 0); //0 - inner site
-            else
-                object.put("category", 1); //1 - out site
-
-            object.put("name", str);
-            object.put("value", 10); //default value
-            nodeList.add(object);
-        }
-        return nodeList;
-    }
-
-    private DBObject formOutputJSONObject(GraphObject graph){
-        DBObject outputGraph = new BasicDBObject();
-        outputGraph.put("nodes", graph.getNodeList());
-        outputGraph.put("links", graph.getLinkList());
-        return outputGraph;
-    }
-
-
-    private Graph transferToD3Graph(Graph graph) {
-        //Todo: D3 links use node index
-        List<String> nodeList = new ArrayList<>();
-        nodeList.addAll(graph.getNodes());
-
-        List<DBObject> linkList = new ArrayList<>();
-        for (DBObject obj : graph.getLinks()) {
-            String ref = (String) obj.get("source");
-            String req = (String) obj.get("target");
-            int sum = (int) obj.get("weight");
-            String type = (String) obj.get("name");
-
-            int refIndex = nodeList.indexOf(ref);
-            int reqIndex = nodeList.indexOf(req);
-
-            DBObject link = new BasicDBObject();
-            link.put("source", refIndex);
-            link.put("target", reqIndex);
-            link.put("weight", sum);
-            link.put("name", type);
-            linkList.add(link);
-        }
-
-        graph.setLinks(linkList);
-        return graph;
-    }
 
     private DBCursor getDbObjects(String nodeName, int type, int threshold) {
         QueryBuilder builder = null;
