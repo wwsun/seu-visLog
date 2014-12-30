@@ -20,28 +20,6 @@ public class LinkDAO {
 
     public LinkDAO(final DB siteDatabase) { links = siteDatabase.getCollection("links"); }
 
-    public void getNodesDetail(Set<String> nodeSet, final int LIMIT) {
-
-        DBObject nodeDetailList = new BasicDBObject();
-        for (String nodeName : nodeSet) {
-            List<DBObject> refList = getTopReferers(nodeName, LIMIT);
-            List<DBObject> reqList = getTopTargets(nodeName, LIMIT);
-
-            DBObject detail = new BasicDBObject();
-            detail.put("topReferrals", refList);
-            detail.put("topTargets", reqList);
-            detail.put("visitTrend", "".toCharArray());
-            detail.put("sourceCategories", new BasicDBObject());
-
-            //DBObject nodeDetail = new BasicDBObject();
-            nodeDetailList.put(nodeName, detail);
-
-        }
-        System.out.println("Size of node-detail list: "+nodeSet.size());
-
-        FileUtil.outputAsJSON(nodeDetailList, "node-detail");
-    }
-
     public List<DBObject> getTopReferers(String nodeName, final int LIMIT) {
         QueryBuilder builder = QueryBuilder.start("referer").is(new BasicDBObject("$regex", urlPattern))
                 .and("request").is(nodeName);

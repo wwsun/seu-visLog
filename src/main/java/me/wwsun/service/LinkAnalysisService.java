@@ -29,7 +29,7 @@ public class LinkAnalysisService {
 
     public DBObject getOverviewGraph(int type, int threshhold) {
         final String HOMEPAGE = "www.made-in-china.com/";
-        Graph initGraph = linkDAO.getGraphByNodeName(HOMEPAGE, 2, 100);
+        Graph initGraph = linkDAO.getGraphByNodeName(HOMEPAGE, type, threshhold);
         Graph nextLayer = linkDAO.getNextLayerByReferNodeName(initGraph.getReqNodes(), 30);
 
         System.out.println("Links of next layer: " + nextLayer.getLinks().size());
