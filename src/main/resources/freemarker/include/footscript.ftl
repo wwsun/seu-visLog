@@ -4,8 +4,8 @@
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 
-<!-- D3.js Core JavaScript -->
-<script src="js/d3.js"></script>
+<!-- Echarts Core JavaScript -->
+<script src="js/echarts-all.js"></script>
 
 <!-- Metis Menu Plugin JavaScript -->
 <script src="js/plugins/metisMenu/metisMenu.min.js"></script>

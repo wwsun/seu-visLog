@@ -2,6 +2,8 @@ package me.wwsun;
 
 import com.mongodb.*;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Weiwei on 12/23/2014.
  */
@@ -21,6 +23,23 @@ public class JumpDAO {
             DBObject obj = cursor.next();
             sessionNums = Integer.valueOf(obj.get("sum").toString());
         }
+        cursor.close();
         return sessionNums;
+    }
+
+    public double getBounceRate() {
+        QueryBuilder builder1 = QueryBuilder.start("type").is("count");
+        DBObject count = jumpCollection.findOne(builder1.get());
+        System.out.println(count);
+
+        QueryBuilder builder2 = QueryBuilder.start("type").is("active");
+        DBObject active = jumpCollection.findOne(builder2.get());
+        System.out.println(active);
+
+
+        double bounceRate = (double)(int)active.get("sum")/(double)(int)count.get("sum");
+        BigDecimal decimal = new BigDecimal(bounceRate);
+        double result = decimal.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return result*100;
     }
 }

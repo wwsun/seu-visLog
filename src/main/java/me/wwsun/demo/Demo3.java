@@ -4,7 +4,7 @@ import com.mongodb.*;
 import com.mongodb.util.JSON;
 import me.wwsun.JumpDAO;
 import me.wwsun.KeywordDAO;
-import me.wwsun.LandDAO;
+import me.wwsun.SourceDAO;
 import me.wwsun.SessionDAO;
 
 import java.io.BufferedWriter;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class Demo3 {
     public static void main(String[] args) throws UnknownHostException {
-        final String mongoURIString = "mongodb://223.3.75.101:27017";
+        final String mongoURIString = "mongodb://223.3.80.243:27017";
         final MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURIString));
 
         final DB siteDatabase = mongoClient.getDB("sample");
@@ -30,20 +30,21 @@ public class Demo3 {
         JumpDAO jumpDAO = new JumpDAO(siteDatabase);
         SessionDAO sessionDAO = new SessionDAO(siteDatabase);
         KeywordDAO keywordDAO = new KeywordDAO(siteDatabase);
-        LandDAO landDAO = new LandDAO(siteDatabase);
+        SourceDAO sourceDAO = new SourceDAO(siteDatabase);
 
         DBObject overview = new BasicDBObject();
 
-        DBObject sessionTrends = sessionDAO.getSessionsByDate("2014-08-10");
+        DBObject sessionTrends = sessionDAO.getSessionsByDate("2014-10-22");
         Integer totalSessions = jumpDAO.getTotalSessions();
-        List topSearchEngines = landDAO.getTopSearchEngines();
+        double bounceRate = jumpDAO.getBounceRate();
+        List topSearchEngines = sourceDAO.getTopSearchEngines();
         List keywords = keywordDAO.getKeywordList();
 
         overview.put("totalSessions", totalSessions);
+        overview.put("totalBounceRate", bounceRate);
         overview.put("sessionTrends", sessionTrends);
         overview.put("topReferral", "".toCharArray());
         overview.put("topSearchEngine", topSearchEngines);
-        overview.put("topActivePages", "".toCharArray());
         overview.put("topKeywords", keywords.toArray());
 
 

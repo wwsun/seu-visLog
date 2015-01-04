@@ -9,36 +9,81 @@
 
 <div id="wrapper">
 <#include "include/header.ftl" >
+    <!-- Page Content -->
     <div id="page-wrapper">
         <div class="container-fluid">
             <div class="page-header">
-                <h3> ${title}
+                <h3>${title}
                     <small>www.made-in-china.com</small>
                 </h3>
             </div>
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default" style="margin-top: 1em">
+                <div class="col-lg-3">
+                    <div class="child-panel">
+                        <div id="session-total">
+                            <h3>Sessions</h3>
 
-                        <div id="svg-wrapper" class="panel-body">
+                            <h1 id="session-sum">0</h1>
 
+                            <h3>Bounce Rate</h3>
+                            <h1 id="bounce-rate">60%</h1>
                         </div>
-                        <!-- /.svg-wrapper -->
                     </div>
                 </div>
-                <!-- /.col-lg-12 -->
+                <!-- /.col-lg-4 -->
+
+                <div class="col-lg-9">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">各时段会话个数</div>
+                        <div class="panel-body child-panel" id="session-timeline">
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <!-- /.row -->
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Top Search Engine Traffic</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Search Engine</th>
+                                <th>Contribution</th>
+                            </tr>
+                            </thead>
+                            <tbody id="top-engines"></tbody>
+                        </table>
+                    </div>
+                    <!-- dataset overview -->
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Top Keywords</div>
+                        <div class="panel-body">
+                            <canvas id="word_cloud" height="370" width="680"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
         <!-- /.container-fluid -->
     </div>
     <!-- /#page-wrapper -->
-</div>
 
+</div>
+<#--wrapper-->
 <#include "include/footscript.ftl" >
 <!-- Force-Layout-Graph -->
-<script src="js/vislog/vislog-force.js"></script>
-<script src="js/vislog/vislog.js"></script>
+<!-- Tag Cloud Core JavaScript-->
+<script src="js/wordcloud2.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

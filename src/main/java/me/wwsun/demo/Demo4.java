@@ -1,9 +1,11 @@
 package me.wwsun.demo;
 
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import me.wwsun.service.LinkAnalysisService;
+import me.wwsun.util.FileUtil;
 
 import java.net.UnknownHostException;
 
@@ -21,7 +23,8 @@ public class Demo4 {
 
 
         LinkAnalysisService linkService = new LinkAnalysisService(siteDatabase);
-        linkService.getOverviewGraph(2, 100);//type=2, threshold=100
+        DBObject overviewGraph = linkService.getOverviewGraph(2, 100);//type=2, threshold=100
+        FileUtil.outputAsJSON(overviewGraph, "overview-graph");
 
 //        LinkDAO linkDAO = new LinkDAO(siteDatabase);
 //        List topRefs = linkDAO.getTopReferers(URL, 10);

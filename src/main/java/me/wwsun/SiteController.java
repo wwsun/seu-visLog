@@ -30,7 +30,7 @@ public class SiteController {
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
-            new SiteController("mongodb://223.3.75.101:27017");
+            new SiteController("mongodb://223.3.80.243:27017");
         } else {
             new SiteController(args[0]);
         }
@@ -52,37 +52,32 @@ public class SiteController {
     }
 
     private void initializeRoutes() throws IOException {
-        // this is the blog home page
+        // this is the home page
         Spark.get(new FreemarkerBasedRoute("/", "index.ftl") {
             @Override
             public void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
-
-                String inbound = inboundDAO.getInboundDataAsJSON();
-                System.out.println((inbound.length()));
-
-//                if(Paths.get("outsite.json") == null) {
-//                    inbound = inboundDAO.getInboundDataAsJSON();
-//                    System.out.println("generate data successfully!");
-//                }
-
                 SimpleHash root = new SimpleHash();
-                root.put("title","Inbound Flow Overview");
-
-                if(inbound == null) {
-                    root.put("inbound", "It seems that nothing returned!");
-                } else {
-                    root.put("inbound", inbound);
-                }
-
+                root.put("title","Website Overview");
                 template.process(root, writer);
             }
         });
 
-        Spark.get(new FreemarkerBasedRoute("/inbound","tables.ftl") {
+        //Page: link analysis for whole site
+        Spark.get(new FreemarkerBasedRoute("/link","link.ftl") {
             @Override
             protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
                 SimpleHash root = new SimpleHash();
-                root.put("title","Inbound Data Table");
+                root.put("title","Link Analysis");
+                template.process(root, writer);
+            }
+        });
+
+        //Page: flow analysis for whole site
+        Spark.get(new FreemarkerBasedRoute("/flow", "flow.ftl") {
+            @Override
+            protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
+                SimpleHash root = new SimpleHash();
+                root.put("title", "Flow Analysis");
                 template.process(root, writer);
             }
         });
