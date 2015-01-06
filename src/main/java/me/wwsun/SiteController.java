@@ -10,14 +10,12 @@ import freemarker.template.TemplateException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.Spark;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import static spark.Spark.setPort;
-import static spark.Spark.staticFileLocation;
+import static spark.Spark.*;
 
 /**
  * Created by Weiwei on 11/24/2014.
@@ -25,8 +23,8 @@ import static spark.Spark.staticFileLocation;
 public class SiteController {
 
     private final Configuration cfg;
-    private final InboundDAO inboundDAO;
-    private final SessionDAO sessionDAO;
+    //private final InboundDAO inboundDAO;
+    //private final SessionDAO sessionDAO;
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
@@ -41,8 +39,8 @@ public class SiteController {
         final MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURIString));
         final DB siteDatabase = mongoClient.getDB("sample");
 
-        inboundDAO = new InboundDAO(siteDatabase);
-        sessionDAO = new SessionDAO(siteDatabase);
+        //inboundDAO = new InboundDAO(siteDatabase);
+        //sessionDAO = new SessionDAO(siteDatabase);
 
         //init of freemarker
         cfg = createFreemarkerConfiguration();
@@ -52,28 +50,28 @@ public class SiteController {
     }
 
     private void initializeRoutes() throws IOException {
-        // this is the home page
-        Spark.get(new FreemarkerBasedRoute("/", "index.ftl") {
+        //Homepage:
+        get(new FreemarkerBasedRoute("/", "index.ftl") {
             @Override
             public void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
                 SimpleHash root = new SimpleHash();
-                root.put("title","Website Overview");
+                root.put("title", "Website Overview");
                 template.process(root, writer);
             }
         });
 
         //Page: link analysis for whole site
-        Spark.get(new FreemarkerBasedRoute("/link","link.ftl") {
+        get(new FreemarkerBasedRoute("/link", "link.ftl") {
             @Override
             protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
                 SimpleHash root = new SimpleHash();
-                root.put("title","Link Analysis");
+                root.put("title", "Link Analysis");
                 template.process(root, writer);
             }
         });
 
         //Page: flow analysis for whole site
-        Spark.get(new FreemarkerBasedRoute("/flow", "flow.ftl") {
+        get(new FreemarkerBasedRoute("/flow", "flow.ftl") {
             @Override
             protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
                 SimpleHash root = new SimpleHash();
@@ -81,6 +79,8 @@ public class SiteController {
                 template.process(root, writer);
             }
         });
+
+        //todo: Post: update dataset
     }
 
     private Configuration createFreemarkerConfiguration() {
