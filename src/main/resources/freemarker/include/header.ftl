@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">Server Log Visualization</a>
+        <a class="navbar-brand" href="/">Server Log Visualization</a>
     </div>
     <!-- /.navbar-header -->
 
@@ -25,15 +25,15 @@
             </a>
             <ul class="dropdown-menu dropdown-tasks">
                 <li>
-                    <a href="#"> Update Overview</a>
+                    <a href="/update"> Update Overview</a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="#"> Update Link Analysis</a>
+                    <a href="/update/link"> Update Link Analysis</a>
                 </li>
                 <li class="divider"></li>
                 <li>
-                    <a href="#"> Update Flow Analysis</a>
+                    <a href="/update/flow"> Update Flow Analysis</a>
                 </li>
                 <li class="divider"></li>
                 <li>
@@ -109,7 +109,7 @@
                             <a href="blank.html">指标分析</a>
                         </li>
                         <li>
-                            <a href="login.html">Login Page</a>
+                            <a href="login.html">指标定义</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
@@ -133,7 +133,7 @@
                 </li>
 
                 <li>
-                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span
+                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Reserved<span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>

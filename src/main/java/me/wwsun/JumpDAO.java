@@ -30,12 +30,9 @@ public class JumpDAO {
     public double getBounceRate() {
         QueryBuilder builder1 = QueryBuilder.start("type").is("count");
         DBObject count = jumpCollection.findOne(builder1.get());
-        System.out.println(count);
 
         QueryBuilder builder2 = QueryBuilder.start("type").is("active");
         DBObject active = jumpCollection.findOne(builder2.get());
-        System.out.println(active);
-
 
         double bounceRate = (double)(int)active.get("sum")/(double)(int)count.get("sum");
         BigDecimal decimal = new BigDecimal(bounceRate);

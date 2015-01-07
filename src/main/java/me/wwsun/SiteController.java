@@ -1,12 +1,17 @@
 package me.wwsun;
 
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import freemarker.template.Configuration;
 import freemarker.template.SimpleHash;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import me.wwsun.service.FlowAnalysisService;
+import me.wwsun.service.LinkAnalysisService;
+import me.wwsun.service.OverviewService;
+import me.wwsun.util.FileUtil;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -23,8 +28,9 @@ import static spark.Spark.*;
 public class SiteController {
 
     private final Configuration cfg;
-    //private final InboundDAO inboundDAO;
-    //private final SessionDAO sessionDAO;
+    private final OverviewService overviewService;
+    private final LinkAnalysisService linkAnalysisService;
+    private final FlowAnalysisService flowAnalysisService;
 
     public static void main(String[] args) throws IOException {
         if (args.length == 0) {
@@ -39,8 +45,9 @@ public class SiteController {
         final MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURIString));
         final DB siteDatabase = mongoClient.getDB("sample");
 
-        //inboundDAO = new InboundDAO(siteDatabase);
-        //sessionDAO = new SessionDAO(siteDatabase);
+        overviewService = new OverviewService(siteDatabase);
+        linkAnalysisService = new LinkAnalysisService(siteDatabase);
+        flowAnalysisService = new FlowAnalysisService(siteDatabase);
 
         //init of freemarker
         cfg = createFreemarkerConfiguration();
@@ -81,6 +88,40 @@ public class SiteController {
         });
 
         //todo: Post: update dataset
+        get(new FreemarkerBasedRoute("/update", "index.ftl") {
+            @Override
+            protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
+                DBObject overview = overviewService.getOverviewData("2014-10-22");
+                FileUtil.outputAsJSON(overview, "site-overview");
+
+                SimpleHash root = new SimpleHash();
+                System.out.println("update: overview");
+                root.put("title", "Website Overview (Update)");
+                template.process(root, writer);
+            }
+        });
+
+        get(new FreemarkerBasedRoute("/update/link", "link.ftl") {
+            @Override
+            protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
+                DBObject overviewGraph = linkAnalysisService.getOverviewGraph(2, 100);//type=2, threshold=100
+                FileUtil.outputAsJSON(overviewGraph, "overview-graph");
+
+                SimpleHash root = new SimpleHash();
+                root.put("title", "Link Analysis (Update)");
+                template.process(root, writer);
+            }
+        });
+
+        get(new FreemarkerBasedRoute("/update/flow", "flow.ftl") {
+            @Override
+            protected void doHandle(Request request, Response response, Writer writer) throws IOException, TemplateException {
+                flowAnalysisService.getOverviewFlowMap();
+                SimpleHash root = new SimpleHash();
+                root.put("title", "Flow Analysis (Update)");
+                template.process(root, writer);
+            }
+        });
     }
 
     private Configuration createFreemarkerConfiguration() {
