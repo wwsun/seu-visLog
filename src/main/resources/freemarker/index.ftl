@@ -34,7 +34,7 @@
 
                 <div class="col-lg-9">
                     <div class="panel panel-default">
-                        <div class="panel-heading">各时段会话个数</div>
+                        <div class="panel-heading">Session Trends</div>
                         <div class="panel-body child-panel" id="session-timeline">
                         </div>
                     </div>

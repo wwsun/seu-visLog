@@ -71,13 +71,13 @@
                     <a href="#" ><i class="fa fa-sitemap fa-fw"></i> Link Analysis<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="/link" id="link-tab">ÕûÕ¾Á´½Ó·ÖÎö</a>
+                            <a href="/link" id="link-tab">å…¨å±€é“¾æŽ¥åˆ†æž</a>
                         </li>
                         <li>
-                            <a href="#">Õ¾ÍâÁ´½Ó·ÖÎö</a>
+                            <a href="#">ç«™å†…é“¾æŽ¥åˆ†æž</a>
                         </li>
                         <li>
-                            <a href="#">Õ¾ÄÚÁ´½Ó·ÖÎö</a>
+                            <a href="#">ç«™å¤–é“¾æŽ¥åˆ†æž</a>
                         </li>
 
                     </ul>
@@ -90,13 +90,13 @@
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="/flow" id="flow-tab">È«Õ¾Á÷Á¿·ÖÎö</a>
+                            <a href="/flow" id="flow-tab">å…¨å±€æµé‡åˆ†æž</a>
                         </li>
                         <li>
-                            <a href="#">Õ¾ÍâÁ÷Á¿·ÖÎö</a>
+                            <a href="#">ç«™å†…æµé‡åˆ†æž</a>
                         </li>
                         <li>
-                            <a href="#">Õ¾ÄÚÁ÷Á¿·ÖÎö</a>
+                            <a href="#">ç«™å¤–æµé‡åˆ†æž</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
@@ -106,10 +106,10 @@
                     <a href="#"><i class="fa fa-files-o fa-fw"></i> Key Indexes<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="blank.html">Ö¸±ê·ÖÎö</a>
+                            <a href="blank.html">æ ¸å¿ƒæŒ‡æ ‡é‡</a>
                         </li>
                         <li>
-                            <a href="login.html">Ö¸±ê¶¨Òå</a>
+                            <a href="login.html">æŒ‡æ ‡é‡å®šä¹‰</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
@@ -120,13 +120,13 @@
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="panels-wells.html">ÈÕÖ¾Êý¾Ý</a>
+                            <a href="panels-wells.html">æ•°æ®è¡¨æ ¼1</a>
                         </li>
                         <li>
-                            <a href="buttons.html">¹Ø¼ü×ÖÊý¾Ý</a>
+                            <a href="buttons.html">æ•°æ®è¡¨æ ¼2</a>
                         </li>
                         <li>
-                            <a href="notifications.html">Ö¸±êÊý¾Ý</a>
+                            <a href="notifications.html">æ•°æ®è¡¨æ ¼3</a>
                         </li>
 
                     </ul>
