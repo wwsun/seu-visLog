@@ -17,7 +17,7 @@ public class SessionTest extends TestCase {
 
     public SessionTest() throws UnknownHostException {
         mongoClient = new MongoClient(new MongoClientURI(mongoURI));
-        siteDatabase = mongoClient.getDB("sample");
+        siteDatabase = mongoClient.getDB("jiaodian");
     }
 
     public void testSessionTrends() {
@@ -29,5 +29,10 @@ public class SessionTest extends TestCase {
     public void testSessionCounts() {
         OverviewService overviewService = new OverviewService(siteDatabase);
         System.out.println(overviewService.getSessionCountsAndBounceRate());
+    }
+
+    public void testSearchEngineRefers() {
+        OverviewService overviewService = new OverviewService(siteDatabase);
+        System.out.println(overviewService.getTopSearchEngines(10));
     }
 }
