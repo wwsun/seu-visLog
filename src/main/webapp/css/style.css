@@ -1,0 +1,42 @@
+body {
+    min-height: 1000px;
+    padding-top: 70px;
+}
+
+#home-logo {
+    padding-top: 10em;
+    padding-bottom: 1em;
+    text-align: center;
+}
+
+div#status h1 {
+    font-size: 5em;
+}
+
+svg {
+    display: block;
+    width: 90%;
+    height: 800px;
+    margin: 0 auto;
+}
+
+.node rect {
+    cursor: move;
+    fill-opacity: .9;
+    shape-rendering: crispEdges;
+}
+
+.node text {
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+}
+
+.link:hover {
+    stroke-opacity: .5;
+}
