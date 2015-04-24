@@ -1,26 +1,18 @@
-package me.wwsun;
+package dao;
 
 import com.mongodb.*;
-import com.mongodb.util.JSON;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Weiwei on 12/23/2014.
- */
 public class SessionDAO {
+
     private DBCollection sessions;
 
     public SessionDAO(final DB siteDatabase) {
         sessions = siteDatabase.getCollection("session");
     }
 
-    /**
-     *
-     * @param date yyyy-mm-dd
-     * @return 24-hours session trends
-     */
     public DBObject getSessionsByDate(String date) {
         QueryBuilder builder = QueryBuilder.start("date").is(date);
         DBCursor cursor = sessions.find(builder.get(), new BasicDBObject("hour", true)
