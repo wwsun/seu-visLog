@@ -1,0 +1,30 @@
+{
+  "name": "vislog-client",
+  "version": "2.0.0",
+  "homepage": "https://github.com/wwsun/seu-visLog",
+  "authors": [
+    "Weiwei SUN <ww.sun@outlook.com>"
+  ],
+  "description": "vislog client that consume rest api",
+  "keywords": [
+    "client"
+  ],
+  "dependencies": {
+    "bootstrap": "latest",
+    "angular": "latest",
+    "angular-ui-router": "latest",
+    "bootstrap-material-design": "~0.2.2",
+    "d3": "~3.5.5",
+    "angular-chart.js": "~0.5.3",
+    "fontawesome": "~4.3.0"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "libs",
+    "test",
+    "tests"
+  ]
+}
