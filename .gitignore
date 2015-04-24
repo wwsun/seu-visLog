@@ -3,6 +3,8 @@
 target/
 lib/
 
+src/main/webapp/libs/
+
 #Files
 vislog-restful.iml
 vislog-web.iml
