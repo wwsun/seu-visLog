@@ -19,10 +19,12 @@ public class SessionController {
     final String mongoURI = "mongodb://223.3.80.243:27017";
     final MongoClient mongoClient;
     final DB siteDatabase;
+    OverviewService overviewService;
 
     public SessionController() throws UnknownHostException {
         mongoClient = new MongoClient(new MongoClientURI(mongoURI));
-        siteDatabase = mongoClient.getDB("sample");
+        siteDatabase = mongoClient.getDB("jiaodian");
+        overviewService = new OverviewService(siteDatabase);
     }
 
     @Path("/all")
@@ -39,7 +41,7 @@ public class SessionController {
     @GET
     @Produces("application/json")
     public JsonObject getDistribution(@PathParam("date") String date) {
-        OverviewService overviewService = new OverviewService(siteDatabase);
+//        OverviewService overviewService = new OverviewService(siteDatabase);
         String jsonString = overviewService.getSessionDistributionByDate(date).toString();
         JsonReader reader = Json.createReader(new StringReader(jsonString));
         JsonObject json = reader.readObject();
@@ -47,8 +49,15 @@ public class SessionController {
         return json;
     }
 
+    @Path("/overview/status")
+    @GET
+    @Produces("application/json")
     public JsonObject getSessionStatus() {
-
-        return null;
+        return overviewService.getSessionCountsAndBounceRate();
     }
+
+    @Path("/overview/sources/se")
+    @GET
+    @Produces("application/json")
+    public JsonArray getSearchEngineContribution() { return overviewService.getTopSearchEngines(10); }
 }
