@@ -28,7 +28,7 @@ public class OverviewService {
 
     /**
      *
-     * @return {"total":"COUNT", "bounceRate":"PERCENT", "inquiryRate":"PERCENT"}
+     * @return {"total":"COUNT", "bounce_rate":"PERCENT", "inquiry_rate":"PERCENT"}
      */
     public JsonObject getSessionCountsAndBounceRate() {
         return Json.createObjectBuilder()
@@ -38,8 +38,36 @@ public class OverviewService {
                 .build();
     }
 
+    /**
+     *
+     * @param limit is the most number of results that returned
+     * @return an array of main reference search engines as json format
+     */
     public JsonArray getTopSearchEngines(int limit) {
         return sourceDAO.getTopSearchEngines(limit);
+    }
+
+
+    /**
+     *
+     * @param limit is the most number of results that returned
+     * @return an array of main categories that user flow retained
+     */
+    public JsonArray getTopCategories(int limit) {
+
+        // todo: finish the business logic
+        return null;
+    }
+
+    /**
+     *
+     * @param limit is the most number of results that returned
+     * @return an array of the most frequent visited pages
+     */
+    public JsonArray getFrequentVisitedPages(int limit) {
+
+        // todo:
+        return null;
     }
 
 }
