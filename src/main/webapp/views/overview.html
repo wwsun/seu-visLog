@@ -2,35 +2,91 @@
     <div class="col-md-8">
 
         <div class="row first-line">
-            <div class="panel panel-default">
-                <div class="panel-heading">Session Distribution</div>
-                <div class="panel-body">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Session Distribution</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
+                                labels="overviewCtrl.distribution.labels" legend="true"
+                                series="overviewCtrl.distribution.series"></canvas>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Session Distribution</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
+                                labels="overviewCtrl.distribution.labels" legend="true"
+                                series="overviewCtrl.distribution.series"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row second-line">
+
+            <div class="col-md-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Category Distribution</div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Search Engine Contribution - Top 10</div>
+                    <ul class="list-group">
+
+                        <li class="list-group-item" ng-repeat="item in overviewCtrl.searchEngines">
+                            {{item.name}} <span class="badge">{{item.dup}}</span>
+                        </li>
+
+                    </ul>
                 </div>
             </div>
         </div>
 
     </div>
+
     <div class="col-md-4">
 
         <div class="row overview-numbers">
-            <div class="panel panel-default">
-                <div class="panel-heading">Overview</div>
-                <div class="panel-body">
-                    <div class="col-md-4">
-                        <h1>7289</h1>
-                        <p>sessions this day</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h1>500</h1>
-                        <p>sessions right now</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h1>320</h1>
-                        <p>errors happened</p>
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Overview</div>
+                    <div class="panel-body">
+                        <div class="col-md-4">
+                            <h1>{{overviewCtrl.status.total}}</h1>
+                            <p>Sessions this day</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h1>{{overviewCtrl.status.bounce_rate}}%</h1>
+                            <p>First visit bounce rate</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h1>{{overviewCtrl.status.inquiry_rate}}%</h1>
+                            <p>Overall inquiry rate</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row frequent-pages">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Frequent Visited Pages</div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

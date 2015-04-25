@@ -14,23 +14,24 @@
 </head>
 <body ng-app="vislog">
 
-<div class="container-fluid">
     <!-- HEADER -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">Server Log Visualization</a>
+                <a class="navbar-brand" href="#">Server Log Visualization</a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a ui-sref="overview">Overview</a></li>
-                <li><a ui-sref="path">Path Relay</a></li>
+                <li ui-sref-active="active"><a ui-sref="overview">Overview</a></li>
+                <li ui-sref-active="active"><a ui-sref="path">Path Relay</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- ANGULAR DYNAMIC CONTENT -->
-    <div ui-view></div>
-</div>
+    <div class="container-fluid">
+        <!-- ANGULAR DYNAMIC CONTENT -->
+        <div ui-view></div>
+    </div>
+
 <!-- JS -->
 <script src="./libs/jquery/dist/jquery.min.js"></script>
 <script src="./libs/bootstrap/dist/js/bootstrap.min.js"></script>
