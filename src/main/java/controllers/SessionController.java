@@ -19,7 +19,7 @@ public class SessionController {
     final String mongoURI = "mongodb://223.3.80.243:27017";
     final MongoClient mongoClient;
     final DB siteDatabase;
-    OverviewService overviewService;
+    final OverviewService overviewService;
 
     public SessionController() throws UnknownHostException {
         mongoClient = new MongoClient(new MongoClientURI(mongoURI));
@@ -41,7 +41,6 @@ public class SessionController {
     @GET
     @Produces("application/json")
     public JsonObject getDistribution(@PathParam("date") String date) {
-//        OverviewService overviewService = new OverviewService(siteDatabase);
         String jsonString = overviewService.getSessionDistributionByDate(date).toString();
         JsonReader reader = Json.createReader(new StringReader(jsonString));
         JsonObject json = reader.readObject();
@@ -60,4 +59,25 @@ public class SessionController {
     @GET
     @Produces("application/json")
     public JsonArray getSearchEngineContribution() { return overviewService.getTopSearchEngines(10); }
+
+    @Path("/overview/sources/countries")
+    @GET
+    @Produces("application/json")
+    public JsonArray getTopCountriesFlowContribution() {
+        return overviewService.getTopCountriesFlow(10);
+    }
+
+    @Path("/overview/frequent/pages")
+    @GET
+    @Produces("application/json")
+    public JsonArray getFrequentVisitedPages() {
+        // todo get frequent visited pages
+        return null;
+    }
+
+    @Path("/overview/frequent/categories")
+    public JsonArray getFrequentVisitedCategory() {
+        // todo get frequent visited categories
+        return null;
+    }
 }
