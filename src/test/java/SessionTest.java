@@ -35,4 +35,9 @@ public class SessionTest extends TestCase {
         OverviewService overviewService = new OverviewService(siteDatabase);
         System.out.println(overviewService.getTopSearchEngines(10));
     }
+
+    public void testTopCountaries() {
+        OverviewService overviewService = new OverviewService(siteDatabase);
+        overviewService.getTopCountriesFlow(10);
+    }
 }
