@@ -13,8 +13,8 @@ angular.module('vislog.appRoutes', [])
 
             .state('path', {
                 url: '/path',
-                templateUrl:'',
-                controller: ''
+                templateUrl:'views/path.html',
+                controller: 'PathCtrl as pathCtrl'
             });
 
     });
