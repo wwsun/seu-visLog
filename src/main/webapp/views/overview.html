@@ -15,7 +15,7 @@
 
             <div class="col-md-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Session Distribution</div>
+                    <div class="panel-heading">Keywords / Configuration</div>
                     <div class="panel-body">
                         <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
                                 labels="overviewCtrl.distribution.labels" legend="true"
@@ -30,10 +30,12 @@
             <div class="col-md-6">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Category Distribution</div>
-                    <div class="panel-body">
-
-                    </div>
+                    <div class="panel-heading">Flow Contribution - Top 10</div>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="item in overviewCtrl.countryContribution">
+                            {{item.name}} <span class="badge">{{item.dup}}</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -46,6 +48,35 @@
                             {{item.name}} <span class="badge">{{item.dup}}</span>
                         </li>
 
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row third-line">
+
+            <div class="col-md-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">User Interested Categories</div>
+                    <ul class="list-group">
+                        <!--<li class="list-group-item" ng-repeat="item in overviewCtrl.countryContribution">-->
+                            <!--{{item.name}} <span class="badge">{{item.dup}}</span>-->
+                        <!--</li>-->
+                        <li class="list-group-item">null</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Main Landing Pages - Top 10</div>
+                    <ul class="list-group">
+
+                        <!--<li class="list-group-item" ng-repeat="item in overviewCtrl.searchEngines">-->
+                            <!--{{item.name}} <span class="badge">{{item.dup}}</span>-->
+                        <!--</li>-->
+                        <li class="list-group-item">null</li>
                     </ul>
                 </div>
             </div>
