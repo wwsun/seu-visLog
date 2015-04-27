@@ -40,4 +40,10 @@ public class SessionTest extends TestCase {
         OverviewService overviewService = new OverviewService(siteDatabase);
         overviewService.getTopCountriesFlow(10);
     }
+
+    public void testHotPages() {
+        OverviewService overviewService = new OverviewService(siteDatabase);
+        System.out.println(overviewService.getFrequentVisitedPages(10));
+    }
+
 }

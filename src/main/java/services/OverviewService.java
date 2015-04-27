@@ -1,12 +1,9 @@
 package services;
 
+import dao.*;
+
 import com.mongodb.DB;
 import com.mongodb.DBObject;
-import com.sun.javafx.scene.layout.region.BackgroundImage;
-import dao.CountryDAO;
-import dao.JumpDAO;
-import dao.SessionDAO;
-import dao.SourceDAO;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -20,12 +17,14 @@ public class OverviewService {
     JumpDAO jumpDAO;
     SourceDAO sourceDAO;
     CountryDAO countryDAO;
+    NodesDAO nodesDAO;
 
     public OverviewService(final DB db) {
         sessionDAO = new SessionDAO(db);
         jumpDAO = new JumpDAO(db);
         sourceDAO = new SourceDAO(db);
         countryDAO = new CountryDAO(db);
+        nodesDAO = new NodesDAO(db);
     }
 
     public DBObject getSessionDistributionByDate(String date) {
@@ -70,9 +69,14 @@ public class OverviewService {
      * @return an array of the most frequent visited pages
      */
     public JsonArray getFrequentVisitedPages(int limit) {
-
-        // todo:
-        return null;
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = nodesDAO.getHotPages(limit);
+        for (DBObject object : list) {
+            builder.add(Json.createObjectBuilder()
+            .add("name", (String)object.get("_id"))
+            .add("dup", (Integer)object.get("nums")));
+        }
+        return builder.build();
     }
 
     /**
@@ -86,7 +90,7 @@ public class OverviewService {
         for (DBObject object : list) {
             builder.add(Json.createObjectBuilder()
                             .add("name",(String)object.get("name"))
-                            .add("dup", (int)object.get("value")));
+                            .add("dup", (Integer)object.get("value")));
         }
         return builder.build();
     }

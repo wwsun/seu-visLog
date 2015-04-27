@@ -112,8 +112,10 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Frequent Visited Pages</div>
-                    <div class="panel-body">
-
+                    <div class="list-group">
+                        <a ng-repeat="item in overviewCtrl.hotPages" class="list-group-item" href="http://{{item.name}}" target="_blank">
+                            {{item.name}} <span class="badge">{{item.dup}}</span>
+                        </a>
                     </div>
                 </div>
             </div>

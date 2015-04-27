@@ -14,6 +14,7 @@ angular.module('vislog.overview', ['chart.js'])
 
         vm.searchEngines = null;
         vm.countryContribution = [];
+        vm.hotPages = null;
 
         vm.getOverviewNumbers = function() {
             $http.get(baseUrl + 'sessions/overview/status').success(function (data) {
@@ -41,9 +42,16 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
+        vm.getHotPages = function() {
+            $http.get(baseUrl + 'sessions/overview/frequent/pages').success(function (data) {
+                vm.hotPages = data;
+            });
+        };
+
         vm.getOverviewNumbers();
         vm.getSessionDistributionByDate("2014-10-22");
         vm.getSearchEngineContribution();
         vm.getCountriesContribution();
+        vm.getHotPages();
 
     });
