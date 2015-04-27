@@ -25,7 +25,7 @@ public class SourceDAO {
             DBObject object = cursor.next();
             jsonArrayBuilder.add(Json.createObjectBuilder()
                     .add("name", (String) object.get("source"))
-                    .add("dup", (int) object.get("sum")));
+                    .add("dup", (Integer) object.get("sum")));
         }
         cursor.close();
         return jsonArrayBuilder.build();

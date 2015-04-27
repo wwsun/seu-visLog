@@ -16,7 +16,7 @@ public class CountryDAO {
                 .sort(new BasicDBObject("sum", -1))
                 .limit(limit);
 
-        List<DBObject> list = new ArrayList<>();
+        List<DBObject> list = new ArrayList<DBObject>();
         while(cursor.hasNext()) {
             DBObject object = cursor.next();
             DBObject newObj = new BasicDBObject();

@@ -18,8 +18,8 @@ public class SessionDAO {
         DBCursor cursor = sessions.find(builder.get(), new BasicDBObject("hour", true)
                 .append("sum", true).append("_id", false)).sort(new BasicDBObject("hour", 1));  //ASC
 
-        List<Integer> dupList = new ArrayList<>();
-        List<Integer> hourList = new ArrayList<>();
+        List<Integer> dupList = new ArrayList<Integer>();
+        List<Integer> hourList = new ArrayList<Integer>();
 
         while(cursor.hasNext()) {
             DBObject obj = cursor.next();
