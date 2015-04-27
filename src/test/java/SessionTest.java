@@ -46,4 +46,9 @@ public class SessionTest extends TestCase {
         System.out.println(overviewService.getFrequentVisitedPages(10));
     }
 
+    public void testHotCategories() {
+        OverviewService overviewService = new OverviewService(siteDatabase);
+        System.out.println(overviewService.getTopCategories(7));
+    }
+
 }

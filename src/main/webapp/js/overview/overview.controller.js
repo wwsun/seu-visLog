@@ -12,6 +12,11 @@ angular.module('vislog.overview', ['chart.js'])
             series:[]
         };
 
+        vm.hotCategories = {
+            labels: [],
+            data: []
+        };
+
         vm.searchEngines = null;
         vm.countryContribution = [];
         vm.hotPages = null;
@@ -48,10 +53,24 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
+        vm.getHotCategories = function() {
+            $http.get(baseUrl + 'sessions/overview/frequent/categories').success(function (data) {
+                var dups = [];
+                var i,n;
+
+                for (i=0, n=data.length; i <n; i++) {
+                    vm.hotCategories.labels.push(data[i].name);
+                    dups.push(data[i].dup);
+                }
+                vm.hotCategories.data.push(dups);
+            });
+        };
+
         vm.getOverviewNumbers();
         vm.getSessionDistributionByDate("2014-10-22");
         vm.getSearchEngineContribution();
         vm.getCountriesContribution();
         vm.getHotPages();
+        vm.getHotCategories();
 
     });

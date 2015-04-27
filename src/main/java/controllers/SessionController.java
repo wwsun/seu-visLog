@@ -75,8 +75,9 @@ public class SessionController {
     }
 
     @Path("/overview/frequent/categories")
+    @GET
+    @Produces("application/json")
     public JsonArray getFrequentVisitedCategory() {
-        // todo get frequent visited categories
-        return null;
+        return overviewService.getTopCategories(7);
     }
 }

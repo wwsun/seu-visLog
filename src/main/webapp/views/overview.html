@@ -15,11 +15,10 @@
 
             <div class="col-md-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Keywords / Configuration</div>
+                    <div class="panel-heading">Hot Categories</div>
                     <div class="panel-body">
-                        <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
-                                labels="overviewCtrl.distribution.labels" legend="true"
-                                series="overviewCtrl.distribution.series"></canvas>
+                        <canvas class="chart chart-radar" data="overviewCtrl.hotCategories.data"
+                                labels="overviewCtrl.hotCategories.labels"></canvas>
                     </div>
                 </div>
             </div>
@@ -88,7 +87,7 @@
 
         <div class="row overview-numbers">
             <div class="col-md-12">
-                <div class="panel panel-default">
+                <div class="panel panel-info">
                     <div class="panel-heading">Overview</div>
                     <div class="panel-body">
                         <div class="col-md-4">

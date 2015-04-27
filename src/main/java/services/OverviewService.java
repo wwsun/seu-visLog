@@ -18,6 +18,7 @@ public class OverviewService {
     SourceDAO sourceDAO;
     CountryDAO countryDAO;
     NodesDAO nodesDAO;
+    LevelDAO levelDAO;
 
     public OverviewService(final DB db) {
         sessionDAO = new SessionDAO(db);
@@ -25,6 +26,7 @@ public class OverviewService {
         sourceDAO = new SourceDAO(db);
         countryDAO = new CountryDAO(db);
         nodesDAO = new NodesDAO(db);
+        levelDAO = new LevelDAO(db);
     }
 
     public DBObject getSessionDistributionByDate(String date) {
@@ -58,9 +60,15 @@ public class OverviewService {
      * @return an array of main categories that user flow retained
      */
     public JsonArray getTopCategories(int limit) {
-
-        // todo: finish the business logic
-        return null;
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = nodesDAO.getHotCategory(limit);
+        for (DBObject object : list) {
+            String cate = levelDAO.getCategoryById((Integer)object.get("_id"));
+            builder.add(Json.createObjectBuilder()
+                            .add("name", cate)
+                            .add("dup", (Integer)object.get("nums")));
+        }
+        return builder.build();
     }
 
     /**
