@@ -20,6 +20,7 @@ public class OverviewService {
     NodesDAO nodesDAO;
     LevelDAO levelDAO;
     LandsDAO landsDAO;
+    LeaveDAO leaveDAO;
 
     public OverviewService(final DB db) {
         sessionDAO = new SessionDAO(db);
@@ -29,6 +30,7 @@ public class OverviewService {
         nodesDAO = new NodesDAO(db);
         levelDAO = new LevelDAO(db);
         landsDAO = new LandsDAO(db);
+        leaveDAO = new LeaveDAO(db);
     }
 
     public DBObject getSessionDistributionByDate(String date) {
@@ -115,6 +117,20 @@ public class OverviewService {
 
             builder.add(Json.createObjectBuilder()
                 .add("name", cate).add("dup", (Integer) object.get("sum")));
+        }
+        return builder.build();
+    }
+
+    public JsonArray getMainDropOffCategories(int limit) {
+
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = leaveDAO.getMainDropoffCategories(limit);
+
+        for (DBObject object : list) {
+            String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("leaveID")));
+
+            builder.add(Json.createObjectBuilder()
+                    .add("name", cate).add("dup", (Integer) object.get("sum")));
         }
         return builder.build();
     }

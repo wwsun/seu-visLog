@@ -51,4 +51,8 @@ public class SessionTest extends TestCase {
     public void testMainLandings() {
         System.out.println(overviewService.getMainLandingCategories(10));
     }
+
+    public void testMainDropOff() {
+        System.out.println(overviewService.getMainDropOffCategories(10));
+    }
 }

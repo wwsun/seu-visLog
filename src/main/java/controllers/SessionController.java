@@ -87,4 +87,11 @@ public class SessionController {
     public JsonArray getMainLandingCategories() {
         return overviewService.getMainLandingCategories(10);
     }
+
+    @Path("/overview/dropoff/categories")
+    @GET
+    @Produces("application/json")
+    public JsonArray getMainDropOffCategories() {
+        return overviewService.getMainDropOffCategories(10);
+    }
 }
