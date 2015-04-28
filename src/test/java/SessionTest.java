@@ -14,10 +14,12 @@ public class SessionTest extends TestCase {
     final String mongoURI = "mongodb://223.3.80.243:27017";
     final MongoClient mongoClient;
     final DB siteDatabase;
+    final OverviewService overviewService;
 
     public SessionTest() throws UnknownHostException {
         mongoClient = new MongoClient(new MongoClientURI(mongoURI));
         siteDatabase = mongoClient.getDB("jiaodian");
+        overviewService = new OverviewService(siteDatabase);
     }
 
     public void testSessionTrends() {
@@ -27,28 +29,26 @@ public class SessionTest extends TestCase {
     }
 
     public void testSessionCounts() {
-        OverviewService overviewService = new OverviewService(siteDatabase);
         System.out.println(overviewService.getSessionCountsAndBounceRate());
     }
 
     public void testSearchEngineRefers() {
-        OverviewService overviewService = new OverviewService(siteDatabase);
         System.out.println(overviewService.getTopSearchEngines(10));
     }
 
     public void testTopCountaries() {
-        OverviewService overviewService = new OverviewService(siteDatabase);
         overviewService.getTopCountriesFlow(10);
     }
 
     public void testHotPages() {
-        OverviewService overviewService = new OverviewService(siteDatabase);
         System.out.println(overviewService.getFrequentVisitedPages(10));
     }
 
     public void testHotCategories() {
-        OverviewService overviewService = new OverviewService(siteDatabase);
         System.out.println(overviewService.getTopCategories(7));
     }
 
+    public void testMainLandings() {
+        System.out.println(overviewService.getMainLandingCategories(10));
+    }
 }

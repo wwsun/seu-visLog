@@ -19,6 +19,7 @@ public class OverviewService {
     CountryDAO countryDAO;
     NodesDAO nodesDAO;
     LevelDAO levelDAO;
+    LandsDAO landsDAO;
 
     public OverviewService(final DB db) {
         sessionDAO = new SessionDAO(db);
@@ -27,6 +28,7 @@ public class OverviewService {
         countryDAO = new CountryDAO(db);
         nodesDAO = new NodesDAO(db);
         levelDAO = new LevelDAO(db);
+        landsDAO = new LandsDAO(db);
     }
 
     public DBObject getSessionDistributionByDate(String date) {
@@ -81,8 +83,8 @@ public class OverviewService {
         List<DBObject> list = nodesDAO.getHotPages(limit);
         for (DBObject object : list) {
             builder.add(Json.createObjectBuilder()
-            .add("name", (String)object.get("_id"))
-            .add("dup", (Integer)object.get("nums")));
+            .add("name", (String) object.get("_id"))
+            .add("dup", (Integer) object.get("nums")));
         }
         return builder.build();
     }
@@ -97,8 +99,22 @@ public class OverviewService {
         List<DBObject> list = countryDAO.getGeoDistribution(limit);
         for (DBObject object : list) {
             builder.add(Json.createObjectBuilder()
-                            .add("name",(String)object.get("name"))
-                            .add("dup", (Integer)object.get("value")));
+                            .add("name", (String) object.get("name"))
+                            .add("dup", (Integer) object.get("value")));
+        }
+        return builder.build();
+    }
+
+    public JsonArray getMainLandingCategories(int limit) {
+
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = landsDAO.getMainLandingCategories(limit);
+
+        for (DBObject object : list) {
+            String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("landID")));
+
+            builder.add(Json.createObjectBuilder()
+                .add("name", cate).add("dup", (Integer) object.get("sum")));
         }
         return builder.build();
     }
