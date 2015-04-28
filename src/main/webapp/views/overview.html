@@ -7,7 +7,7 @@
                     <div class="panel-heading">Session Distribution</div>
                     <div class="panel-body">
                         <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
-                                labels="overviewCtrl.distribution.labels" legend="true"
+                                labels="overviewCtrl.distribution.labels"
                                 series="overviewCtrl.distribution.series"></canvas>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
             <div class="col-md-6">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Main Landing Categories</div>
+                    <div class="panel-heading">Main Landing Categories - Top 10</div>
                     <div class="panel-body">
                         <canvas class="chart chart-bar" data="overviewCtrl.mainLandingCategories.data"
                                 labels="overviewCtrl.mainLandingCategories.labels"></canvas>
@@ -67,14 +67,11 @@
 
             <div class="col-md-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Main Landing Pages - Top 10</div>
-                    <ul class="list-group">
-
-                        <!--<li class="list-group-item" ng-repeat="item in overviewCtrl.searchEngines">-->
-                            <!--{{item.name}} <span class="badge">{{item.dup}}</span>-->
-                        <!--</li>-->
-                        <li class="list-group-item">null</li>
-                    </ul>
+                    <div class="panel-heading">Main DropOff Pages - Top 10</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-bar" data="overviewCtrl.mainDropOffCategories.data"
+                                labels="overviewCtrl.mainDropOffCategories.labels"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,6 +98,25 @@
                             <p>Overall inquiry rate</p>
                         </div>
                     </div>
+
+                    <div class="panel-body">
+
+                        <p>Change the analysis date range: </p>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="startDate">Start Date</label>
+                                <input type="input" class="form-control" id="startDate" placeholder="Start Date"
+                                        ng-model="overviewCtrl.date">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="endDate">End Date</label>
+                                <input type="date" class="form-control" id="endDate" placeholder="End Date" disabled>
+                            </div>
+                            <button class="btn btn-primary"
+                                    ng-click="overviewCtrl.handleNewAnalysisRangeBtn(overviewCtrl.date)">Refresh Data</button>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>

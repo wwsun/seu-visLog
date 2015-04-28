@@ -6,6 +6,9 @@ angular.module('vislog.overview', ['chart.js'])
         var vm = this;
 
         vm.status = null;
+
+        vm.date = "2014-10-22";
+
         vm.distribution = {
             labels: [],
             data: [],
@@ -25,6 +28,11 @@ angular.module('vislog.overview', ['chart.js'])
             data: []
         };
 
+        vm.mainDropOffCategories = {
+            labels: [],
+            data: []
+        };
+
         vm.getOverviewNumbers = function() {
             $http.get(baseUrl + 'sessions/overview/status').success(function (data) {
                 vm.status = data;
@@ -37,6 +45,12 @@ angular.module('vislog.overview', ['chart.js'])
                 vm.distribution.data.push(data.dup);
                 vm.distribution.series.push('sessions');
             });
+        };
+
+        vm.handleNewAnalysisRangeBtn = function (newDate) {
+            if (angular.isDefined(newDate)) {
+                vm.getSessionDistributionByDate(newDate);
+            }
         };
 
         vm.getSearchEngineContribution = function () {
@@ -82,6 +96,18 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
+        vm.getMainDropOffCategories = function () {
+            $http.get(baseUrl + 'sessions/overview/dropoff/categories').success(function (data) {
+                var dups = [];
+                var i, n;
+                for (i=0, n=data.length; i<n; i++) {
+                    vm.mainDropOffCategories.labels.push(data[i].name);
+                    dups.push(data[i].dup);
+                }
+                vm.mainDropOffCategories.data.push(dups);
+            });
+        };
+
         vm.getOverviewNumbers();
         vm.getSessionDistributionByDate("2014-10-22");
         vm.getSearchEngineContribution();
@@ -89,5 +115,6 @@ angular.module('vislog.overview', ['chart.js'])
         vm.getHotPages();
         vm.getHotCategories();
         vm.getMainLandingCategories();
+        vm.getMainDropOffCategories();
 
     });
