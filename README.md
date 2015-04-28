@@ -1,4 +1,4 @@
-Server Log Visualization
+Server Log Visualization - RESTful version
 ==========
 
 ##Prerequisties
@@ -8,20 +8,25 @@ To rebuild this project, you'll need to have the following:
 - Maven
 - JDK 1.7 (1.8 is not recommended)
 - MongoDB (least version)
+- GlassFish
 
 ##Project Introduction
-visLog is a visualization project for web server logs. The project is a cooperation project with Focus Technology (China) for the server log analysis of www.made-in-china.com.
+visLog is a visualization project for web server logs. 
+The project is a cooperation project with Focus Technology (China) 
+for the server log analysis of www.made-in-china.com.
 
-##Running
+The project architecture is:
 
-1. Before you start the project you should connect to the MongoDB cluster first
-2. Using the following command to run the project in the project root folder
+- Database: MongoDB 3.0 clusters
+- Back-end: RESTful Web Services based on Jersey, running on GlassFish
+- Front-end: Single Page Application based on AngularJS
 
-		mvn compile exec:java -Dexec.mainClass=me.wwsun.SiteController
+##Running(development)
 
-3. Open your browser, and visit the link of:
-		
-		http://localhost:8082/
+1. Start the application in Intellij: `shift` + `F10`
+2. or you can deploy the `war` file to the GlassFish directly
+3. Consume the RESTful services via:
+
 
 ##Team
 The Data&Intelligence Lab, Southeast University (Nanjing)
