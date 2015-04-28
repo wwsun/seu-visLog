@@ -57,13 +57,11 @@
             <div class="col-md-6">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">User Interested Categories</div>
-                    <ul class="list-group">
-                        <!--<li class="list-group-item" ng-repeat="item in overviewCtrl.countryContribution">-->
-                            <!--{{item.name}} <span class="badge">{{item.dup}}</span>-->
-                        <!--</li>-->
-                        <li class="list-group-item">null</li>
-                    </ul>
+                    <div class="panel-heading">Main Landing Categories</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-bar" data="overviewCtrl.mainLandingCategories.data"
+                                labels="overviewCtrl.mainLandingCategories.labels"></canvas>
+                    </div>
                 </div>
             </div>
 
