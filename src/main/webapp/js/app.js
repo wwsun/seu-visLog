@@ -3,5 +3,7 @@ angular.module("vislog",[
     'chart.js',
 
     'vislog.appRoutes',
-    'vislog.overview'
+
+    'vislog.overview',
+    'vislog.path'
 ]);

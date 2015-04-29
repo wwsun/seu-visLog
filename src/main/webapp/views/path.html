@@ -19,16 +19,16 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Reference Categories</div>
                     <div class="panel-body">
-                        Panel content
+                        the main reference categories and urls of the node you clicked
                     </div>
                 </div>
             </div>
 
             <div class="col-md-6 top-landing">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Main Landings</div>
+                    <div class="panel-heading">Click Node detail</div>
                     <div class="panel-body">
-                        Panel content
+                        flow throughout & flow dropoff (percent) of the node you clicked
                     </div>
                 </div>
             </div>
@@ -40,10 +40,38 @@
 
         <div class="row">
             <div class="col-md-12 configuration-console">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Configuration</div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Overview</div>
                     <div class="panel-body">
-                        Panel content
+                        <div class="col-md-4">
+                            <h1>120</h1>
+                            <p>Nodes</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h1>500</h1>
+                            <p>Links</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h1>1200</h1>
+                            <p>Sessions</p>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <p>Change the analysis date range: </p>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="startDate">Start Date</label>
+                                <input type="input" class="form-control" id="startDate" placeholder="Start Date"
+                                       ng-model="pathCtrl.dateRange.start">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="endDate">End Date</label>
+                                <input type="date" class="form-control" id="endDate" placeholder="End Date" disabled>
+                            </div>
+                            <button class="btn btn-primary">Refresh Data</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -52,7 +80,7 @@
         <div class="row">
             <div class="col-md-12 selected-node-detail">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Node detail</div>
+                    <div class="panel-heading">Main Landings of Current Path Graph</div>
                     <div class="panel-body">
                         Panel content
                     </div>
@@ -65,7 +93,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Dropoff</div>
                     <div class="panel-body">
-                        Panel content
+                        High and low dropoff in current path graph
                     </div>
                 </div>
             </div>
