@@ -27,16 +27,6 @@ public class SessionController {
         overviewService = new OverviewService(siteDatabase);
     }
 
-    @Path("/all")
-    @GET
-    @Produces("application/json")
-    public JsonArray getAll() {
-        JsonArrayBuilder builder = Json.createArrayBuilder();
-        // for-loop
-        builder.add(Json.createObjectBuilder().add("name", "weiwei"));
-        return builder.build();
-    }
-
     @Path("/distribution/{date}") //2014-10-22
     @GET
     @Produces("application/json")
