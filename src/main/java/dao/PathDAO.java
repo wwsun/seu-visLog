@@ -15,10 +15,14 @@ public class PathDAO {
 
     private DBCollection path;
 
-    public PathDAO(DB db) { path = db.getCollection("path"); }
+    public PathDAO(DB db) {
+        path = db.getCollection("path");
+    }
 
-    /** 需要传入时间参数
-     *  具体一次访问
+    /**
+     * 需要传入时间参数
+     * 具体一次访问
+     *
      * @param step
      * @param nextStep
      * @param startTime
@@ -26,9 +30,9 @@ public class PathDAO {
      * @return
      * @throws ParseException
      */
-    public List<DBObject>  groupByFour(int  step, int nextStep,String startTime, String endTime) throws ParseException {
-        String start="P"+step;
-        String end ="P"+nextStep;
+    public List<DBObject> groupByFour(int step, int nextStep, String startTime, String endTime) throws ParseException {
+        String start = "P" + step;
+        String end = "P" + nextStep;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //match筛选,时间要求的
         //start & end 不是"null"
@@ -58,7 +62,7 @@ public class PathDAO {
         // $sort
         DBObject sort = new BasicDBObject("$sort", new BasicDBObject("_group", 1));
         //run
-        DBObject out=new BasicDBObject("$out","tmp_out");
+        DBObject out = new BasicDBObject("$out", "tmp_out");
         List<DBObject> pipeline = Arrays.asList(match, project, group, sort, out);
 
         //allowDiskUse
@@ -73,7 +77,8 @@ public class PathDAO {
         return pathGroupList;
     }
 
-    /**需要传入时间参数
+    /**
+     * 需要传入时间参数
      * 获得P1的URL用于计算入度
      *
      * @param startTime
@@ -81,8 +86,8 @@ public class PathDAO {
      * @return
      * @throws ParseException
      */
-    public List<DBObject> getDepth0(String startTime,String endTime)throws ParseException{
-        String start="P1";
+    public List<DBObject> getDepth0(String startTime, String endTime) throws ParseException {
+        String start = "P1";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //match筛选,时间要求的
         //start 不是"null"
@@ -109,8 +114,8 @@ public class PathDAO {
         // $sort
         DBObject sort = new BasicDBObject("$sort", new BasicDBObject("_group", 1));
         //run
-        DBObject out=new BasicDBObject("$out","tmp_out");
-        List<DBObject> pipeline = Arrays.asList(match, project, group, sort,out);
+        DBObject out = new BasicDBObject("$out", "tmp_out");
+        List<DBObject> pipeline = Arrays.asList(match, project, group, sort, out);
         //allowDiskUse
         AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).batchSize(10000).build();
         Cursor cursor = path.aggregate(pipeline, options);
