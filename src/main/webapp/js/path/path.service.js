@@ -5,8 +5,8 @@ angular.module('vislog.path')
         };
 
         obj.getPathData = function () {
-            return $http.get('./data/flow.json', {
-                header: {'Content-Type': 'application/json; charset:GBK'}
+            return $http.get('./data/session-path.json', {
+                header: {'Content-Type': 'application/json; charset:utf-8'}
             })
                 .success(function (data) {
                     angular.copy(data, obj.pathData);

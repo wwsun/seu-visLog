@@ -23,6 +23,7 @@
                         <tr>
                             <th>#</th>
                             <th><a ng-click="pathCtrl.orderBy('-url')">url</a></th>
+                            <th><a ng-click="pathCtrl.orderBy('-semantics')">semantics</a></th>
                             <th><a ng-click="pathCtrl.orderBy('-out_degree')">out</a></th>
                             <th><a ng-click="pathCtrl.orderBy('-in_degree')">int</a></th>
                         </tr>
@@ -31,6 +32,7 @@
                             <tr ng-repeat="item in pathCtrl.pathData.nodes | orderBy: pathCtrl.orderedAttribute">
                                 <td>{{$index}}</td>
                                 <td>{{item.url}}</td>
+                                <td>{{item.semantics}}</td>
                                 <td>{{item.out_degree}}</td>
                                 <td>{{item.in_degree}}</td>
                             </tr>
