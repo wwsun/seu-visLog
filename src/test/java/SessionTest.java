@@ -15,10 +15,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class SessionTest extends TestCase {
-
 
     final String mongoURI = "mongodb://223.3.80.243:27017";
     final MongoClient mongoClient;
@@ -93,5 +96,13 @@ public class SessionTest extends TestCase {
         bw.write(result);
         bw.close();
 
+    }
+
+    public void testDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Calendar cal1 = new GregorianCalendar(2014,10,25,0,0,0);
+        Calendar cal2 = new GregorianCalendar(2014,10,26,0,0,0);
+        System.out.println(sdf.format(cal1.getTime()));
+        System.out.println(sdf.format(cal2.getTime()));
     }
 }

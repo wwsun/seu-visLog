@@ -17,6 +17,9 @@ import javax.ws.rs.Produces;
 import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Path("/sessions")
@@ -95,13 +98,20 @@ public class SessionController {
         return overviewService.getMainDropOffCategories(10);
     }
 
-    @Path("/path")
+    @Path("/path/{date}") //2014-10-22
     @GET
     @Produces("application/json")
-    public JsonObject getSessionPath() throws ParseException, UnknownHostException {
+    public JsonObject getSessionPath(@PathParam("date") String date) throws ParseException, UnknownHostException {
+
+        String[] arr = date.split("-");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Calendar startCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
+                Integer.parseInt(arr[2]),0,0,0);
+        Calendar endCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
+                Integer.parseInt(arr[2])+1, 0,0,0);  // analysis one day by default
 
         //传入日期参数和depth参数(路径深度)
-        SankeyGraph sankeyGraph = pathService.getGraph(7, "2014-10-22 0:0:0", "2014-10-23 0:0:0");
+        SankeyGraph sankeyGraph = pathService.getGraph(7, startCal.getTime().toString(), endCal.getTime().toString());
 
         //传入边的权值
         SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //   根据边的权值过滤
