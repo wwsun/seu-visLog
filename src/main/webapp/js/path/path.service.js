@@ -5,6 +5,10 @@ angular.module('vislog.path')
         };
 
         obj.getPathData = function () {
+
+            // todo: get data via RESTful services
+            // todo: improve the computation efficiency -- path service
+
             return $http.get('./data/session-path.json', {
                 header: {'Content-Type': 'application/json; charset:utf-8'}
             })

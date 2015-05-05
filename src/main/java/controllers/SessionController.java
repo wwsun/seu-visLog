@@ -103,6 +103,8 @@ public class SessionController {
     @Produces("application/json")
     public JsonObject getSessionPath(@PathParam("date") String date) throws ParseException, UnknownHostException {
 
+        // todo: the computation efficiency is too bad!
+
         String[] arr = date.split("-");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Calendar startCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
