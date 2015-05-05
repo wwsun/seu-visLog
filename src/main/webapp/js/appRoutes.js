@@ -14,7 +14,12 @@ angular.module('vislog.appRoutes', [])
             .state('path', {
                 url: '/path',
                 templateUrl:'views/path.html',
-                controller: 'PathCtrl as pathCtrl'
+                controller: 'PathCtrl as pathCtrl',
+                resolve: {
+                    pathDataPromise: ['sessionPathData', function(sessionPathData) {
+                        return sessionPathData.getPathData();
+                    }]
+                }
             });
 
     });
