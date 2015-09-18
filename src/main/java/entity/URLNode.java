@@ -10,12 +10,17 @@ public class URLNode extends Node {
     protected double out_degree;
     protected double in_degree;
     protected double drop_per;
+<<<<<<< HEAD
     protected String datetime;
     protected int depth;
 
     public void setDatetime(String datetime) {
         this.datetime = datetime;
     }
+=======
+    protected int depth;
+
+>>>>>>> seuvislogwws/master
 
     public String getUrl() {
         return url;
@@ -66,8 +71,11 @@ public class URLNode extends Node {
     public double getOut_degree() {
         return out_degree;
     }
+<<<<<<< HEAD
 
     public String getSemantics() {
         return semantics;
     }
+=======
+>>>>>>> seuvislogwws/master
 }

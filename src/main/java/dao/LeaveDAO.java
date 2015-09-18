@@ -2,10 +2,14 @@ package dao;
 
 import com.mongodb.*;
 
+<<<<<<< HEAD
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+=======
+import java.util.ArrayList;
+>>>>>>> seuvislogwws/master
 import java.util.List;
 
 public class LeaveDAO {
@@ -16,6 +20,7 @@ public class LeaveDAO {
 
     /**
      * get main drop off categories
+<<<<<<< HEAD
      * @param limit is the number of results you want to returned
      * @return the main drop off categories
      */
@@ -47,10 +52,24 @@ public class LeaveDAO {
             item.put("sum", cursorItem.get("nums"));
             list.add(item);
 
+=======
+     * @param LIMIT is the number of results you want to returned
+     * @return the main drop off categories
+     */
+    public List<DBObject> getMainDropoffCategories(final int LIMIT) {
+        QueryBuilder builder = QueryBuilder.start();
+        DBCursor cursor = leave.find(builder.get(), new BasicDBObject("_id", false))
+                .sort(new BasicDBObject("sum", -1)).limit(LIMIT);
+
+        List<DBObject> list = new ArrayList<>();
+        while (cursor.hasNext()) {
+            list.add(cursor.next());
+>>>>>>> seuvislogwws/master
         }
         cursor.close();
         return list;
     }
+<<<<<<< HEAD
 
     //leave页面下某一类别的top页面
     // 通过传入的category的ID，获得该类别下面的top页面
@@ -96,4 +115,6 @@ public class LeaveDAO {
         List<DBObject> list =leaveDAO.getTopLeavePagesByCategory(2554, 5);
         System.out.println(list);
     }
+=======
+>>>>>>> seuvislogwws/master
 }

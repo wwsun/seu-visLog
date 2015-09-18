@@ -2,10 +2,14 @@ package dao;
 
 import com.mongodb.*;
 
+<<<<<<< HEAD
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+=======
+import java.util.ArrayList;
+>>>>>>> seuvislogwws/master
 import java.util.List;
 
 public class CountryDAO {
@@ -14,6 +18,7 @@ public class CountryDAO {
     public CountryDAO(final DB siteDatabase) { geo = siteDatabase.getCollection("country"); }
 
     public List<DBObject> getGeoDistribution(int limit) {
+<<<<<<< HEAD
         DBObject groupFields = new BasicDBObject("_id", "$country");
         groupFields.put("total_session", new BasicDBObject("$sum", "$session_nums"));
         DBObject group = new BasicDBObject("$group", groupFields);
@@ -25,18 +30,30 @@ public class CountryDAO {
         //allowDiskUse
         AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).batchSize(10000).build();
         Cursor cursor = geo.aggregate(pipeline, options);
+=======
+        QueryBuilder builder = QueryBuilder.start();
+        DBCursor cursor = geo.find(builder.get(), new BasicDBObject("_id", false))
+                .sort(new BasicDBObject("sum", -1))
+                .limit(limit);
+>>>>>>> seuvislogwws/master
 
         List<DBObject> list = new ArrayList<DBObject>();
         while(cursor.hasNext()) {
             DBObject object = cursor.next();
             DBObject newObj = new BasicDBObject();
+<<<<<<< HEAD
             newObj.put("name", object.get("_id"));
             newObj.put("value", object.get("total_session"));
+=======
+            newObj.put("name", object.get("country"));
+            newObj.put("value", object.get("sum"));
+>>>>>>> seuvislogwws/master
             list.add(newObj);
         }
         cursor.close();
         return list;
     }
+<<<<<<< HEAD
 
     public List<DBObject> getGeoDetail(int limit) {
         //统计各项指标
@@ -136,4 +153,6 @@ public class CountryDAO {
         cursor.close();
         return inquiry_nums_all;
     }
+=======
+>>>>>>> seuvislogwws/master
 }

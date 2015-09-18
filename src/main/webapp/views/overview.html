@@ -1,0 +1,138 @@
+<div class="row">
+    <div class="col-md-8">
+
+        <div class="row first-line">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Session Distribution</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
+                                labels="overviewCtrl.distribution.labels"
+                                series="overviewCtrl.distribution.series"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Hot Categories</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-radar" data="overviewCtrl.hotCategories.data"
+                                labels="overviewCtrl.hotCategories.labels"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row second-line">
+
+            <div class="col-md-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Flow Contribution - Top 10</div>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="item in overviewCtrl.countryContribution">
+                            {{item.name}} <span class="badge">{{item.dup}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Search Engine Contribution - Top 10</div>
+                    <ul class="list-group">
+
+                        <li class="list-group-item" ng-repeat="item in overviewCtrl.searchEngines">
+                            {{item.name}} <span class="badge">{{item.dup}}</span>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row third-line">
+
+            <div class="col-md-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Main Landing Categories - Top 10</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-bar" data="overviewCtrl.mainLandingCategories.data"
+                                labels="overviewCtrl.mainLandingCategories.labels"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Main DropOff Pages - Top 10</div>
+                    <div class="panel-body">
+                        <canvas class="chart chart-bar" data="overviewCtrl.mainDropOffCategories.data"
+                                labels="overviewCtrl.mainDropOffCategories.labels"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="row overview-numbers">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Overview</div>
+                    <div class="panel-body">
+                        <div class="col-md-4">
+                            <h1>{{overviewCtrl.status.total}}</h1>
+                            <p>Sessions this day</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h1>{{overviewCtrl.status.bounce_rate}}%</h1>
+                            <p>First visit bounce rate</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h1>{{overviewCtrl.status.inquiry_rate}}%</h1>
+                            <p>Overall inquiry rate</p>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <p>Change the analysis date range: </p>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only" for="startDate">Start Date</label>
+                                <input type="input" class="form-control" id="startDate" placeholder="Start Date"
+                                        ng-model="overviewCtrl.date">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="endDate">End Date</label>
+                                <input type="date" class="form-control" id="endDate" placeholder="End Date" disabled>
+                            </div>
+                            <button class="btn btn-primary"
+                                    ng-click="overviewCtrl.handleNewAnalysisRangeBtn(overviewCtrl.date)">Refresh Data</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row frequent-pages">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Frequent Visited Pages</div>
+                    <div class="list-group">
+                        <a ng-repeat="item in overviewCtrl.hotPages" class="list-group-item" href="http://{{item.name}}" target="_blank">
+                            {{item.name}} <span class="badge">{{item.dup}}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

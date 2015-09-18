@@ -30,6 +30,10 @@ public class SessionDAO {
         }
         cursor.close();
         DBObject sessionTrends = new BasicDBObject();
+<<<<<<< HEAD
+=======
+
+>>>>>>> seuvislogwws/master
         sessionTrends.put("hour", hourList.toArray());
         sessionTrends.put("dup", dupList.toArray());
         return sessionTrends;
