@@ -1,19 +1,15 @@
 package dao;
 
 import com.mongodb.*;
-<<<<<<< HEAD
 import sun.tools.jar.Main;
-=======
->>>>>>> seuvislogwws/master
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-<<<<<<< HEAD
+
 import java.util.Date;
-=======
->>>>>>> seuvislogwws/master
 import java.util.List;
 
 /**
@@ -32,8 +28,8 @@ public class PathDAO {
      * ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
      * ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½ï¿½
 =======
-     * ÐèÒª´«ÈëÊ±¼ä²ÎÊý
-     * ¾ßÌåÒ»´Î·ÃÎÊ
+     * ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
+     * ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î·ï¿½ï¿½ï¿½
 >>>>>>> seuvislogwws/master
      *
      * @param step
@@ -51,13 +47,10 @@ public class PathDAO {
         String start = "P" + step;
         String end = "P" + nextStep;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-<<<<<<< HEAD
+
         //match
         //start & end !="null"
-=======
-        //matchÉ¸Ñ¡,Ê±¼äÒªÇóµÄ
-        //start & end ²»ÊÇ"null"
->>>>>>> seuvislogwws/master
+
         BasicDBObject[] arrayCond = {
                 new BasicDBObject("time", new BasicDBObject("$gte", sdf.parse(startTime))),
                 new BasicDBObject("time", new BasicDBObject("$lt", sdf.parse(endTime))),
@@ -67,7 +60,6 @@ public class PathDAO {
         BasicDBObject cond = new BasicDBObject();
         cond.put("$and", arrayCond);
         DBObject match = new BasicDBObject("$match", cond);
-<<<<<<< HEAD
         //$project
         DBObject fields = new BasicDBObject(start, 1);
         fields.put(end, 1);
@@ -113,10 +105,8 @@ public class PathDAO {
         cond.put("$and", arrayCond);
         DBObject match = new BasicDBObject("$match", cond);
         //$project
-=======
 
-        //ÀûÓÃ$projectÆ´×°groupÐèÒªµÄÊý¾Ý
->>>>>>> seuvislogwws/master
+
         DBObject fields = new BasicDBObject(start, 1);
         fields.put(end, 1);
         fields.put("session", 1);
@@ -125,25 +115,18 @@ public class PathDAO {
         DBObject _group = new BasicDBObject(start, "$" + start);
         _group.put(end, "$" + end);
         _group.put("session", "$session");
-<<<<<<< HEAD
+
         //_group
         DBObject groupFields = new BasicDBObject("_id", _group);
         groupFields.put("nums", new BasicDBObject("$sum", 1));  //ï¿½ï¿½Îª1
-=======
-        //_group×÷ÎªgroupµÄÌõ¼þ
-        DBObject groupFields = new BasicDBObject("_id", _group);
-        groupFields.put("nums", new BasicDBObject("$sum", 1));  //¼ÆÎª1
->>>>>>> seuvislogwws/master
         DBObject group = new BasicDBObject("$group", groupFields);
         // $sort
         DBObject sort = new BasicDBObject("$sort", new BasicDBObject("_group", 1));
         //run
         DBObject out = new BasicDBObject("$out", "tmp_out");
         List<DBObject> pipeline = Arrays.asList(match, project, group, sort, out);
-<<<<<<< HEAD
-=======
 
->>>>>>> seuvislogwws/master
+
         //allowDiskUse
         AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).batchSize(10000).build();
 
@@ -160,8 +143,8 @@ public class PathDAO {
 <<<<<<< HEAD
      * èŽ·å¾—P1çš„æ‰€æœ‰èŠ‚ç‚¹
 =======
-     * ÐèÒª´«ÈëÊ±¼ä²ÎÊý
-     * »ñµÃP1µÄURLÓÃÓÚ¼ÆËãÈë¶È
+     * ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
+     * ï¿½ï¿½ï¿½P1ï¿½ï¿½URLï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 >>>>>>> seuvislogwws/master
      *
      * @param startTime
@@ -176,13 +159,9 @@ public class PathDAO {
     public List<DBObject> getDepth0(String startTime, String endTime) throws ParseException {
         String start = "P1";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-<<<<<<< HEAD
         //match
         //start!="null"
-=======
-        //matchÉ¸Ñ¡,Ê±¼äÒªÇóµÄ
-        //start ²»ÊÇ"null"
->>>>>>> seuvislogwws/master
+
         BasicDBObject[] arrayCond = {
                 new BasicDBObject("time", new BasicDBObject("$gte", sdf.parse(startTime))),
                 new BasicDBObject("time", new BasicDBObject("$lt", sdf.parse(endTime))),
@@ -191,7 +170,6 @@ public class PathDAO {
         BasicDBObject cond = new BasicDBObject();
         cond.put("$and", arrayCond);
         DBObject match = new BasicDBObject("$match", cond);
-<<<<<<< HEAD
         //project
         DBObject fields = new BasicDBObject(start, 1);
         fields.put("session", 1);
@@ -231,25 +209,18 @@ public class PathDAO {
         cond.put("$and", arrayCond);
         DBObject match = new BasicDBObject("$match", cond);
         //$project
-=======
 
-        //ÀûÓÃ$projectÆ´×°groupÐèÒªµÄÊý¾Ý
->>>>>>> seuvislogwws/master
         DBObject fields = new BasicDBObject(start, 1);
         fields.put("session", 1);
         DBObject project = new BasicDBObject("$project", fields);
         // $group
         DBObject _group = new BasicDBObject(start, "$" + start);
         _group.put("session", "$session");
-<<<<<<< HEAD
+
         //_group
         DBObject groupFields = new BasicDBObject("_id", _group);
         groupFields.put("nums", new BasicDBObject("$sum", 1));
-=======
-        //_group×÷ÎªgroupµÄÌõ¼þ
-        DBObject groupFields = new BasicDBObject("_id", _group);
-        groupFields.put("nums", new BasicDBObject("$sum", 1));  //¼ÆÎª1
->>>>>>> seuvislogwws/master
+
         DBObject group = new BasicDBObject("$group", groupFields);
         // $sort
         DBObject sort = new BasicDBObject("$sort", new BasicDBObject("_group", 1));
@@ -266,7 +237,7 @@ public class PathDAO {
         }
         return pathGroupList;
     }
-<<<<<<< HEAD
+
 
 
 
@@ -397,6 +368,5 @@ public class PathDAO {
         return lists;
 
     }
-=======
->>>>>>> seuvislogwws/master
+
 }

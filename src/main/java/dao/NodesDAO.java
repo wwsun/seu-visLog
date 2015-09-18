@@ -77,7 +77,7 @@ public class NodesDAO {
         return categoryList;
     }
 
-<<<<<<< HEAD
+
     //通过传入的category的ID，获得该类别下面的topk页面
     //返回 _id:
     //     nums:
@@ -113,6 +113,4 @@ public class NodesDAO {
     }
 
 
-=======
->>>>>>> seuvislogwws/master
 }

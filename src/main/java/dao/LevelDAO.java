@@ -2,12 +2,10 @@ package dao;
 
 import com.mongodb.*;
 
-<<<<<<< HEAD
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-=======
->>>>>>> seuvislogwws/master
+
 import java.util.List;
 
 public class LevelDAO {
@@ -29,19 +27,10 @@ public class LevelDAO {
         return response;
     }
 
-<<<<<<< HEAD
-    public String[][] getRegexName() {
-        DBObject query = new BasicDBObject();
-=======
-    /**
-     * author: Xiaocheng TENG
-     *
-     * @return
-     */
     public String[][] getRegexName() {
         DBObject query = new BasicDBObject();
 
->>>>>>> seuvislogwws/master
+
         DBObject keys = new BasicDBObject();
         keys.put("LEVEL3_NAME", 1);
         keys.put("REGEX", 1);
@@ -58,7 +47,6 @@ public class LevelDAO {
         }
         return RegexName;
     }
-<<<<<<< HEAD
 
 
     //传入LEVEL3_NAME，返回LEVEL3_ID
@@ -101,6 +89,5 @@ public class LevelDAO {
         System.out.println(list.size());
         System.out.println(list);
     }
-=======
->>>>>>> seuvislogwws/master
+
 }

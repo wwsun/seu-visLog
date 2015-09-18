@@ -21,7 +21,7 @@ public class SankeyGraph extends Graph {
 
     /**
 <<<<<<< HEAD
-     * °´±ßµÄvalueÖµ½øÐÐ¹ýÂË
+     * ï¿½ï¿½ï¿½ßµï¿½valueÖµï¿½ï¿½ï¿½Ð¹ï¿½ï¿½ï¿½
 =======
      * æŒ‰è¾¹çš„valueå€¼è¿›è¡Œè¿‡æ»¤
 >>>>>>> seuvislogwws/master
@@ -36,11 +36,8 @@ public class SankeyGraph extends Graph {
             Edge edge = iterator_links.next();
             double value = ((StreamEdge) edge).getValue();
             if (value < filter)
-<<<<<<< HEAD
-                iterator_links.remove();  //ÒÆ³ý±ß
-=======
-                iterator_links.remove();  //ç§»é™¤è¾¹
->>>>>>> seuvislogwws/master
+                iterator_links.remove();  //ï¿½Æ³ï¿½ï¿½
+
             else {
                 nodeset.add(edge.getSource());
                 nodeset.add(edge.getTarget());
@@ -49,21 +46,13 @@ public class SankeyGraph extends Graph {
         Iterator<? extends Node> iterator_nodes = this.nodes.iterator();
         while (iterator_nodes.hasNext()) {
             Node node = iterator_nodes.next();
-<<<<<<< HEAD
-            if (!nodeset.contains(node.getName())) {  //²»°üº¬nodesµÄ
+
+            if (!nodeset.contains(node.getName())) {  //ï¿½ï¿½ï¿½ï¿½nodesï¿½ï¿½
                 iterator_nodes.remove();
             }
         }
-        // System.out.println( "¹ýÂËºónodesµÄ´óÐ¡£º "+this.nodes.size());
-        //½«¹ýÂË¹ýºóµÄjson½á¹ûÔÙ´Î°´nodeµÄname´Ó0¿ªÊ¼ÅÅºÃ
-=======
-            if (!nodeset.contains(node.getName())) {  //ä¸åŒ…å«nodesçš„
-                iterator_nodes.remove();
-            }
-        }
-        // System.out.println( "è¿‡æ»¤åŽnodesçš„å¤§å°ï¼š "+this.nodes.size());
-        //å°†è¿‡æ»¤è¿‡åŽçš„jsonç»“æžœå†æ¬¡æŒ‰nodeçš„nameä»Ž0å¼€å§‹æŽ’å¥½
->>>>>>> seuvislogwws/master
+        // System.out.println( "ï¿½ï¿½ï¿½Ëºï¿½nodesï¿½Ä´ï¿½Ð¡ï¿½ï¿½ "+this.nodes.size());
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½jsonï¿½ï¿½ï¿½ï¿½Ù´Î°ï¿½nodeï¿½ï¿½nameï¿½ï¿½0ï¿½ï¿½Ê¼ï¿½Åºï¿½
         int index = 0;
         for (Node n : this.nodes) {
             int old_name = n.getName();
@@ -82,7 +71,7 @@ public class SankeyGraph extends Graph {
 
     /**
 <<<<<<< HEAD
-     * topk ×ÅÂ½Ò³
+     * topk ï¿½ï¿½Â½Ò³
 =======
      * topk ç€é™†é¡µ
 >>>>>>> seuvislogwws/master
@@ -118,7 +107,7 @@ public class SankeyGraph extends Graph {
 
     /**
 <<<<<<< HEAD
-     * topK Ìø³öÒ³
+     * topK ï¿½ï¿½ï¿½Ò³
 =======
      * topK è·³å‡ºé¡µ
 >>>>>>> seuvislogwws/master
@@ -126,11 +115,8 @@ public class SankeyGraph extends Graph {
     public List<URLNode> topKDropPage(int k) {
         List<URLNode> highdrop_nodes = new ArrayList<URLNode>();
         List<? extends Node> nodes = this.getNodes();
-<<<<<<< HEAD
-        //ÏÈÕÒµ½ËùÓÐ½ÚµãµÄindegreeµÄÖÐÎ»Êý£¬
-=======
-        //å…ˆæ‰¾åˆ°æ‰€æœ‰èŠ‚ç‚¹çš„indegreeçš„ä¸­ä½æ•°ï¼Œ
->>>>>>> seuvislogwws/master
+        //ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½Ð½Úµï¿½ï¿½indegreeï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+
         double middle = getMiddle(nodes);
         for (Node node : nodes) {
             URLNode n = (URLNode) node;
@@ -151,7 +137,7 @@ public class SankeyGraph extends Graph {
 
     /**
 <<<<<<< HEAD
-     * È¡µÃnodesÖÐÄ³¸öÖ¸±ê×îÐ¡µÄnode
+     * È¡ï¿½ï¿½nodesï¿½ï¿½Ä³ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½node
 =======
      * å–å¾—nodesä¸­æŸä¸ªæŒ‡æ ‡æœ€å°çš„node
 >>>>>>> seuvislogwws/master
@@ -181,7 +167,7 @@ public class SankeyGraph extends Graph {
 
     /**
 <<<<<<< HEAD
-     * µÃµ½nodesµÄListµÄindegreeµÄÖÐÎ»Êý
+     * ï¿½Ãµï¿½nodesï¿½ï¿½Listï¿½ï¿½indegreeï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
 =======
      * å¾—åˆ°nodesçš„Listçš„indegreeçš„ä¸­ä½æ•°
 >>>>>>> seuvislogwws/master
@@ -201,7 +187,7 @@ public class SankeyGraph extends Graph {
 
     /**
 <<<<<<< HEAD
-     * ÏÂÃæÁ½¸öÊÇÕÒµÚk´óÊý
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½kï¿½ï¿½ï¿½ï¿½
 =======
      * ä¸‹é¢ä¸¤ä¸ªæ˜¯æ‰¾ç¬¬kå¤§æ•°
 >>>>>>> seuvislogwws/master
