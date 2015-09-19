@@ -24,4 +24,6 @@ public abstract class Node implements Comparable<Node>{
     public int getName(){
         return name;
     }
+
+
 }

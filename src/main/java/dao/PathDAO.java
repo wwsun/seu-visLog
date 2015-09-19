@@ -24,24 +24,15 @@ public class PathDAO {
     }
 
     /**
-<<<<<<< HEAD
      * ��Ҫ����ʱ�����
      * ����һ�η���
-=======
-     * ��Ҫ����ʱ�����
-     * ����һ�η���
->>>>>>> seuvislogwws/master
      *
      * @param step
      * @param nextStep
      * @param startTime
      * @param endTime
      * @return
-<<<<<<< HEAD
      * @throws java.text.ParseException
-=======
-     * @throws ParseException
->>>>>>> seuvislogwws/master
      */
     public List<DBObject> groupByFour(int step, int nextStep, String startTime, String endTime) throws ParseException {
         String start = "P" + step;
@@ -368,5 +359,6 @@ public class PathDAO {
         return lists;
 
     }
+
 
 }

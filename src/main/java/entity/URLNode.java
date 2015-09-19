@@ -71,4 +71,8 @@ public class URLNode extends Node {
         return semantics;
     }
 
+    @Override
+    public String toString() {
+        return "url:" + url + "," + "in_degree:" + in_degree + "," + "out_degree:" + out_degree;
+    }
 }

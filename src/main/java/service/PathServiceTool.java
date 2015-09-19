@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * �����ϣ�For VisitFlowDataResource
+ * ???????For VisitFlowDataResource
  */
 public class PathServiceTool {
 
@@ -35,53 +35,53 @@ public class PathServiceTool {
 
     public PathServiceTool(DB db) {
         pathDAO = new PathDAO(db);
-        levelDAO = new LevelDAO(db);  //��Ҫ�õ�regex,name
+        levelDAO = new LevelDAO(db);  //??????regex,name
         logDAO = new LogDAO(db);
     }
 
-    //���˻Ự��ԭ(�Ƿ���Ҫ���Ӹ��ip��ȡ)
+    //????????(????????????ip???)
     public String getSequenceBySessionID(String sessionID) {
         return logDAO.getPathBySession(sessionID);
     }
 
-    //���뿪ʼʱ��ͽ���ʱ�䣬���ȫ��·����Ȼ����Ҫ���ˣ�����ȡ��TOP10��
+    //????????????????????????????????????????????TOP10??
     public SankeyGraph getGraph(int depth, String startTime, String endTime) throws UnknownHostException, ParseException {
         List<URLNode> nodes;
-        //��session��ǵ�·����ݣ����ڼ���ÿ���ڵ��out_degree��in_degree
+        //??session?????????????????????????out_degree??in_degree
         List<StreamEdge> links;
-        //����session��ǵ�·����ݣ���ÿ���ߵ�Ȩֵ��������ʾ
+        //????session??????????????????????????????
         List<StreamEdge> noSessionLinksList;
         SankeyGraph graph = null;
-        int node_index = 0;   //������name
+        int node_index = 0;   //??????name
 
         nodes = new ArrayList<URLNode>();
         links = new ArrayList<StreamEdge>();
         noSessionLinksList = new ArrayList<StreamEdge>();
 
-        //����map���ڴ�ţ����->index�������յ�->index����ӳ��
+        //????map??????????->index?????????->index???????
         Map<String, Integer> startMap = null;
         Map<String, Integer> endMap = null;
 
-        //depthmap���ڴ��ÿ���ڵ㣨��name��ʶ������·������ȵĶ�Ӧ��ϵ
+        //depthmap??????????????name???????????????????????
         Map<Integer, Integer> depthMap = new HashMap<Integer, Integer>();
 
-        //����� ȡ �����
+        //????? ? ?????
         for (int i = 0; i < depth; i++) {
-            //��Ų�ͬsession��ͬ�����յ��·�ε�ln(count)֮��
+            //?????session????????????????ln(count)???
             Map<String, Double> segCount = new HashMap<String, Double>();
-            //��ʼ��map
+            //?????map
             if (i == 0) {
                 startMap = new HashMap<String, Integer>();
             } else {
                 startMap = endMap;
             }
             endMap = new HashMap<String, Integer>();
-            //һ��ȡ���
+            //???????
             List<DBObject> pathGroupList = pathDAO.groupByFour(i + 1, i + 2, startTime, endTime);
 
-            //ȡ�õ���ݰ� _id(start,end,session),nums
+            //???????? _id(start,end,session),nums
             for (DBObject obj : pathGroupList) {
-                int count = (Integer) obj.get("nums");  //��ñߵ�count
+                int count = (Integer) obj.get("nums");  //?????count
                 DBObject idObject = (DBObject) obj.get("_id");
                 String start_url = (String) idObject.get("P" + (i + 1));
                 String end_url = (String) idObject.get("P" + (i + 2));
@@ -89,14 +89,14 @@ public class PathServiceTool {
 
                 if (!(start_url.equals("null")) && !(end_url.equals("null"))) {
                     if (i == 0) {
-                        //startMap��<start_url,node_index>
+                        //startMap??<start_url,node_index>
                         if (!startMap.containsKey(start_url)) {
                             startMap.put(start_url, node_index);
                             depthMap.put(node_index, i);
                             node_index++;
                         }
                     }
-                    //endMap��<end_url,node_index>
+                    //endMap??<end_url,node_index>
                     if (!endMap.containsKey(end_url)) {
                         endMap.put(end_url, node_index);
                         depthMap.put(node_index, i + 1);
@@ -147,12 +147,12 @@ public class PathServiceTool {
             }
 
         }
-        //��nodes����name����
+        //??nodes????name????
         for (URLNode node : nodes) {
-            //����map���ڼ�¼ͬһ��session���Ե�ǰ�ڵ��Ϊ���ıߵ�value֮��
+            //????map??????????session?????????????????value???
             Map<String, Double> in_session = new HashMap<String, Double>();
             Map<String, Double> out_session = new HashMap<String, Double>();
-            //����ÿ��node�ĳ��Ⱥ����
+            //???????node?????????
             double out = 0;
             double in = 0;
             for (StreamEdge link : links) {
@@ -180,7 +180,7 @@ public class PathServiceTool {
             node.setIn_degree(in);
             node.setOut_degree(out);
 
-            //����ÿ��node��url��������Ϣ
+            //???????node??url?????????
             String[][] RegexName = levelDAO.getRegexName();
             for (int j = 0; j < RegexName.length; j++) {
                 Matcher m = Pattern.compile(RegexName[j][0]).matcher(node.getUrl());
@@ -189,11 +189,11 @@ public class PathServiceTool {
                 }
             }
         }
-        //depth�������Ժ�
-        //����depthΪ0�Ľڵ�����
+        //depth?????????
+        //????depth?0????????
         Map<String, Double> Startout_session = new HashMap<String, Double>();
         List<DBObject> path0List = pathDAO.getDepth0(startTime, endTime);
-        //ȡ�õ���ݰ� _id(start,session),nums
+        //???????? _id(start,session),nums
         for (DBObject obj : path0List) {
             int count = (Integer) obj.get("nums");
             DBObject idObject = (DBObject) obj.get("_id");
@@ -206,64 +206,65 @@ public class PathServiceTool {
             } else
                 Startout_session.put(start_url, Math.log((double) count) + 1);
         }
-        //����start_url�����
+        //????start_url?????
         for (URLNode node : nodes) {
             if (node.getDepth() == 0) {
                 node.setIn_degree(Startout_session.get(node.getUrl()));
             }
         }
-        //����ÿ���ڵ�������
+        //????????????????
         for (URLNode node : nodes) {
             double in = node.getIn_degree();
             double out = node.getOut_degree();
             node.setDrop_per((in - out) / in);
         }
 
+        System.out.println(nodes);
         graph = new SankeyGraph(nodes, noSessionLinksList);
         return graph;
     }
 
-    //����·����ԭ(ͼ)
+    //??????????(?)
     public SankeyGraph getGraph(int depth, String sessionID) throws UnknownHostException, ParseException {
 
         List<URLNode> nodes;
-        //��session��ǵ�·����ݣ����ڼ���ÿ���ڵ��out_degree��in_degree
+        //??session?????????????????????????out_degree??in_degree
         List<StreamEdge> links;
-        //����session��ǵ�·����ݣ���ÿ���ߵ�Ȩֵ��������ʾ
+        //????session??????????????????????????????
         List<StreamEdge> noSessionLinksList;
 
         SankeyGraph graph = null;
-        int node_index = 0;   //������name
+        int node_index = 0;   //??????name
 
         nodes = new ArrayList<URLNode>();
         links = new ArrayList<StreamEdge>();
         noSessionLinksList = new ArrayList<StreamEdge>();
 
-        //����map���ڴ�ţ����->index�������յ�->index����ӳ��
+        //????map??????????->index?????????->index???????
         Map<String, Integer> startMap = null;
         Map<String, Integer> endMap = null;
 
-        //depthmap���ڴ��ÿ���ڵ㣨��name��ʶ������·������ȵĶ�Ӧ��ϵ
+        //depthmap??????????????name???????????????????????
         Map<Integer, Integer> depthMap = new HashMap<Integer, Integer>();
 
-        //����� ȡ �����
+        //????? ? ?????
         for (int i = 0; i < depth; i++) {
-            //��Ų�ͬsession��ͬ�����յ��·�ε�ln(count)֮��
+            //?????session????????????????ln(count)???
             Map<String, Double> segCount = new HashMap<String, Double>();
-            //��ʼ��map
+            //?????map
             if (i == 0) {
                 startMap = new HashMap<String, Integer>();
             } else {
                 startMap = endMap;
             }
             endMap = new HashMap<String, Integer>();
-            //һ��ȡ���
+            //???????
             List<DBObject> pathGroupList = pathDAO.groupBySessionID(i + 1, i + 2, sessionID);
 //            System.out.println(pathGroupList);
 
-            //ȡ�õ���ݰ� _id(start,end,session),nums
+            //???????? _id(start,end,session),nums
             for (DBObject obj : pathGroupList) {
-                int count = (Integer) obj.get("nums");  //��ñߵ�count
+                int count = (Integer) obj.get("nums");  //?????count
                 DBObject idObject = (DBObject) obj.get("_id");
                 String start_url = (String) idObject.get("P" + (i + 1));
                 String end_url = (String) idObject.get("P" + (i + 2));
@@ -271,14 +272,14 @@ public class PathServiceTool {
 
                 if (!(start_url.equals("null")) && !(end_url.equals("null"))) {
                     if (i == 0) {
-                        //startMap��<start_url,node_index>
+                        //startMap??<start_url,node_index>
                         if (!startMap.containsKey(start_url)) {
                             startMap.put(start_url, node_index);
                             depthMap.put(node_index, i);
                             node_index++;
                         }
                     }
-                    //endMap��<end_url,node_index>
+                    //endMap??<end_url,node_index>
                     if (!endMap.containsKey(end_url)) {
                         endMap.put(end_url, node_index);
                         depthMap.put(node_index, i + 1);
@@ -329,12 +330,12 @@ public class PathServiceTool {
             }
 
         }
-        //��nodes����name����
+        //??nodes????name????
         for (URLNode node : nodes) {
-            //����map���ڼ�¼ͬһ��session���Ե�ǰ�ڵ��Ϊ���ıߵ�value֮��
+            //????map??????????session?????????????????value???
             Map<String, Double> in_session = new HashMap<String, Double>();
             Map<String, Double> out_session = new HashMap<String, Double>();
-            //����ÿ��node�ĳ��Ⱥ����
+            //???????node?????????
             double out = 0;
             double in = 0;
             for (StreamEdge link : links) {
@@ -364,7 +365,7 @@ public class PathServiceTool {
 
 //            System.out.println("NODES:"+nodes);
 
-            //����ÿ��node��url��������Ϣ
+            //???????node??url?????????
             String[][] RegexName = levelDAO.getRegexName();
             for (int j = 0; j < RegexName.length; j++) {
                 Matcher m = Pattern.compile(RegexName[j][0]).matcher(node.getUrl());
@@ -373,12 +374,12 @@ public class PathServiceTool {
                 }
             }
         }
-        //depth�������Ժ�
-        //����depthΪ0�Ľڵ�����
+        //depth?????????
+        //????depth?0????????
         Map<String, Double> Startout_session = new HashMap<String, Double>();
         List<DBObject> path0List = pathDAO.getDepth0(sessionID);
 //        System.out.println(path0List);
-        //ȡ�õ���ݰ� _id(start,session),nums
+        //???????? _id(start,session),nums
         for (DBObject obj : path0List) {
             int count = (Integer) obj.get("nums");
             DBObject idObject = (DBObject) obj.get("_id");
@@ -391,41 +392,43 @@ public class PathServiceTool {
             } else
                 Startout_session.put(start_url, Math.log((double) count) + 1);
         }
-        //����start_url�����
+        //????start_url?????
         for (URLNode node : nodes) {
             if (node.getDepth() == 0) {
                 node.setIn_degree(Startout_session.get(node.getUrl()));
             }
         }
-        //����ÿ���ڵ�������
+        //????????????????
         for (URLNode node : nodes) {
             double in = node.getIn_degree();
             double out = node.getOut_degree();
             node.setDrop_per((in - out) / in);
         }
 
+
+
         graph = new SankeyGraph(nodes, noSessionLinksList);
         return graph;
     }
 
-   //�������Ⱥ��·���ļ�(һ����һ��)
+   //????????????????(????????)
    public static void main(String[] args)throws  ParseException,IOException{
        final String mongoURI = "mongodb://223.3.75.101:27017";
        MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURI));
        DB db = mongoClient.getDB("huawei");
        PathServiceTool ps =new PathServiceTool(db);
-       // �������ڲ����depth����(·�����)
+       // ????????????depth????(??????)
        String date="2014-08-10";
        SankeyGraph sankeyGraph = ps.getGraph(7, date+" 0:0:0", date+" 23:59:59");
 
-       //����ݽ�һ������õ�������ߵ�Ȩֵ����
-       SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(10); // ��ݱߵ�Ȩֵ����
+       //?????????????????????????????
+       SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(10); // ???????????
        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10); // topK
-       List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10); // topK ��½ҳ
+       List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10); // topK ????
        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage,
-               topKLandPage).toJson(); // ���ս��
+               topKLandPage).toJson(); // ??????
 
-       //д�뵽�����tomcatĿ¼�����������
+       //?????????tomcat??????????????
        BufferedWriter bw2 = new BufferedWriter(new FileWriter("E:\\toolkit\\apache-tomcat-7.0.56\\webapps\\vislog\\pathdata\\"+date+".json"));
        bw2.write(result);
        bw2.close();
@@ -469,6 +472,11 @@ public class PathServiceTool {
         return jab.build();
 
     }
+
+
+
+
+
 
 
     public JsonArray getCategoryNums(int state){
@@ -544,21 +552,43 @@ public class PathServiceTool {
         return sortedHashMap;
     }
 
+    private static HashMap sortByValuesUp(HashMap map) {
+        List list = new LinkedList(map.entrySet());
 
-    public JsonArray getGrapthByTime(int depth, String startTime, String endTime) throws ParseException, UnknownHostException {
-        SankeyGraph sg = getGraph(depth, startTime, endTime);
+        Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) ((Map.Entry) (o1)).getValue())
+                        .compareTo(((Map.Entry) (o2)).getValue());
+            }
+        });
+
+
+        HashMap sortedHashMap = new LinkedHashMap();
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            sortedHashMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedHashMap;
+    }
+
+    public JsonArray getGrapthByTime(int depth, String time) throws ParseException, UnknownHostException {
+        SankeyGraph sg = getGraphByCategory(depth, time);
         List<URLNode> list = (List<URLNode>)sg.getNodes();
         JsonArrayBuilder jab = Json.createArrayBuilder();
 
         for(URLNode u : list)
         {
-            jab.add(Json.createObjectBuilder().add("category", u.getSemantics()).add("out_degree", u.getOut_degree())
-                    .add("in_degree", u.getIn_degree()).add("drop_per", u.getDrop_per())
-                    .add("depth", u.getDepth()).add("name", u.getName()));
+
+            jab.add(Json.createObjectBuilder().add("category", u.getUrl()).
+                    add("out_degree", String.valueOf(u.getOut_degree()))
+                    .add("in_degree", String.valueOf(u.getIn_degree())).
+                            add("drop_per", String.valueOf(u.getDrop_per()))
+                    .add("depth", String.valueOf(u.getDepth())));
         }
 
         JsonArrayBuilder jab2 = Json.createArrayBuilder();
-        List<StreamEdge> ls = (List<StreamEdge>) sg.getLinks();
+
+       List<StreamEdge> ls = (List<StreamEdge>) sg.getLinks();
         for(StreamEdge se : ls){
 
             jab2.add(Json.createObjectBuilder().add("value", se.getValue()).add("target", se.getTarget()
@@ -568,10 +598,264 @@ public class PathServiceTool {
         JsonArrayBuilder jab3 = Json.createArrayBuilder();
         jab3.add(Json.createObjectBuilder().add("nodes", jab).add("links",jab2));
 
+
         return jab3.build();
+
     }
 
 
 
+    public SankeyGraph getGraphByCategory(int depth, String time) throws UnknownHostException, ParseException {
+
+
+        String startTime = time + " 00:00:00";
+        String endTime = time + " 23:59:59";
+        List<URLNode> nodes;
+        //??session?????????????????????????out_degree??in_degree
+        List<StreamEdge> links;
+        //????session??????????????????????????????
+        List<StreamEdge> noSessionLinksList;
+        SankeyGraph graph = null;
+        int node_index = 0;   //??????name
+
+        nodes = new ArrayList<URLNode>();
+        links = new ArrayList<StreamEdge>();
+        noSessionLinksList = new ArrayList<StreamEdge>();
+
+
+        Map<String, Integer> startMap = null;
+        HashMap<String, Integer> endMap = null;
+
+
+        Map<Integer, Integer> depthMap = new HashMap<Integer, Integer>();
+
+        for (int i = 0; i < depth; i++) {
+            //?????session????????????????ln(count)???
+            Map<String, Double> segCount = new HashMap<String, Double>();
+            //?????map
+            if (i == 0) {
+                startMap = new HashMap<String, Integer>();
+            } else {
+                startMap = endMap;
+            }
+            endMap = new HashMap<String, Integer>();
+            //???????
+            List<DBObject> pathGroupList = getCatetoriesByUrl(i + 1, i + 2, startTime, endTime);
+           //System.out.println(pathGroupList);
+            //???????? _id(start,end,session),nums
+            for (DBObject obj : pathGroupList) {
+                int count = (Integer) obj.get("nums");  //?????count
+                DBObject idObject = (DBObject) obj.get("_id");
+                String start_url = (String) idObject.get("P" + (i + 1));
+                String end_url = (String) idObject.get("P" + (i + 2));
+                String session = (String) idObject.get("session");
+             //   System.out.println(start_url + "" + end_url);
+                //System.out.println("start: " + start_url);
+                if (!(("null").equals(start_url)) && !(("null").equals(end_url))) {
+                  /*  if (i == 0) {
+                        //startMap??<start_url,node_index>
+                        if (!startMap.containsKey(start_url)) {
+                            startMap.put(start_url, node_index);
+                            depthMap.put(node_index, i);
+                            node_index++;
+                        }
+                    }
+                    */
+                    //endMap??<end_url,node_index>
+
+                    if (!endMap.containsKey(start_url)) {
+                        endMap.put(start_url, node_index);
+                        depthMap.put(node_index, i + 1);
+                        node_index++;
+                    }
+
+                    if (!endMap.containsKey(end_url)) {
+                        endMap.put(end_url, node_index);
+                        depthMap.put(node_index, i + 1);
+                        node_index++;
+                    }
+
+                    if(startMap.containsKey(start_url) && endMap.containsKey(end_url)) {
+
+                        StreamEdge link = new StreamEdge(endMap.get(start_url), endMap.get(end_url), (double) count);
+                        link.setSession(session);
+                        links.add(link);
+
+                        String key = start_url + "~" + end_url;
+                        // System.out.println(key);
+                        if (!segCount.containsKey(key)) {
+                            segCount.put(key, Math.log(count) + 1);
+                        } else {
+                            double old_count = segCount.get(key);
+                            segCount.put(key, old_count + Math.log(count) + 1);
+                        }
+                    }
+
+                }
+            }
+            //
+            for (Map.Entry<String, Double> entry : segCount.entrySet()) {
+                String key = entry.getKey();
+                double count = entry.getValue();
+                String start_url = key.split("~")[0];
+                String end_url = key.split("~")[1];
+
+                StreamEdge noSessionLinks = new StreamEdge(startMap.get(start_url), endMap.get(end_url), count);
+
+                noSessionLinksList.add(noSessionLinks);
+            }
+
+            if (i == 0) {
+                for (Map.Entry<String, Integer> entry : startMap.entrySet()) {
+                    //startMap<start_url, node_index>
+                    //node_index  >>>>  name
+                    //URLNode(Integer name,String url)
+                    URLNode node = new URLNode(entry.getValue(), entry.getKey());
+                    node.setDepth(depthMap.get(entry.getValue()));
+                    nodes.add(node);
+                }
+            }
+
+            HashMap<String ,Integer> map = sortByValuesUp(endMap);
+            for (Map.Entry<String, Integer> entry : endMap.entrySet()) {
+                URLNode node = new URLNode(entry.getValue(), entry.getKey());
+                node.setDepth(depthMap.get(entry.getValue()));
+                nodes.add(node);
+            }
+
+        }
+        //??nodes????name????
+        for (URLNode node : nodes) {
+            //????map??????????session?????????????????value???
+            Map<String, Double> in_session = new HashMap<String, Double>();
+            Map<String, Double> out_session = new HashMap<String, Double>();
+            //???????node?????????
+            double out = 0;
+            double in = 0;
+            for (StreamEdge link : links) {
+                if (link.getSource() == node.getName()) {
+                    if (out_session.containsKey(link.getSession())) {
+                        double value = out_session.get(link.getSession());
+                        out_session.put(link.getSession(), value + link.getValue());
+                    } else
+                        out_session.put(link.getSession(), link.getValue());
+                }
+                if (link.getTarget() == node.getName()) {
+                    if (in_session.containsKey(link.getSession())) {
+                        double value = in_session.get(link.getSession());
+                        in_session.put(link.getSession(), value + link.getValue());
+                    } else
+                        in_session.put(link.getSession(), link.getValue());
+                }
+            }
+            for (Map.Entry<String, Double> entry : out_session.entrySet()) {
+                out += Math.log(entry.getValue()) + 1;
+            }
+            for (Map.Entry<String, Double> entry : in_session.entrySet()) {
+                in += Math.log(entry.getValue()) + 1;
+            }
+            node.setIn_degree(in);
+            node.setOut_degree(out);
+
+            //???????node??url?????????
+            String[][] RegexName = levelDAO.getRegexName();
+            for (int j = 0; j < RegexName.length; j++) {
+                Matcher m = Pattern.compile(RegexName[j][0]).matcher(node.getUrl());
+                while (m.find()) {
+                    node.setSemantics(RegexName[j][1]);  //
+                }
+            }
+        }
+        //depth?????????
+        //????depth?0????????
+        Map<String, Double> Startout_session = new HashMap<String, Double>();
+        List<DBObject> path0List = pathDAO.getDepth0(startTime, endTime);
+        //???????? _id(start,session),nums
+        for (DBObject obj : path0List) {
+            int count = (Integer) obj.get("nums");
+            DBObject idObject = (DBObject) obj.get("_id");
+            String start_url = (String) idObject.get("P1");
+            //  String session = (String) idObject.get("session");
+
+            if (Startout_session.containsKey(start_url)) {
+                double value = Startout_session.get(start_url);
+                Startout_session.put(start_url, value + Math.log((double) count) + 1);
+            } else
+                Startout_session.put(start_url, Math.log((double) count) + 1);
+        }
+        //????start_url?????
+        for (URLNode node : nodes) {
+            if (node.getDepth() == 0) {
+                node.setIn_degree(Startout_session.get(node.getUrl()));
+            }
+        }
+        //????????????????
+        for (URLNode node : nodes) {
+            double in = node.getIn_degree();
+            double out = node.getOut_degree();
+            node.setDrop_per((in - out) / in);
+        }
+
+        //System.out.println(nodes);
+        graph = new SankeyGraph(nodes, noSessionLinksList);
+        return graph;
+    }
+
+
+    public List<DBObject> getCatetoriesByUrl(int step, int nextStep, String startTime, String endTime) throws ParseException {
+
+        List<DBObject> lists = pathDAO.groupByFour(step, nextStep, startTime, endTime);
+
+        String [][] regex = levelDAO.getRegexName();
+
+
+
+
+        for(int i = 0; i < lists.size(); i++){
+           DBObject dbo = lists.get(i);
+
+            DBObject idObject = (DBObject) dbo.get("_id");
+            String p1 = (String) idObject.get("P" + step);
+            String p2 = (String) idObject.get("P" + nextStep);
+
+
+            String p1Match = getCategoryByUrl(p1, regex );
+            String p2Match = getCategoryByUrl(p2, regex);
+
+            if(p1Match != null && p2Match != null) {
+                idObject.put("P" + step, p1Match);
+                idObject.put("P" + nextStep, p2Match);
+            }
+
+            /*
+            if(p1Match != null && p2Match != null) {
+
+                lists.get(i).put("P" + step, p1Match);
+                lists.get(i).put("p" + nextStep, p2Match);
+            }
+*/
+        }
+
+      // System.out.println(lists);
+
+        return lists;
+
+    }
+
+    public String getCategoryByUrl(String url, String [][] RegexName){
+
+        String str = null;
+
+        for (int j = 0; j < RegexName.length; j++) {
+            //System.out.println("url is :" + url);
+            Matcher m = Pattern.compile(RegexName[j][0]).matcher(url);
+            while (m.find()) {
+                str =  RegexName[j][1];
+            }
+        }
+
+      //  System.out.println(str);
+        return str;
+    }
 
 }

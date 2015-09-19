@@ -91,7 +91,7 @@
       <!--<dependency>-->
           <!--<groupId>javax.json</groupId>-->
           <!--<artifactId>javax.json-api</artifactId>-->
-          <!--<version>1.0-b06</version>-->
+          <!--<version>1b06</version>-->
       <!--</dependency>-->
   </dependencies>
 

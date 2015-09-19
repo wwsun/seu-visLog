@@ -140,10 +140,10 @@ public class VisitFlowDataResource extends BasicResource{
     }
 
 
-    @Path("/path/semantic/{date}")
+    @Path("/path/depth/{depth}/{date}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getPathByDate1(@PathParam("date") String date) throws ParseException, UnknownHostException {
+    public String getPathByDate1(@PathParam("depth") Integer depth,@PathParam("date") String date) throws ParseException, UnknownHostException {
         //传入日期参数和depth参数(路径深度)
 
        /*
@@ -152,9 +152,18 @@ public class VisitFlowDataResource extends BasicResource{
         */
         //System.out.println("..................");
         //SankeyGraph sankeyGraph = ps.getGraph(7, date+" 0:0:0", date+" 23:59:59")
-        return pathServiceTool.getGrapthByTime(7, date+" 00:00:00", date+" 23:59:59").toString();
+        return pathServiceTool.getGrapthByTime(depth, date).toString();
     }
 
+    /*
 
+    @Path("/path/depth/{depth}/{date}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getSankyGraph(@PathParam("depth") Integer depth,@PathParam("date") String date) throws ParseException, UnknownHostException {
+
+        return pathServiceTool.getGraphByCategory(depth, date).toString();
+    }
+    */
 
 }
