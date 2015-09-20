@@ -152,7 +152,25 @@ public class VisitFlowDataResource extends BasicResource{
         */
         //System.out.println("..................");
         //SankeyGraph sankeyGraph = ps.getGraph(7, date+" 0:0:0", date+" 23:59:59")
-        return pathServiceTool.getGrapthByTime(depth, date).toString();
+
+        String str = pathServiceTool.getGrapthByTime(depth, date).toString();
+
+        /*
+
+        File file = new File("graphByCategory_" + date + ".json" );
+        System.out.println(file.getAbsolutePath());
+        if(!file.exists()) try {
+            file.createNewFile();
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+*/
+        return str;
+        //return pathServiceTool.getGrapthByTime(depth, date).toString();
     }
 
     /*

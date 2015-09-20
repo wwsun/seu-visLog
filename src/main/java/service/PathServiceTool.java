@@ -16,6 +16,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -599,7 +600,21 @@ public class PathServiceTool {
         jab3.add(Json.createObjectBuilder().add("nodes", jab).add("links",jab2));
 
 
+        /*File file = new File("graphByCategory_" + time + ".json" );
+
+        if(!file.exists()) try {
+            file.createNewFile();
+            FileWriter fw = new FileWriter(file);
+
+            fw.write(jab3.build().toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+
+
         return jab3.build();
+
 
     }
 
@@ -629,17 +644,12 @@ public class PathServiceTool {
 
         Map<Integer, Integer> depthMap = new HashMap<Integer, Integer>();
 
+        endMap = new HashMap<String, Integer>();
+        Map<String, Double> segCount = new HashMap<String, Double>();
+
+
         for (int i = 0; i < depth; i++) {
-            //?????session????????????????ln(count)???
-            Map<String, Double> segCount = new HashMap<String, Double>();
-            //?????map
-            if (i == 0) {
-                startMap = new HashMap<String, Integer>();
-            } else {
-                startMap = endMap;
-            }
-            endMap = new HashMap<String, Integer>();
-            //???????
+
             List<DBObject> pathGroupList = getCatetoriesByUrl(i + 1, i + 2, startTime, endTime);
            //System.out.println(pathGroupList);
             //???????? _id(start,end,session),nums
@@ -675,7 +685,7 @@ public class PathServiceTool {
                         node_index++;
                     }
 
-                    if(startMap.containsKey(start_url) && endMap.containsKey(end_url)) {
+                    if(endMap.containsKey(start_url) && endMap.containsKey(end_url)) {
 
                         StreamEdge link = new StreamEdge(endMap.get(start_url), endMap.get(end_url), (double) count);
                         link.setSession(session);
@@ -694,18 +704,9 @@ public class PathServiceTool {
                 }
             }
             //
-            for (Map.Entry<String, Double> entry : segCount.entrySet()) {
-                String key = entry.getKey();
-                double count = entry.getValue();
-                String start_url = key.split("~")[0];
-                String end_url = key.split("~")[1];
 
-                StreamEdge noSessionLinks = new StreamEdge(startMap.get(start_url), endMap.get(end_url), count);
 
-                noSessionLinksList.add(noSessionLinks);
-            }
-
-            if (i == 0) {
+          /*  if (i == 0) {
                 for (Map.Entry<String, Integer> entry : startMap.entrySet()) {
                     //startMap<start_url, node_index>
                     //node_index  >>>>  name
@@ -715,14 +716,32 @@ public class PathServiceTool {
                     nodes.add(node);
                 }
             }
+            */
 
-            HashMap<String ,Integer> map = sortByValuesUp(endMap);
-            for (Map.Entry<String, Integer> entry : endMap.entrySet()) {
-                URLNode node = new URLNode(entry.getValue(), entry.getKey());
-                node.setDepth(depthMap.get(entry.getValue()));
-                nodes.add(node);
+
+
+        }
+
+
+        for (Map.Entry<String, Double> entry : segCount.entrySet()) {
+            String key = entry.getKey();
+            double count = entry.getValue();
+            String start_url = key.split("~")[0];
+            String end_url = key.split("~")[1];
+
+            if(count > 50.0) {
+                StreamEdge noSessionLinks = new StreamEdge(endMap.get(start_url), endMap.get(end_url), count);
+
+                noSessionLinksList.add(noSessionLinks);
             }
+        }
 
+
+        HashMap<String ,Integer> map = sortByValuesUp(endMap);
+        for (Map.Entry<String, Integer> entry : endMap.entrySet()) {
+            URLNode node = new URLNode(entry.getValue(), entry.getKey());
+            node.setDepth(depthMap.get(entry.getValue()));
+            nodes.add(node);
         }
         //??nodes????name????
         for (URLNode node : nodes) {
@@ -771,6 +790,7 @@ public class PathServiceTool {
         Map<String, Double> Startout_session = new HashMap<String, Double>();
         List<DBObject> path0List = pathDAO.getDepth0(startTime, endTime);
         //???????? _id(start,session),nums
+
         for (DBObject obj : path0List) {
             int count = (Integer) obj.get("nums");
             DBObject idObject = (DBObject) obj.get("_id");
@@ -783,6 +803,8 @@ public class PathServiceTool {
             } else
                 Startout_session.put(start_url, Math.log((double) count) + 1);
         }
+
+
         //????start_url?????
         for (URLNode node : nodes) {
             if (node.getDepth() == 0) {
@@ -796,8 +818,39 @@ public class PathServiceTool {
             node.setDrop_per((in - out) / in);
         }
 
+
+        Set<URLNode> nodeSet = new TreeSet<>(new NodeComparator());
+
+        for(URLNode node :nodes){
+
+            for(StreamEdge se : noSessionLinksList){
+
+                if(node.getName() == se.getTarget() || node.getName()== se.getSource())
+                    nodeSet.add(node);
+            }
+
+        }
+
         //System.out.println(nodes);
-        graph = new SankeyGraph(nodes, noSessionLinksList);
+
+        List<URLNode> newNodes = new ArrayList<>(nodeSet);
+
+
+        for(int i = 0 ; i < newNodes.size(); i++){
+
+            URLNode n = newNodes.get(i);
+
+            for(StreamEdge se : noSessionLinksList){
+
+                if(se.getSource() == n.getName())  se.setSource(i);
+                if(se.getTarget() == n.getName()) se.setTarget(i);
+
+            }
+        }
+
+        System.out.println(newNodes.size() + "   " + noSessionLinksList.size() );
+        //graph = new SankeyGraph(nodes, noSessionLinksList);
+        graph = new SankeyGraph(newNodes, noSessionLinksList);
         return graph;
     }
 
@@ -825,6 +878,10 @@ public class PathServiceTool {
             if(p1Match != null && p2Match != null) {
                 idObject.put("P" + step, p1Match);
                 idObject.put("P" + nextStep, p2Match);
+            }else {
+
+                idObject.put("P" + step, "null");
+                idObject.put("P" + nextStep, "null");
             }
 
             /*
@@ -849,13 +906,21 @@ public class PathServiceTool {
         for (int j = 0; j < RegexName.length; j++) {
             //System.out.println("url is :" + url);
             Matcher m = Pattern.compile(RegexName[j][0]).matcher(url);
-            while (m.find()) {
+            if (m.find()) {
                 str =  RegexName[j][1];
             }
         }
 
-      //  System.out.println(str);
         return str;
     }
 
+}
+
+class NodeComparator implements   Comparator<URLNode>{
+
+
+    @Override
+    public int compare(URLNode o1, URLNode o2) {
+        return o1.getName() - o2.getName();
+    }
 }
