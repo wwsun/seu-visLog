@@ -50,10 +50,11 @@ public class CountryDAO {
         fields.put("sum", 1);
         DBObject project = new BasicDBObject("$project", fields);
 
-
+        // $sort
+        DBObject sort = new BasicDBObject("$sort", new BasicDBObject("sum", 1));
         //run
         //DBObject out = new BasicDBObject("$out", "tmp_out");
-        List<DBObject> pipeline = Arrays.asList(match, project);
+        List<DBObject> pipeline = Arrays.asList(match, project,sort);
 
         //allowDiskUse
         AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).batchSize(10000).build();

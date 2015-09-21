@@ -50,6 +50,17 @@ public class SessionController {
         return json;
     }
 
+    @Path("/distribution/{start}/{end}") //2014-10-22
+    @GET
+    @Produces("application/json")
+    public JsonObject getDistributionByRange(@PathParam("start") String start,@PathParam("end")String end) throws  ParseException{
+        String jsonString = overviewService.getSessionDistributionByDate(start,end).toString();
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        JsonObject json = reader.readObject();
+        reader.close();
+        return json;
+    }
+
     @Path("/overview/status")
     @GET
     @Produces("application/json")
@@ -74,7 +85,7 @@ public class SessionController {
     @Path("/overview/sources/countries/{start}/{end}")
     @GET
     @Produces("application/json")
-    public JsonArray getTopCountriesFlowContribution1(@PathParam("start")String start,@PathParam("end")String end) throws Exception {
+    public JsonArray getTopCountriesFlowContributionByRange(@PathParam("start")String start,@PathParam("end")String end) throws Exception {
         return overviewService.getTopCountriesFlow(start, end);
     }
 

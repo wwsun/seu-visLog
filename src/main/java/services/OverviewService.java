@@ -9,6 +9,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import java.text.ParseException;
 import java.util.List;
 
 public class OverviewService {
@@ -35,6 +36,10 @@ public class OverviewService {
 
     public DBObject getSessionDistributionByDate(String date) {
         return sessionDAO.getSessionsByDate(date);
+    }
+
+    public DBObject getSessionDistributionByDate(String start,String end) throws ParseException{
+        return sessionDAO.getSessionsByDate(start,end);
     }
 
     /**
