@@ -25,7 +25,8 @@ import java.util.List;
 @Path("/sessions")
 public class SessionController {
 
-    final String mongoURI = "mongodb://223.3.80.243:27017";
+    //final String mongoURI = "mongodb://223.3.80.243:27017";
+    final String mongoURI="mongodb://localhost:27017";
     final MongoClient mongoClient;
     final DB siteDatabase;
     final OverviewService overviewService;
@@ -33,7 +34,7 @@ public class SessionController {
 
     public SessionController() throws UnknownHostException {
         mongoClient = new MongoClient(new MongoClientURI(mongoURI));
-        siteDatabase = mongoClient.getDB("jiaodian");
+        siteDatabase = mongoClient.getDB("jiaodian1");
         overviewService = new OverviewService(siteDatabase);
         pathService = new PathService(siteDatabase);
     }
@@ -68,6 +69,13 @@ public class SessionController {
     @Produces("application/json")
     public JsonArray getTopCountriesFlowContribution() {
         return overviewService.getTopCountriesFlow(10);
+    }
+
+    @Path("/overview/sources/countries/{start}/{end}")
+    @GET
+    @Produces("application/json")
+    public JsonArray getTopCountriesFlowContribution1(@PathParam("start")String start,@PathParam("end")String end) throws Exception {
+        return overviewService.getTopCountriesFlow(start, end);
     }
 
     @Path("/overview/frequent/pages")
@@ -112,17 +120,17 @@ public class SessionController {
         Calendar endCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
                 Integer.parseInt(arr[2])+1, 0,0,0);  // analysis one day by default
 
-        //´«ÈëÈÕÆÚ²ÎÊýºÍdepth²ÎÊý(Â·¾¶Éî¶È)
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½depthï¿½ï¿½ï¿½ï¿½(Â·ï¿½ï¿½ï¿½ï¿½ï¿½)
         SankeyGraph sankeyGraph = pathService.getGraph(7, startCal.getTime().toString(), endCal.getTime().toString());
 
-        //´«Èë±ßµÄÈ¨Öµ
-        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //   ¸ù¾Ý±ßµÄÈ¨Öµ¹ýÂË
+        //ï¿½ï¿½ï¿½ï¿½ßµï¿½È¨Öµ
+        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //   ï¿½ï¿½Ý±ßµï¿½È¨Öµï¿½ï¿½ï¿½ï¿½
 
-        //¶ÔÊý¾Ý½øÒ»²½´¦ÀíµÃµ½
-        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //  topK ¸ßÌø³öÂÊµÄÒ³Ãæ
-        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   // topK ×ÅÂ½Ò³
+        //ï¿½ï¿½ï¿½ï¿½Ý½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½
+        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //  topK ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ò³ï¿½ï¿½
+        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   // topK ï¿½ï¿½Â½Ò³
 
-        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //×îÖÕ½á¹û
+        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //ï¿½ï¿½ï¿½Õ½ï¿½ï¿½
 
         // format transfer
         JsonReader reader = Json.createReader(new StringReader(result));

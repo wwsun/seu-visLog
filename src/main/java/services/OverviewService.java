@@ -107,6 +107,17 @@ public class OverviewService {
         return builder.build();
     }
 
+    public JsonArray getTopCountriesFlow(String start,String end) throws Exception {
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = countryDAO.getGeoDistribution(start,end);
+        for (DBObject object : list) {
+            builder.add(Json.createObjectBuilder()
+                    .add("name", (String) object.get("name"))
+                    .add("dup", (Integer) object.get("value")));
+        }
+        return builder.build();
+    }
+
     public JsonArray getMainLandingCategories(int limit) {
 
         JsonArrayBuilder builder = Json.createArrayBuilder();
