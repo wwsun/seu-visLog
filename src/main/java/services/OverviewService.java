@@ -54,6 +54,14 @@ public class OverviewService {
                 .build();
     }
 
+    public JsonObject getSessionCountsAndBounceRate(String start, String end) throws  ParseException{
+        return Json.createObjectBuilder()
+                .add("total", jumpDAO.getSessionCounts(start,end))
+                .add("bounce_rate", jumpDAO.getBounceRate(start,end))
+                .add("inquiry_rate", jumpDAO.getInquiryRate(start,end))
+                .build();
+    }
+
     /**
      *
      * @param limit is the most number of results that returned
@@ -61,6 +69,10 @@ public class OverviewService {
      */
     public JsonArray getTopSearchEngines(int limit) {
         return sourceDAO.getTopSearchEngines(limit);
+    }
+
+    public JsonArray getTopSearchEngines(String start,String end) throws ParseException{
+        return sourceDAO.getTopSearchEngines(start,end);
     }
 
     /**

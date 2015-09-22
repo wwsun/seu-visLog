@@ -37,8 +37,8 @@ public class CountryDAO {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         BasicDBObject[] arrayCond = {
-                new BasicDBObject("date", new BasicDBObject("$gte", sdf.parse(start))),
-                new BasicDBObject("date", new BasicDBObject("$lt", sdf.parse(end))),
+                new BasicDBObject("date", new BasicDBObject("$gt", sdf.parse(start))),
+                new BasicDBObject("date", new BasicDBObject("$lte", sdf.parse(end))),
 
         };
         BasicDBObject cond = new BasicDBObject();

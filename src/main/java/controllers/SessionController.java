@@ -21,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import  java.lang.String;
+
 
 @Path("/sessions")
 public class SessionController {
@@ -42,51 +44,66 @@ public class SessionController {
     @Path("/distribution/{date}") //2014-10-22
     @GET
     @Produces("application/json")
-    public JsonObject getDistribution(@PathParam("date") String date) {
+    public String getDistribution(@PathParam("date") String date) {
         String jsonString = overviewService.getSessionDistributionByDate(date).toString();
         JsonReader reader = Json.createReader(new StringReader(jsonString));
         JsonObject json = reader.readObject();
         reader.close();
-        return json;
+        return json.toString();
     }
 
     @Path("/distribution/{start}/{end}") //2014-10-22
     @GET
     @Produces("application/json")
-    public JsonObject getDistributionByRange(@PathParam("start") String start,@PathParam("end")String end) throws  ParseException{
+    public String getDistributionByRange(@PathParam("start") String start,@PathParam("end")String end) throws  ParseException{
         String jsonString = overviewService.getSessionDistributionByDate(start,end).toString();
         JsonReader reader = Json.createReader(new StringReader(jsonString));
         JsonObject json = reader.readObject();
         reader.close();
-        return json;
+        return json.toString();
     }
 
     @Path("/overview/status")
     @GET
     @Produces("application/json")
-    public JsonObject getSessionStatus() {
-        return overviewService.getSessionCountsAndBounceRate();
+    public String getSessionStatus() {
+        return overviewService.getSessionCountsAndBounceRate().toString();
+    }
+
+    @Path("/overview/status/{start}/{end}")
+    @GET
+    @Produces("application/json")
+    public String  getSessionStatusByRange(@PathParam("start")String start, @PathParam("end")String end) throws  ParseException{
+        System.out.println(start+end);
+        return overviewService.getSessionCountsAndBounceRate(start,end).toString();
     }
 
     @Path("/overview/sources/se")
     @GET
     @Produces("application/json")
-    public JsonArray getSearchEngineContribution() {
-        return overviewService.getTopSearchEngines(10);
+    public String getSearchEngineContribution() {
+        return overviewService.getTopSearchEngines(10).toString();
+    }
+
+    @Path("/overview/sources/se/{start}/{end}")
+    @GET
+    @Produces("application/json")
+    public String getSearchEngineContributionByRange(@PathParam("start")String start,@PathParam("end")String end) throws ParseException{
+        return overviewService.getTopSearchEngines(start, end).toString();
     }
 
     @Path("/overview/sources/countries")
     @GET
     @Produces("application/json")
-    public JsonArray getTopCountriesFlowContribution() {
-        return overviewService.getTopCountriesFlow(10);
+    public String getTopCountriesFlowContribution() {
+        return overviewService.getTopCountriesFlow(10).toString();
     }
 
     @Path("/overview/sources/countries/{start}/{end}")
     @GET
     @Produces("application/json")
-    public JsonArray getTopCountriesFlowContributionByRange(@PathParam("start")String start,@PathParam("end")String end) throws Exception {
-        return overviewService.getTopCountriesFlow(start, end);
+    public String getTopCountriesFlowContributionByRange(@PathParam("start")String start,@PathParam("end")String end) throws Exception {
+        return overviewService.getTopCountriesFlow(start, end).toString();
     }
 
     @Path("/overview/frequent/pages")
