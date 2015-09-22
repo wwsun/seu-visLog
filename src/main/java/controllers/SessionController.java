@@ -151,8 +151,15 @@ public class SessionController {
     @Path("/overview/dropoff/categories")
     @GET
     @Produces("application/json")
-    public JsonArray getMainDropOffCategories() {
-        return overviewService.getMainDropOffCategories(10);
+    public String getMainDropOffCategories() {
+        return overviewService.getMainDropOffCategories(10).toString();
+    }
+
+    @Path("/overview/dropoff/categories/{start}/{end}")
+    @GET
+    @Produces("application/json")
+    public String getMainDropOffCategories(@PathParam("start")String start,@PathParam("end")String end)throws ParseException{
+        return overviewService.getMainDropOffCategories(start, end).toString();
     }
 
     @Path("/path/{date}") //2014-10-22

@@ -200,4 +200,18 @@ public class OverviewService {
         return builder.build();
     }
 
+    public JsonArray getMainDropOffCategories(String start,String end) throws ParseException{
+
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = leaveDAO.getMainDropoffCategories(start, end);
+
+        for (DBObject object : list) {
+            String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("leaveID")));
+
+            builder.add(Json.createObjectBuilder()
+                    .add("name", cate).add("dup", (Integer) object.get("sum")));
+        }
+        return builder.build();
+    }
+
 }
