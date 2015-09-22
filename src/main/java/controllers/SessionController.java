@@ -176,17 +176,14 @@ public class SessionController {
         Calendar endCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
                 Integer.parseInt(arr[2])+1, 0,0,0);  // analysis one day by default
 
-        //�������ڲ����depth����(·�����)
+        //传入日期参数和depth参数(路径深度)
         SankeyGraph sankeyGraph = pathService.getGraph(7, startCal.getTime().toString(), endCal.getTime().toString());
-
-        //����ߵ�Ȩֵ
-        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //   ��ݱߵ�Ȩֵ����
-
-        //����ݽ�һ������õ�
-        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //  topK ������ʵ�ҳ��
-        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   // topK ��½ҳ
-
-        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //���ս��
+        //传入边的权值
+        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5); // 根据边的权值过滤
+        // 对数据进一步处理得到
+        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10); // topK 高跳出率的页面
+        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10); // topK 着陆页
+        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson(); //最终结果
 
         // format transfer
         JsonReader reader = Json.createReader(new StringReader(result));

@@ -19,9 +19,10 @@ public class PathDAO {
         path = db.getCollection("path");
     }
 
+
     /**
-     * ĞèÒª´«ÈëÊ±¼ä²ÎÊı
-     * ¾ßÌåÒ»´Î·ÃÎÊ
+     * éœ€è¦ä¼ å…¥æ—¶é—´å‚æ•°
+     * å…·ä½“ä¸€æ¬¡è®¿é—®
      *
      * @param step
      * @param nextStep
@@ -34,8 +35,8 @@ public class PathDAO {
         String start = "P" + step;
         String end = "P" + nextStep;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //matchÉ¸Ñ¡,Ê±¼äÒªÇóµÄ
-        //start & end ²»ÊÇ"null"
+        //matchç­›é€‰,æ—¶é—´è¦æ±‚çš„
+        // start & end ä¸æ˜¯"null"
         BasicDBObject[] arrayCond = {
                 new BasicDBObject("time", new BasicDBObject("$gte", sdf.parse(startTime))),
                 new BasicDBObject("time", new BasicDBObject("$lt", sdf.parse(endTime))),
@@ -45,8 +46,7 @@ public class PathDAO {
         BasicDBObject cond = new BasicDBObject();
         cond.put("$and", arrayCond);
         DBObject match = new BasicDBObject("$match", cond);
-
-        //ÀûÓÃ$projectÆ´×°groupĞèÒªµÄÊı¾İ
+        //åˆ©ç”¨$projectæ‹¼è£…groupéœ€è¦çš„æ•°æ®
         DBObject fields = new BasicDBObject(start, 1);
         fields.put(end, 1);
         fields.put("session", 1);
@@ -55,19 +55,17 @@ public class PathDAO {
         DBObject _group = new BasicDBObject(start, "$" + start);
         _group.put(end, "$" + end);
         _group.put("session", "$session");
-        //_group×÷ÎªgroupµÄÌõ¼ş
+        //_groupä½œä¸ºgroupçš„æ¡ä»¶
         DBObject groupFields = new BasicDBObject("_id", _group);
-        groupFields.put("nums", new BasicDBObject("$sum", 1));  //¼ÆÎª1
+        groupFields.put("nums", new BasicDBObject("$sum", 1)); //è®¡ä¸º1
         DBObject group = new BasicDBObject("$group", groupFields);
         // $sort
         DBObject sort = new BasicDBObject("$sort", new BasicDBObject("_group", 1));
         //run
         DBObject out = new BasicDBObject("$out", "tmp_out");
         List<DBObject> pipeline = Arrays.asList(match, project, group, sort, out);
-
         //allowDiskUse
         AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).batchSize(10000).build();
-
         Cursor cursor = path.aggregate(pipeline, options);
         List<DBObject> pathGroupList = new ArrayList<DBObject>();
         while (cursor.hasNext()) {
@@ -76,10 +74,9 @@ public class PathDAO {
         }
         return pathGroupList;
     }
-
     /**
-     * ĞèÒª´«ÈëÊ±¼ä²ÎÊı
-     * »ñµÃP1µÄURLÓÃÓÚ¼ÆËãÈë¶È
+     * éœ€è¦ä¼ å…¥æ—¶é—´å‚æ•°
+     * è·å¾—P1çš„URLç”¨äºè®¡ç®—å…¥åº¦
      *
      * @param startTime
      * @param endTime
@@ -89,8 +86,8 @@ public class PathDAO {
     public List<DBObject> getDepth0(String startTime, String endTime) throws ParseException {
         String start = "P1";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //matchÉ¸Ñ¡,Ê±¼äÒªÇóµÄ
-        //start ²»ÊÇ"null"
+        //matchç­›é€‰,æ—¶é—´è¦æ±‚çš„
+        // start ä¸æ˜¯"null"
         BasicDBObject[] arrayCond = {
                 new BasicDBObject("time", new BasicDBObject("$gte", sdf.parse(startTime))),
                 new BasicDBObject("time", new BasicDBObject("$lt", sdf.parse(endTime))),
@@ -99,17 +96,16 @@ public class PathDAO {
         BasicDBObject cond = new BasicDBObject();
         cond.put("$and", arrayCond);
         DBObject match = new BasicDBObject("$match", cond);
-
-        //ÀûÓÃ$projectÆ´×°groupĞèÒªµÄÊı¾İ
+        //åˆ©ç”¨$projectæ‹¼è£…groupéœ€è¦çš„æ•°æ®
         DBObject fields = new BasicDBObject(start, 1);
         fields.put("session", 1);
         DBObject project = new BasicDBObject("$project", fields);
         // $group
         DBObject _group = new BasicDBObject(start, "$" + start);
         _group.put("session", "$session");
-        //_group×÷ÎªgroupµÄÌõ¼ş
+        //_groupä½œä¸ºgroupçš„æ¡ä»¶
         DBObject groupFields = new BasicDBObject("_id", _group);
-        groupFields.put("nums", new BasicDBObject("$sum", 1));  //¼ÆÎª1
+        groupFields.put("nums", new BasicDBObject("$sum", 1)); //è®¡ä¸º1
         DBObject group = new BasicDBObject("$group", groupFields);
         // $sort
         DBObject sort = new BasicDBObject("$sort", new BasicDBObject("_group", 1));
@@ -126,4 +122,5 @@ public class PathDAO {
         }
         return pathGroupList;
     }
+
 }

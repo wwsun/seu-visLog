@@ -74,14 +74,12 @@ public class SessionTest extends TestCase {
 
         long start = System.currentTimeMillis();
         SankeyGraph sankeyGraph = pathService.getGraph(7, "2014-10-22 0:0:0", "2014-10-23 0:0:0");
-        //����ߵ�Ȩֵ
-        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //��ݱߵ�Ȩֵ����
-
-        //����ݽ�һ������õ�
-        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //topK ������ʵ�ҳ��
-        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   //topK ��½ҳ
-
-        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //���ս��
+        //传入边的权值
+        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5); //根据边的权值过滤
+        // 对数据进一步处理得到
+        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10); //topK 高跳出率的页面
+        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10); //topK 着陆页
+        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson(); //最终结果
 
         long end = System.currentTimeMillis();
         System.out.println("costTime:  " + (end - start) / 1000 + "s");
