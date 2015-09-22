@@ -137,8 +137,15 @@ public class SessionController {
     @Path("/overview/landings/categories")
     @GET
     @Produces("application/json")
-    public JsonArray getMainLandingCategories() {
-        return overviewService.getMainLandingCategories(10);
+    public String getMainLandingCategories() {
+        return overviewService.getMainLandingCategories(10).toString();
+    }
+
+    @Path("/overview/landings/categories/{start}/{end}")
+    @GET
+    @Produces("application/json")
+    public String getMainLandingCategoriesByRange(@PathParam("start")String start,@PathParam("end")String end) throws ParseException{
+        return overviewService.getMainLandingCategories(start, end).toString();
     }
 
     @Path("/overview/dropoff/categories")

@@ -99,7 +99,7 @@ public class OverviewService {
             String cate = levelDAO.getCategoryById((Integer)object.get("_id"));
             builder.add(Json.createObjectBuilder()
                     .add("name", cate)
-                    .add("dup", (Integer)object.get("nums")));
+                    .add("dup", (Integer) object.get("nums")));
         }
         return builder.build();
     }
@@ -168,6 +168,20 @@ public class OverviewService {
 
             builder.add(Json.createObjectBuilder()
                 .add("name", cate).add("dup", (Integer) object.get("sum")));
+        }
+        return builder.build();
+    }
+
+    public JsonArray getMainLandingCategories(String start,String end) throws ParseException{
+
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = landsDAO.getMainLandingCategories(start,end);
+
+        for (DBObject object : list) {
+            String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("landID")));
+
+            builder.add(Json.createObjectBuilder()
+                    .add("name", cate).add("dup", (Integer) object.get("sum")));
         }
         return builder.build();
     }
