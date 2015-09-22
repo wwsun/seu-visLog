@@ -20,7 +20,11 @@ public class SankeyGraph extends Graph {
 //    }
 
     /**
+<<<<<<< HEAD
+     * ���ߵ�valueֵ���й���
+=======
      * 按边的value值进行过滤
+>>>>>>> seuvislogwws/master
      *
      * @param filter
      * @return
@@ -32,7 +36,8 @@ public class SankeyGraph extends Graph {
             Edge edge = iterator_links.next();
             double value = ((StreamEdge) edge).getValue();
             if (value < filter)
-                iterator_links.remove();  //移除边
+                iterator_links.remove();  //�Ƴ��
+
             else {
                 nodeset.add(edge.getSource());
                 nodeset.add(edge.getTarget());
@@ -41,12 +46,13 @@ public class SankeyGraph extends Graph {
         Iterator<? extends Node> iterator_nodes = this.nodes.iterator();
         while (iterator_nodes.hasNext()) {
             Node node = iterator_nodes.next();
-            if (!nodeset.contains(node.getName())) {  //不包含nodes的
+
+            if (!nodeset.contains(node.getName())) {  //����nodes��
                 iterator_nodes.remove();
             }
         }
-        // System.out.println( "过滤后nodes的大小： "+this.nodes.size());
-        //将过滤过后的json结果再次按node的name从0开始排好
+        // System.out.println( "���˺�nodes�Ĵ�С�� "+this.nodes.size());
+        //�����˹���json����ٴΰ�node��name��0��ʼ�ź�
         int index = 0;
         for (Node n : this.nodes) {
             int old_name = n.getName();
@@ -64,7 +70,11 @@ public class SankeyGraph extends Graph {
     }
 
     /**
+<<<<<<< HEAD
+     * topk ��½ҳ
+=======
      * topk 着陆页
+>>>>>>> seuvislogwws/master
      *
      * @param topK
      * @return
@@ -96,12 +106,17 @@ public class SankeyGraph extends Graph {
     }
 
     /**
+<<<<<<< HEAD
+     * topK ���ҳ
+=======
      * topK 跳出页
+>>>>>>> seuvislogwws/master
      */
     public List<URLNode> topKDropPage(int k) {
         List<URLNode> highdrop_nodes = new ArrayList<URLNode>();
         List<? extends Node> nodes = this.getNodes();
-        //先找到所有节点的indegree的中位数，
+        //���ҵ����нڵ��indegree����λ��
+
         double middle = getMiddle(nodes);
         for (Node node : nodes) {
             URLNode n = (URLNode) node;
@@ -121,7 +136,11 @@ public class SankeyGraph extends Graph {
     }
 
     /**
+<<<<<<< HEAD
+     * ȡ��nodes��ĳ��ָ����С��node
+=======
      * 取得nodes中某个指标最小的node
+>>>>>>> seuvislogwws/master
      *
      * @param nodes
      * @param param
@@ -147,7 +166,11 @@ public class SankeyGraph extends Graph {
     }
 
     /**
+<<<<<<< HEAD
+     * �õ�nodes��List��indegree����λ��
+=======
      * 得到nodes的List的indegree的中位数
+>>>>>>> seuvislogwws/master
      */
     public double getMiddle(List<? extends Node> nodes) {
         double[] indegree = new double[nodes.size()];
@@ -163,7 +186,11 @@ public class SankeyGraph extends Graph {
     }
 
     /**
+<<<<<<< HEAD
+     * �����������ҵ�k����
+=======
      * 下面两个是找第k大数
+>>>>>>> seuvislogwws/master
      *
      * @param a
      * @param low

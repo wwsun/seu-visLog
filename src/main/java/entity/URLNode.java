@@ -10,8 +10,12 @@ public class URLNode extends Node {
     protected double out_degree;
     protected double in_degree;
     protected double drop_per;
+    protected String datetime;
     protected int depth;
 
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
 
     public String getUrl() {
         return url;
@@ -61,5 +65,14 @@ public class URLNode extends Node {
 
     public double getOut_degree() {
         return out_degree;
+    }
+
+    public String getSemantics() {
+        return semantics;
+    }
+
+    @Override
+    public String toString() {
+        return "url:" + url + "," + "in_degree:" + in_degree + "," + "out_degree:" + out_degree;
     }
 }

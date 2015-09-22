@@ -27,4 +27,10 @@ public class StreamEdge extends Edge{
     public void setSession(String session) {
         this.session = session;
     }
+
+    @Override
+    public String toString() {
+
+        return "target:" + target + "," + "sorce:" + source + "," + "value" +value;
+     }
 }

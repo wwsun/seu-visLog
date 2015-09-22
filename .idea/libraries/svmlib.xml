@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="svmlib">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/svmlib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/svmlib" recursive="false" />
+  </library>
+</component>

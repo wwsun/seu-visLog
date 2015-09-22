@@ -77,4 +77,40 @@ public class NodesDAO {
         return categoryList;
     }
 
+
+    //通过传入的category的ID，获得该类别下面的topk页面
+    //返回 _id:
+    //     nums:
+    public List<DBObject> getTopPagesByCategory(int category,int limit){
+        //match
+        BasicDBObject cond = new BasicDBObject();
+        cond.put("category", category);
+        DBObject match = new BasicDBObject("$match", cond);
+        // $project
+        DBObject fields = new BasicDBObject("url", 1);
+        fields.put("degree", 1);
+        DBObject project = new BasicDBObject("$project", fields);
+        // $group
+        DBObject groupFields = new BasicDBObject("_id", "$url");
+        groupFields.put("nums", new BasicDBObject("$sum", "$degree"));
+        DBObject group = new BasicDBObject("$group", groupFields);
+        // $sort
+        DBObject sort = new BasicDBObject("$sort", new BasicDBObject("nums", -1)); //DEC
+        // $limit
+        DBObject limitObj = new BasicDBObject("$limit", limit);
+        //run
+        List<DBObject> pipeline = Arrays.asList(match,project, group, sort, limitObj);
+        //allowDiskUse
+        AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).build();
+        Cursor cursor = nodes.aggregate(pipeline, options);
+
+        List<DBObject> pagesList = new ArrayList<DBObject>();
+        while (cursor.hasNext()) {
+            DBObject item = cursor.next();
+            pagesList.add(item);
+        }
+        return  pagesList;
+    }
+
+
 }
