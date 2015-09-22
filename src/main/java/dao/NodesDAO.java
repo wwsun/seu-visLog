@@ -119,4 +119,39 @@ public class NodesDAO {
         return categoryList;
     }
 
+    public List<DBObject> getHotCategory(String start, String end) throws ParseException{
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        BasicDBObject[] arrayCond={
+                new BasicDBObject("date",new BasicDBObject("$gt",sdf.parse(start))),
+                new BasicDBObject("date",new BasicDBObject("$lte",sdf.parse(end))),
+                new BasicDBObject("category",new BasicDBObject("$ne",0)),
+        };
+        BasicDBObject cond=new BasicDBObject();
+        cond.put("$and",arrayCond);
+        DBObject match=new BasicDBObject("$match",cond);
+
+        // $project
+        DBObject fields = new BasicDBObject("category", 1);
+        fields.put("degree", 1);
+        DBObject project = new BasicDBObject("$project", fields);
+        // $group
+        DBObject groupFields = new BasicDBObject("_id", "$category");
+        groupFields.put("nums", new BasicDBObject("$sum", "$degree"));
+        DBObject group = new BasicDBObject("$group", groupFields);
+        // $sort
+        DBObject sort = new BasicDBObject("$sort", new BasicDBObject("nums", -1));
+;
+        List<DBObject> pipeline = Arrays.asList(match,project,group, sort);
+        //allowDiskUse
+        AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).build();
+        Cursor cursor = nodes.aggregate(pipeline, options);
+        // output
+        List<DBObject> categoryList = new ArrayList<DBObject>();
+        while (cursor.hasNext()) {
+            DBObject item = cursor.next();
+            categoryList.add(item);
+        }
+        return categoryList;
+    }
+
 }

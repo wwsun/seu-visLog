@@ -92,6 +92,18 @@ public class OverviewService {
         return builder.build();
     }
 
+    public JsonArray getTopCategories(String start, String end) throws ParseException{
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = nodesDAO.getHotCategory(start, end);
+        for (DBObject object : list) {
+            String cate = levelDAO.getCategoryById((Integer)object.get("_id"));
+            builder.add(Json.createObjectBuilder()
+                    .add("name", cate)
+                    .add("dup", (Integer)object.get("nums")));
+        }
+        return builder.build();
+    }
+
     /**
      *
      * @param limit is the most number of results that returned

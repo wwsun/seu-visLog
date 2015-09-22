@@ -199,48 +199,6 @@ public class JumpDAO {
             inquiry = Integer.valueOf(obj.get("sum").toString());
         }
         cursor1.close();
-       /* BasicDBList condList = new BasicDBList();
-        BasicDBObject cond = new BasicDBObject();
-        cond.put("$gte",sdf.parse(start));
-        cond.put("$lt",sdf.parse(end));
-        BasicDBObject composeCod = new BasicDBObject();
-        composeCod.put("date", cond);
-        condList.add(composeCod);
-
-        BasicDBObject nameCond = new BasicDBObject();
-        nameCond.put("type", "countAll");
-        condList.add(nameCond);
-
-        //查询条件组合（or条件）
-        BasicDBObject searchCond = new BasicDBObject();
-        searchCond.put("$and", condList);
-
-        DBObject count = jumpCollection.findOne(searchCond);
-        //QueryBuilder builder1 = QueryBuilder.start("type").is("countAll");
-        //DBObject count = jumpCollection.findOne(builder1.get(), new BasicDBObject("date", new BasicDBObject("$gte", sdf.parse(start))),
-        //       new BasicDBObject("date", new BasicDBObject("$lt", sdf.parse(end))));
-
-        BasicDBList condList1 = new BasicDBList();
-        BasicDBObject cond1 = new BasicDBObject();
-        cond1.put("$gte",sdf.parse(start));
-        cond1.put("$lt",sdf.parse(end));
-        BasicDBObject composeCod1 = new BasicDBObject();
-        composeCod1.put("date", cond1);
-        condList1.add(composeCod1);
-
-        BasicDBObject nameCond1 = new BasicDBObject();
-        nameCond1.put("type", "directAccess");
-        condList1.add(nameCond1);
-
-        //查询条件组合（or条件）
-        BasicDBObject searchCond1 = new BasicDBObject();
-        searchCond1.put("$and", condList1);
-
-        DBObject inquiry = jumpCollection.findOne(searchCond1);
-        //QueryBuilder builder2 = QueryBuilder.start("type").is("onehop");
-        //DBObject oneHops = jumpCollection.findOne(builder2.get(),new BasicDBObject("date", new BasicDBObject("$gte", sdf.parse(start))),
-        //       new BasicDBObject("date", new BasicDBObject("$lt", sdf.parse(end))));*/
-
         double bounceRate = (double)(Integer)inquiry/(double)(Integer)count;
         BigDecimal decimal = new BigDecimal(bounceRate);
         double result = decimal.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();

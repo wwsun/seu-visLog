@@ -123,8 +123,15 @@ public class SessionController {
     @Path("/overview/frequent/categories")
     @GET
     @Produces("application/json")
-    public JsonArray getFrequentVisitedCategory() {
-        return overviewService.getTopCategories(7);
+    public String getFrequentVisitedCategory() {
+        return overviewService.getTopCategories(7).toString();
+    }
+
+    @Path("/overview/frequent/categories/{start}/{end}")
+    @GET
+    @Produces("application/json")
+    public String getFrequentVisitedCategoryByRange(@PathParam("start")String start,@PathParam("end")String end) throws ParseException{
+        return overviewService.getTopCategories(start,end).toString();
     }
 
     @Path("/overview/landings/categories")
