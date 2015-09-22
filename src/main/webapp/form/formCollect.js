@@ -296,7 +296,7 @@ $(function(){
             contentType: "application/json; charset=utf-8",
             async: false,
             success: function (data) {
-                alert("success");
+                //alert("success");
                 //$(".result")[0].innerHTML=data;
             },
             error: function () {

@@ -45,7 +45,7 @@ public class ReceiveDataResource extends BasicResource {
 
         String schema = "browser,os,url,ip,loadtime,time,element,id,text,semantics,event,left,top,height,width";
         HashSet<String> hs_log = new HashSet<String>();
-        System.out.println(data);
+        //System.out.println(data);
         //读取获得的json数据
         JsonReader reader = Json.createReader(new StringReader(data));
         JsonObject jsonobj = reader.readObject();
@@ -61,7 +61,7 @@ public class ReceiveDataResource extends BasicResource {
         os = jsonobj.getString("os");
         url = jsonobj.getString("url").split("\\?")[0];
         url=url.replace("http://","").replace("HTTP://","").replace("https://","");
-        loadtime = jsonobj.getString("loadime");
+        loadtime = jsonobj.getString("loadtime");
         JsonArray events = jsonobj.getJsonArray("events");
 
         //整理数据
