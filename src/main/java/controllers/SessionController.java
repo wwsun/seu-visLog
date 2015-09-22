@@ -109,8 +109,15 @@ public class SessionController {
     @Path("/overview/frequent/pages")
     @GET
     @Produces("application/json")
-    public JsonArray getFrequentVisitedPages() {
-        return overviewService.getFrequentVisitedPages(20);
+    public String getFrequentVisitedPages() {
+        return overviewService.getFrequentVisitedPages(20).toString();
+    }
+
+    @Path("/overview/frequent/pages/{start}/{end}")
+    @GET
+    @Produces("application/json")
+    public String  getFrequentVisitedPagesByRange(@PathParam("start")String start,@PathParam("end")String end) throws ParseException{
+        return overviewService.getFrequentVisitedPages(start, end).toString();
     }
 
     @Path("/overview/frequent/categories")

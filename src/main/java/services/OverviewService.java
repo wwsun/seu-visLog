@@ -108,6 +108,17 @@ public class OverviewService {
         return builder.build();
     }
 
+    public JsonArray getFrequentVisitedPages(String start,String end) throws ParseException{
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = nodesDAO.getHotPages(start,end);
+        for (DBObject object : list) {
+            builder.add(Json.createObjectBuilder()
+                    .add("name", (String) object.get("_id"))
+                    .add("dup", (Integer) object.get("nums")));
+        }
+        return builder.build();
+    }
+
     /**
      *
      * @param limit is the result you want to returned
