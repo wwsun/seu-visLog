@@ -23,7 +23,7 @@ import java.util.List;
 
 public class SessionTest extends TestCase {
 
-    final String mongoURI = "mongodb://223.3.80.243:27017";
+    final String mongoURI = "mongodb://localhost:27017";
     final MongoClient mongoClient;
     final DB siteDatabase;
     final OverviewService overviewService;
@@ -31,7 +31,7 @@ public class SessionTest extends TestCase {
 
     public SessionTest() throws UnknownHostException {
         mongoClient = new MongoClient(new MongoClientURI(mongoURI));
-        siteDatabase = mongoClient.getDB("jiaodian");
+        siteDatabase = mongoClient.getDB("jiaodian1");
         overviewService = new OverviewService(siteDatabase);
         pathService = new PathService(siteDatabase);
     }
@@ -74,14 +74,14 @@ public class SessionTest extends TestCase {
 
         long start = System.currentTimeMillis();
         SankeyGraph sankeyGraph = pathService.getGraph(7, "2014-10-22 0:0:0", "2014-10-23 0:0:0");
-        //´«Èë±ßµÄÈ¨Öµ
-        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //¸ù¾Ý±ßµÄÈ¨Öµ¹ýÂË
+        //ï¿½ï¿½ï¿½ï¿½ßµï¿½È¨Öµ
+        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //ï¿½ï¿½Ý±ßµï¿½È¨Öµï¿½ï¿½ï¿½ï¿½
 
-        //¶ÔÊý¾Ý½øÒ»²½´¦ÀíµÃµ½
-        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //topK ¸ßÌø³öÂÊµÄÒ³Ãæ
-        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   //topK ×ÅÂ½Ò³
+        //ï¿½ï¿½ï¿½ï¿½Ý½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½
+        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //topK ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ò³ï¿½ï¿½
+        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   //topK ï¿½ï¿½Â½Ò³
 
-        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //×îÖÕ½á¹û
+        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //ï¿½ï¿½ï¿½Õ½ï¿½ï¿½
 
         long end = System.currentTimeMillis();
         System.out.println("costTime:  " + (end - start) / 1000 + "s");
