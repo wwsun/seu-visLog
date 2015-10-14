@@ -99,21 +99,22 @@
                         </div>
                     </div>
 
-                    <div class="panel-body">
+                     <div class="panel-body">
 
                         <p>Change the analysis date range: </p>
                         <form class="form-inline">
                             <div class="form-group">
                                 <label class="sr-only" for="startDate">Start Date</label>
                                 <input type="input" class="form-control" id="startDate" placeholder="Start Date"
-                                        ng-model="overviewCtrl.date">
+                                        ng-model="overviewCtrl.startDate">
                             </div>
                             <div class="form-group">
                                 <label class="sr-only" for="endDate">End Date</label>
-                                <input type="date" class="form-control" id="endDate" placeholder="End Date" disabled>
+                                <input type="input" class="form-control" id="endDate" placeholder="End Date"
+                                       ng-model="overviewCtrl.endDate">
                             </div>
                             <button class="btn btn-primary"
-                                    ng-click="overviewCtrl.handleNewAnalysisRangeBtn(overviewCtrl.date)">Refresh Data</button>
+                                    ng-click="overviewCtrl.handleNewAnalysisRangeBtn(overviewCtrl.startDate,overviewCtrl.endDate)">Refresh Data</button>
                         </form>
                     </div>
 
