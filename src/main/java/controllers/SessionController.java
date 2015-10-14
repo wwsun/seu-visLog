@@ -28,7 +28,7 @@ import  java.lang.String;
 public class SessionController {
 
     //final String mongoURI = "mongodb://223.3.80.243:27017";
-    final String mongoURI="mongodb://223.3.75.101:27017";
+    final String mongoURI="mongodb://localhost:27017";
     final MongoClient mongoClient;
     final DB siteDatabase;
     final OverviewService overviewService;
