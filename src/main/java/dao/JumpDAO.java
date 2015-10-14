@@ -179,7 +179,7 @@ public class JumpDAO {
         BasicDBObject[] arrayCond1 = {
                 new BasicDBObject("date", new BasicDBObject("$gt", sdf.parse(start))),
                 new BasicDBObject("date", new BasicDBObject("$lte", sdf.parse(end))),
-                new BasicDBObject("type", new BasicDBObject("$eq", "inquirygit")),
+                new BasicDBObject("type", new BasicDBObject("$eq", "inquiry")),
         };
         BasicDBObject cond1 = new BasicDBObject();
         cond1.put("$and", arrayCond1);
