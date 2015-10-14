@@ -41,7 +41,7 @@ public class SessionController {
         pathService = new PathService(siteDatabase);
     }
 
-    @Path("/distribution/{date}") //2014-10-22
+    @Path("/distribution/{date}") //2014-08-10
     @GET
     @Produces("application/json")
     public String getDistribution(@PathParam("date") String date) {
@@ -52,7 +52,7 @@ public class SessionController {
         return json.toString();
     }
 
-    @Path("/distribution/{start}/{end}") //2014-10-22
+    @Path("/distribution/{start}/{end}") //2014-08-08 2014-08-10
     @GET
     @Produces("application/json")
     public String getDistributionByRange(@PathParam("start") String start,@PathParam("end")String end) throws  ParseException{
@@ -85,11 +85,11 @@ public class SessionController {
         return overviewService.getTopSearchEngines(10).toString();
     }
 
-    @Path("/overview/sources/se/{start}/{end}")
+    @Path("/overview/sources/se/{start}/{end}/{limit}")
     @GET
     @Produces("application/json")
-    public String getSearchEngineContributionByRange(@PathParam("start")String start,@PathParam("end")String end) throws ParseException{
-        return overviewService.getTopSearchEngines(start, end).toString();
+    public String getSearchEngineContributionByRange(@PathParam("start")String start,@PathParam("end")String end,@PathParam("limit")int limit) throws ParseException{
+        return overviewService.getTopSearchEngines(start, end,limit).toString();
     }
 
     @Path("/overview/sources/countries")
@@ -99,11 +99,11 @@ public class SessionController {
         return overviewService.getTopCountriesFlow(10).toString();
     }
 
-    @Path("/overview/sources/countries/{start}/{end}")
+    @Path("/overview/sources/countries/{start}/{end}/{limit}")
     @GET
     @Produces("application/json")
-    public String getTopCountriesFlowContributionByRange(@PathParam("start")String start,@PathParam("end")String end) throws Exception {
-        return overviewService.getTopCountriesFlow(start, end).toString();
+    public String getTopCountriesFlowContributionByRange(@PathParam("start")String start,@PathParam("end")String end,@PathParam("limit")int limit) throws Exception {
+        return overviewService.getTopCountriesFlow(start, end,limit).toString();
     }
 
     @Path("/overview/frequent/pages")
@@ -113,11 +113,11 @@ public class SessionController {
         return overviewService.getFrequentVisitedPages(20).toString();
     }
 
-    @Path("/overview/frequent/pages/{start}/{end}")
+    @Path("/overview/frequent/pages/{start}/{end}/{limit}")
     @GET
     @Produces("application/json")
-    public String  getFrequentVisitedPagesByRange(@PathParam("start")String start,@PathParam("end")String end) throws ParseException{
-        return overviewService.getFrequentVisitedPages(start, end).toString();
+    public String  getFrequentVisitedPagesByRange(@PathParam("start")String start,@PathParam("end")String end,@PathParam("limit")int limit) throws ParseException{
+        return overviewService.getFrequentVisitedPages(start, end,limit).toString();
     }
 
     @Path("/overview/frequent/categories")
@@ -127,11 +127,11 @@ public class SessionController {
         return overviewService.getTopCategories(7).toString();
     }
 
-    @Path("/overview/frequent/categories/{start}/{end}")
+    @Path("/overview/frequent/categories/{start}/{end}/{limit}")
     @GET
     @Produces("application/json")
-    public String getFrequentVisitedCategoryByRange(@PathParam("start")String start,@PathParam("end")String end) throws ParseException{
-        return overviewService.getTopCategories(start,end).toString();
+    public String getFrequentVisitedCategoryByRange(@PathParam("start")String start,@PathParam("end")String end,@PathParam("limit")int limit) throws ParseException{
+        return overviewService.getTopCategories(start,end,limit).toString();
     }
 
     @Path("/overview/landings/categories")
@@ -141,11 +141,11 @@ public class SessionController {
         return overviewService.getMainLandingCategories(10).toString();
     }
 
-    @Path("/overview/landings/categories/{start}/{end}")
+    @Path("/overview/landings/categories/{start}/{end}/{limit}")
     @GET
     @Produces("application/json")
-    public String getMainLandingCategoriesByRange(@PathParam("start")String start,@PathParam("end")String end) throws ParseException{
-        return overviewService.getMainLandingCategories(start, end).toString();
+    public String getMainLandingCategoriesByRange(@PathParam("start")String start,@PathParam("end")String end,@PathParam("limit")int limit) throws ParseException{
+        return overviewService.getMainLandingCategories(start, end,limit).toString();
     }
 
     @Path("/overview/dropoff/categories")
@@ -155,11 +155,11 @@ public class SessionController {
         return overviewService.getMainDropOffCategories(10).toString();
     }
 
-    @Path("/overview/dropoff/categories/{start}/{end}")
+    @Path("/overview/dropoff/categories/{start}/{end}/{limit}")
     @GET
     @Produces("application/json")
-    public String getMainDropOffCategories(@PathParam("start")String start,@PathParam("end")String end)throws ParseException{
-        return overviewService.getMainDropOffCategories(start, end).toString();
+    public String getMainDropOffCategories(@PathParam("start")String start,@PathParam("end")String end,@PathParam("limit")int limit)throws ParseException{
+        return overviewService.getMainDropOffCategories(start, end,limit).toString();
     }
 
     @Path("/path/{date}") //2014-10-22

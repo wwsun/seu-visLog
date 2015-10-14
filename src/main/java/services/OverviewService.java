@@ -71,8 +71,8 @@ public class OverviewService {
         return sourceDAO.getTopSearchEngines(limit);
     }
 
-    public JsonArray getTopSearchEngines(String start,String end) throws ParseException{
-        return sourceDAO.getTopSearchEngines(start,end);
+    public JsonArray getTopSearchEngines(String start,String end,int limit) throws ParseException{
+        return sourceDAO.getTopSearchEngines(start,end,limit);
     }
 
     /**
@@ -92,9 +92,9 @@ public class OverviewService {
         return builder.build();
     }
 
-    public JsonArray getTopCategories(String start, String end) throws ParseException{
+    public JsonArray getTopCategories(String start, String end,int limit) throws ParseException{
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = nodesDAO.getHotCategory(start, end);
+        List<DBObject> list = nodesDAO.getHotCategory(start, end,limit);
         for (DBObject object : list) {
             String cate = levelDAO.getCategoryById((Integer)object.get("_id"));
             builder.add(Json.createObjectBuilder()
@@ -120,9 +120,9 @@ public class OverviewService {
         return builder.build();
     }
 
-    public JsonArray getFrequentVisitedPages(String start,String end) throws ParseException{
+    public JsonArray getFrequentVisitedPages(String start,String end,int limit) throws ParseException{
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = nodesDAO.getHotPages(start,end);
+        List<DBObject> list = nodesDAO.getHotPages(start,end,limit);
         for (DBObject object : list) {
             builder.add(Json.createObjectBuilder()
                     .add("name", (String) object.get("_id"))
@@ -147,9 +147,9 @@ public class OverviewService {
         return builder.build();
     }
 
-    public JsonArray getTopCountriesFlow(String start,String end) throws Exception {
+    public JsonArray getTopCountriesFlow(String start,String end,int limit) throws Exception {
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = countryDAO.getGeoDistribution(start,end);
+        List<DBObject> list = countryDAO.getGeoDistribution(start,end,limit);
         for (DBObject object : list) {
             builder.add(Json.createObjectBuilder()
                     .add("name", (String) object.get("name"))
@@ -172,10 +172,10 @@ public class OverviewService {
         return builder.build();
     }
 
-    public JsonArray getMainLandingCategories(String start,String end) throws ParseException{
+    public JsonArray getMainLandingCategories(String start,String end,int limit) throws ParseException{
 
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = landsDAO.getMainLandingCategories(start,end);
+        List<DBObject> list = landsDAO.getMainLandingCategories(start,end,limit);
 
         for (DBObject object : list) {
             String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("landID")));
@@ -200,10 +200,10 @@ public class OverviewService {
         return builder.build();
     }
 
-    public JsonArray getMainDropOffCategories(String start,String end) throws ParseException{
+    public JsonArray getMainDropOffCategories(String start,String end,int limit) throws ParseException{
 
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = leaveDAO.getMainDropoffCategories(start, end);
+        List<DBObject> list = leaveDAO.getMainDropoffCategories(start, end,limit);
 
         for (DBObject object : list) {
             String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("leaveID")));
