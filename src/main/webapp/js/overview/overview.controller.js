@@ -7,15 +7,15 @@ angular.module('vislog.overview', ['chart.js'])
 
         vm.status = null;
 
-        vm.date = "2014-10-22";
+        vm.date = "2015-07-01";
 
         vm.distribution = {
             labels: [],
             data: [],
-            series:[]
+            series: []
         };
 
-        vm.hotCategories = {
+        vm.categoryDistribution = {
             labels: [],
             data: []
         };
@@ -33,23 +33,55 @@ angular.module('vislog.overview', ['chart.js'])
             data: []
         };
 
-        vm.getOverviewNumbers = function() {
+        // 核心参数指标
+        vm.getOverviewNumbers = function () {
             $http.get(baseUrl + 'sessions/overview/status').success(function (data) {
                 vm.status = data;
             });
         };
 
+        // 按日期获取会话在不同时段的分布
         vm.getSessionDistributionByDate = function (date) {
-            $http.get(baseUrl + 'sessions/distribution/' + date).success(function (data) {
-                vm.distribution.labels = data.hour;
-                vm.distribution.data.push(data.dup);
-                vm.distribution.series.push('sessions');
+            $http.get(baseUrl + 'sessions/distribution/trend/' + date).success(function (data) {
+
+                // 只保留奇数项
+                var labels = data.hour.filter(function (item, index, array) {
+                    return (index % 2 == 1)
+                });
+
+                vm.distribution.labels = labels.map(function (item, index, array) {
+                    return item + "h";
+                });
+
+                // 只保留奇数项
+                vm.distribution.data.push(data.dup.filter(function (item, index, array) {
+                    return (index % 2 == 1)
+                }));
+                vm.distribution.series.push(vm.date);
+
             });
         };
 
+        // 按日期获取会话在不同类别的分布
+        vm.getCategoryDistributionByDate = function (date) {
+            $http.get(baseUrl + 'sessions/distribution/category/' + date).success(function (data) {
+                var dups = [];
+                var i;
+                var n;
+
+                for (i = 0, n = data.length; i < n; i++) {
+                    vm.categoryDistribution.labels.push(data[i].name);
+                    dups.push(data[i].dup);
+                }
+                vm.categoryDistribution.data.push(dups);
+            })
+        };
+
+        // 响应按钮事件：在图形中增加新的对比数据
         vm.handleNewAnalysisRangeBtn = function (newDate) {
             if (angular.isDefined(newDate)) {
                 vm.getSessionDistributionByDate(newDate);
+                vm.getCategoryDistributionByDate(newDate);
             }
         };
 
@@ -60,35 +92,22 @@ angular.module('vislog.overview', ['chart.js'])
         };
 
         vm.getCountriesContribution = function () {
-            $http.get(baseUrl + 'sessions/overview/sources/countries').success(function (data){
+            $http.get(baseUrl + 'sessions/overview/sources/countries').success(function (data) {
                 vm.countryContribution = data;
             });
         };
 
-        vm.getHotPages = function() {
+        vm.getHotPages = function () {
             $http.get(baseUrl + 'sessions/overview/frequent/pages').success(function (data) {
                 vm.hotPages = data;
             });
         };
 
-        vm.getHotCategories = function() {
-            $http.get(baseUrl + 'sessions/overview/frequent/categories').success(function (data) {
-                var dups = [];
-                var i,n;
-
-                for (i=0, n=data.length; i <n; i++) {
-                    vm.hotCategories.labels.push(data[i].name);
-                    dups.push(data[i].dup);
-                }
-                vm.hotCategories.data.push(dups);
-            });
-        };
-
-        vm.getMainLandingCategories = function() {
+        vm.getMainLandingCategories = function () {
             $http.get(baseUrl + 'sessions/overview/landings/categories').success(function (data) {
                 var dups = [];
                 var i, n;
-                for (i=0, n=data.length; i<n; i++) {
+                for (i = 0, n = data.length; i < n; i++) {
                     vm.mainLandingCategories.labels.push(data[i].name);
                     dups.push(data[i].dup);
                 }
@@ -100,7 +119,7 @@ angular.module('vislog.overview', ['chart.js'])
             $http.get(baseUrl + 'sessions/overview/dropoff/categories').success(function (data) {
                 var dups = [];
                 var i, n;
-                for (i=0, n=data.length; i<n; i++) {
+                for (i = 0, n = data.length; i < n; i++) {
                     vm.mainDropOffCategories.labels.push(data[i].name);
                     dups.push(data[i].dup);
                 }
@@ -109,11 +128,12 @@ angular.module('vislog.overview', ['chart.js'])
         };
 
         vm.getOverviewNumbers();
-        vm.getSessionDistributionByDate("2014-10-22");
+        vm.getSessionDistributionByDate(vm.date);
+        vm.getCategoryDistributionByDate(vm.date);
         vm.getSearchEngineContribution();
         vm.getCountriesContribution();
         vm.getHotPages();
-        vm.getHotCategories();
+        //vm.getHotCategories();
         vm.getMainLandingCategories();
         vm.getMainDropOffCategories();
 

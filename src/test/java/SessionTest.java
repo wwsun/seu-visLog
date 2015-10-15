@@ -10,9 +10,13 @@ import junit.framework.TestCase;
 import services.OverviewService;
 import services.PathService;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,9 +25,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * 测试时间：2015-10-15
+ * 本次测试用例的数据范围：2015-06-30, 07-01, 07-02, 07-03, 07-04
+ */
 public class SessionTest extends TestCase {
 
-    final String mongoURI = "mongodb://223.3.80.243:27017";
+    final String mongoURI = "mongodb://localhost:27017";
     final MongoClient mongoClient;
     final DB siteDatabase;
     final OverviewService overviewService;
@@ -38,7 +46,7 @@ public class SessionTest extends TestCase {
 
     public void testSessionTrends() {
         SessionDAO sessionDAO = new SessionDAO(siteDatabase);
-        DBObject result = sessionDAO.getSessionsByDate("2014-10-22");
+        DBObject result = sessionDAO.getSessionsByDate("2015-07-03");
         System.out.println(result.toString());
     }
 
@@ -62,6 +70,32 @@ public class SessionTest extends TestCase {
         System.out.println(overviewService.getTopCategories(7));
     }
 
+    /**
+     * 测试指定日期会话在不同时段的分布情况
+     * 数据来源：Nodes表
+     * 测试结果：全部通过
+     */
+    public void testSessionDistributionByDate() {
+        String jsonString = overviewService.getSessionDistributionByDate("2015-07-03").toString();
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        JsonObject json = reader.readObject();
+        reader.close();
+        System.out.println(json);
+    }
+
+    /**
+     * 测试指定日期会话在类别上的主要分布情况
+     * 数据来源：Session表
+     * 测试结果：全部通过
+     */
+    public void testHotCategoriesByDate() {
+//        System.out.println(overviewService.getTopCategoriesByDate("2015-06-30", 10));
+//        System.out.println(overviewService.getTopCategoriesByDate("2015-07-01", 10));
+//        System.out.println(overviewService.getTopCategoriesByDate("2015-07-02", 10));
+//        System.out.println(overviewService.getTopCategoriesByDate("2015-07-03", 10));
+        System.out.println(overviewService.getTopCategoriesByDate("2015-07-04", 10));
+    }
+
     public void testMainLandings() {
         System.out.println(overviewService.getMainLandingCategories(10));
     }
@@ -74,14 +108,14 @@ public class SessionTest extends TestCase {
 
         long start = System.currentTimeMillis();
         SankeyGraph sankeyGraph = pathService.getGraph(7, "2014-10-22 0:0:0", "2014-10-23 0:0:0");
-        //����ߵ�Ȩֵ
-        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //���ݱߵ�Ȩֵ����
+        //传入边的权值
+        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //根据边的权值过滤
 
-        //�����ݽ�һ�������õ�
-        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //topK �������ʵ�ҳ��
-        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   //topK ��½ҳ
+        //对数据进一步处理得到
+        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //topK 高跳出率的页面
+        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   //topK 着陆页
 
-        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //���ս��
+        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //最终结果
 
         long end = System.currentTimeMillis();
         System.out.println("costTime:  " + (end - start) / 1000 + "s");

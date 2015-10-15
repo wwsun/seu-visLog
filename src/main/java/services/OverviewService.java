@@ -33,6 +33,11 @@ public class OverviewService {
         leaveDAO = new LeaveDAO(db);
     }
 
+    /**
+     *
+     * @param date 日期
+     * @return 返回指定日期不同时段的会话分布情况
+     */
     public DBObject getSessionDistributionByDate(String date) {
         return sessionDAO.getSessionsByDate(date);
     }
@@ -59,7 +64,7 @@ public class OverviewService {
     }
 
     /**
-     *
+     * todo: obsolete
      * @param limit is the most number of results that returned
      * @return an array of main categories that user flow retained
      */
@@ -71,6 +76,24 @@ public class OverviewService {
             builder.add(Json.createObjectBuilder()
                             .add("name", cate)
                             .add("dup", (Integer)object.get("nums")));
+        }
+        return builder.build();
+    }
+
+    /**
+     *
+     * @param date 查询的日期，e.g. 2015-06-30
+     * @param limit 返回的结果个数
+     * @return 返回指定日期会话在类别上的分布
+     */
+    public JsonArray getTopCategoriesByDate(String date, int limit) {
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        List<DBObject> list = nodesDAO.getHotCategoriesByDate(date, limit);
+        for (DBObject object : list) {
+            String cate = levelDAO.getCategoryById((Integer)object.get("_id"));
+            builder.add(Json.createObjectBuilder()
+                    .add("name", cate)
+                    .add("dup", (Integer)object.get("nums")));
         }
         return builder.build();
     }
