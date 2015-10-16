@@ -5,9 +5,9 @@ angular.module('vislog.overview', ['chart.js'])
 
         var vm = this;
 
-        vm.status = null;
-
         vm.date = "2015-07-01";
+
+        vm.keyIndex = null;
 
         vm.distribution = {
             labels: [],
@@ -34,9 +34,13 @@ angular.module('vislog.overview', ['chart.js'])
         };
 
         // 核心参数指标
-        vm.getOverviewNumbers = function () {
-            $http.get(baseUrl + 'sessions/overview/status').success(function (data) {
-                vm.status = data;
+        vm.getKeyIndexByDate = function (date) {
+            $http.get(baseUrl + 'sessions/distribution/index/' + date).success(function (data) {
+                vm.keyIndex = {
+                    total: data.total,
+                    bounce_rate: data.bounce_rate.toFixed(2),
+                    inquiry_rate: data.inquiry_rate.toFixed(2)
+                };
             });
         };
 
@@ -80,6 +84,7 @@ angular.module('vislog.overview', ['chart.js'])
         // 响应按钮事件：在图形中增加新的对比数据
         vm.handleNewAnalysisRangeBtn = function (newDate) {
             if (angular.isDefined(newDate)) {
+                vm.getKeyIndexByDate(newDate);
                 vm.getSessionDistributionByDate(newDate);
                 vm.getCategoryDistributionByDate(newDate);
             }
@@ -127,7 +132,7 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
-        vm.getOverviewNumbers();
+        vm.getKeyIndexByDate(vm.date);
         vm.getSessionDistributionByDate(vm.date);
         vm.getCategoryDistributionByDate(vm.date);
         vm.getSearchEngineContribution();

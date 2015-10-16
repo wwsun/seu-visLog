@@ -46,11 +46,11 @@ public class OverviewService {
      *
      * @return {"total":"COUNT", "bounce_rate":"PERCENT", "inquiry_rate":"PERCENT"}
      */
-    public JsonObject getSessionCountsAndBounceRate() {
+    public JsonObject getSessionCountsAndBounceRateByDate(String date) {
         return Json.createObjectBuilder()
-                .add("total", jumpDAO.getSessionCounts())
-                .add("bounce_rate", jumpDAO.getBounceRate())
-                .add("inquiry_rate", jumpDAO.getInquiryRate())
+                .add("total", jumpDAO.getSessionCountsByDate(date))
+                .add("bounce_rate", jumpDAO.getBounceRateByDate(date))
+                .add("inquiry_rate", jumpDAO.getInquiryRateByDate(date))
                 .build();
     }
 

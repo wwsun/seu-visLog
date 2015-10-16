@@ -44,14 +44,17 @@ public class SessionTest extends TestCase {
         pathService = new PathService(siteDatabase);
     }
 
-    public void testSessionTrends() {
-        SessionDAO sessionDAO = new SessionDAO(siteDatabase);
-        DBObject result = sessionDAO.getSessionsByDate("2015-07-03");
-        System.out.println(result.toString());
-    }
-
-    public void testSessionCounts() {
-        System.out.println(overviewService.getSessionCountsAndBounceRate());
+    /**
+     * 测试指定日期会话的关键指标（当日会话数、当日首次访问跳出率、当日询盘率）
+     * 测试涞源：Jump表
+     * 测试结果：全部通过
+     */
+    public void testKeyIndexByDate() {
+        System.out.println(overviewService.getSessionCountsAndBounceRateByDate("2015-06-30"));
+//        System.out.println(overviewService.getSessionCountsAndBounceRateByDate("2015-07-01"));
+//        System.out.println(overviewService.getSessionCountsAndBounceRateByDate("2015-07-02"));
+//        System.out.println(overviewService.getSessionCountsAndBounceRateByDate("2015-07-03"));
+//        System.out.println(overviewService.getSessionCountsAndBounceRateByDate("2015-07-04"));
     }
 
     public void testSearchEngineRefers() {
@@ -71,7 +74,7 @@ public class SessionTest extends TestCase {
     }
 
     /**
-     * 测试指定日期会话在不同时段的分布情况
+     * 测试指定日期会话在不同时段的分布情况(24h)
      * 数据来源：Nodes表
      * 测试结果：全部通过
      */
