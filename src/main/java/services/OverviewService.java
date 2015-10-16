@@ -9,6 +9,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class OverviewService {
@@ -112,16 +113,20 @@ public class OverviewService {
         return builder.build();
     }
 
-    public JsonArray getMainLandingCategories(int limit) {
+    public JsonArray getMainLandingCategoriesByDate(String date, int limit) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = landsDAO.getMainLandingCategories(limit);
+        List<DBObject> list = landsDAO.getMainLandingCategoriesByDate(date, limit);
 
         for (DBObject object : list) {
             String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("landID")));
 
             builder.add(Json.createObjectBuilder()
-                .add("name", cate).add("dup", (Integer) object.get("sum")));
+                    .add("name", cate)
+                    .add("date", sdf.format(object.get("date")))
+                    .add("dup", (Integer) object.get("sum")));
         }
         return builder.build();
     }

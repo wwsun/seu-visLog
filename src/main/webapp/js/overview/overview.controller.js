@@ -81,15 +81,30 @@ angular.module('vislog.overview', ['chart.js'])
             })
         };
 
+        // 按日期获取搜索引擎贡献
         vm.getSearchEngineContributionByDate = function (date) {
             $http.get(baseUrl + 'sessions/distribution/sources/se/' + date).success(function (data) {
                 vm.searchEngines = data;
             });
         };
 
+        // 按日期获取主要流量的国家分布
         vm.getCountriesContributionByDate = function (date) {
             $http.get(baseUrl + 'sessions/distribution/sources/countries/' + date).success(function (data) {
                 vm.countryContribution = data;
+            });
+        };
+
+        // 按日期获取当日流量在类别上的分布情况
+        vm.getMainLandingCategoriesByDate = function (date) {
+            $http.get(baseUrl + 'sessions/distribution/landings/categories/' + date).success(function (data) {
+                var dups = [];
+                var i, n;
+                for (i = 0, n = data.length; i < n; i++) {
+                    vm.mainLandingCategories.labels.push(data[i].name);
+                    dups.push(data[i].dup);
+                }
+                vm.mainLandingCategories.data.push(dups);
             });
         };
 
@@ -101,24 +116,14 @@ angular.module('vislog.overview', ['chart.js'])
                 vm.getCategoryDistributionByDate(newDate);
                 vm.getSearchEngineContributionByDate(newDate);
                 vm.getCountriesContributionByDate(newDate);
+                vm.getMainLandingCategoriesByDate(newDate);
+
             }
         };
 
         vm.getHotPages = function () {
             $http.get(baseUrl + 'sessions/overview/frequent/pages').success(function (data) {
                 vm.hotPages = data;
-            });
-        };
-
-        vm.getMainLandingCategories = function () {
-            $http.get(baseUrl + 'sessions/overview/landings/categories').success(function (data) {
-                var dups = [];
-                var i, n;
-                for (i = 0, n = data.length; i < n; i++) {
-                    vm.mainLandingCategories.labels.push(data[i].name);
-                    dups.push(data[i].dup);
-                }
-                vm.mainLandingCategories.data.push(dups);
             });
         };
 
@@ -134,15 +139,17 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
+        // 数据初始化
         vm.getKeyIndexByDate(vm.date);
         vm.getSessionDistributionByDate(vm.date);
         vm.getCategoryDistributionByDate(vm.date);
         vm.getSearchEngineContributionByDate(vm.date);
         vm.getCountriesContributionByDate(vm.date);
+        vm.getMainLandingCategoriesByDate(vm.date);
+
 
         vm.getHotPages();
         //vm.getHotCategories();
-        vm.getMainLandingCategories();
         vm.getMainDropOffCategories();
 
     });

@@ -77,18 +77,18 @@ public class SessionController {
         return overviewService.getTopCountriesByDate(date, 10);
     }
 
+    @Path("/distribution/landings/categories/{date}")
+    @GET
+    @Produces("application/json")
+    public JsonArray getMainLandingCategories(@PathParam("date") String date) {
+        return overviewService.getMainLandingCategoriesByDate(date, 10);
+    }
+
     @Path("/overview/frequent/pages")
     @GET
     @Produces("application/json")
     public JsonArray getFrequentVisitedPages() {
         return overviewService.getFrequentVisitedPages(20);
-    }
-
-    @Path("/overview/landings/categories")
-    @GET
-    @Produces("application/json")
-    public JsonArray getMainLandingCategories() {
-        return overviewService.getMainLandingCategories(10);
     }
 
     @Path("/overview/dropoff/categories")

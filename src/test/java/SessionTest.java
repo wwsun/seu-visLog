@@ -113,8 +113,17 @@ public class SessionTest extends TestCase {
         System.out.println(overviewService.getTopCategoriesByDate("2015-07-04", 10));
     }
 
-    public void testMainLandings() {
-        System.out.println(overviewService.getMainLandingCategories(10));
+    /**
+     * 测试指定日期会话着陆时在网站上的主要类别分布
+     * 测试来源：land表
+     * 测试结果：全部通过
+     */
+    public void testMainLandingsCategoriesByDate() {
+        System.out.println(overviewService.getMainLandingCategoriesByDate("2015-06-30", 10));
+        System.out.println(overviewService.getMainLandingCategoriesByDate("2015-07-01", 10));
+        System.out.println(overviewService.getMainLandingCategoriesByDate("2015-07-02", 10));
+        System.out.println(overviewService.getMainLandingCategoriesByDate("2015-07-03", 10));
+        System.out.println(overviewService.getMainLandingCategoriesByDate("2015-07-04", 10));
     }
 
     public void testMainDropOff() {
