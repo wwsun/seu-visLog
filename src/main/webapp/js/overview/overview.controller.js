@@ -17,7 +17,8 @@ angular.module('vislog.overview', ['chart.js'])
 
         vm.categoryDistribution = {
             labels: [],
-            data: []
+            data: [],
+            series: []
         };
 
         vm.searchEngines = null;
@@ -25,12 +26,14 @@ angular.module('vislog.overview', ['chart.js'])
         vm.hotPages = null;
         vm.mainLandingCategories = {
             labels: [],
-            data: []
+            data: [],
+            series: []
         };
 
         vm.mainDropOffCategories = {
             labels: [],
-            data: []
+            data: [],
+            series: []
         };
 
         // 核心参数指标
@@ -78,6 +81,7 @@ angular.module('vislog.overview', ['chart.js'])
                     dups.push(data[i].dup);
                 }
                 vm.categoryDistribution.data.push(dups);
+                vm.categoryDistribution.series.push(date);
             })
         };
 
@@ -105,6 +109,7 @@ angular.module('vislog.overview', ['chart.js'])
                     dups.push(data[i].dup);
                 }
                 vm.mainLandingCategories.data.push(dups);
+                vm.mainLandingCategories.series.push(date);
             });
         };
 
@@ -118,6 +123,7 @@ angular.module('vislog.overview', ['chart.js'])
                     dups.push(data[i].dup);
                 }
                 vm.mainDropOffCategories.data.push(dups);
+                vm.mainDropOffCategories.series.push(date);
             });
         };
 

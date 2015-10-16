@@ -1,33 +1,37 @@
+<div class="row search-bar">
+    <div class="col-md-12">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="overviewCtrl.date">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary"
+                                    ng-click="overviewCtrl.handleNewAnalysisRangeBtn(overviewCtrl.date)">Visualize!
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-primary">
+        <div class="panel panel-default">
             <div class="panel-heading">Session Distribution By Date</div>
             <div class="panel-body">
-                <div class="col-md-4">
-                    <p>Change the analysis date range: </p>
-
-                    <form class="form">
-                        <div class="form-group">
-                            <label class="sr-only" for="queryDate">Start Date</label>
-                            <input type="input"
-                                   id="queryDate"
-                                   class="form-control"
-                                   placeholder="Start Date"
-                                   ng-model="overviewCtrl.date">
-                        </div>
-                        <button class="btn btn-primary"
-                                ng-click="overviewCtrl.handleNewAnalysisRangeBtn(overviewCtrl.date)">Refresh Data
-                        </button>
-                    </form>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
                             labels="overviewCtrl.distribution.labels"
                             series="overviewCtrl.distribution.series"></canvas>
                 </div>
-                <div class="col-md-4">
-                    <canvas class="chart chart-radar" data="overviewCtrl.categoryDistribution.data"
-                            labels="overviewCtrl.categoryDistribution.labels"></canvas>
+                <div class="col-md-6">
+                    <canvas class="chart chart-radar"
+                            chart-data="overviewCtrl.categoryDistribution.data"
+                            chart-labels="overviewCtrl.categoryDistribution.labels"
+                            chart-series="overviewCtrl.categoryDistribution.series"></canvas>
                 </div>
             </div>
 
@@ -42,7 +46,7 @@
         <div class="row first-line">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Key Index By Date - 位置需要移动</div>
+                    <div class="panel-heading">Key Index By Date</div>
                     <div class="panel-body">
                         <div class="col-md-4">
                             <h1>{{overviewCtrl.keyIndex.total}}</h1>
@@ -94,23 +98,29 @@
 
         <div class="row third-line">
 
-            <div class="col-md-6">
+            <div class="col-md-12">
 
                 <div class="panel panel-default">
                     <div class="panel-heading">Main Landing Categories - Top 10</div>
                     <div class="panel-body">
-                        <canvas class="chart chart-bar" data="overviewCtrl.mainLandingCategories.data"
-                                labels="overviewCtrl.mainLandingCategories.labels"></canvas>
+                        <canvas class="chart chart-bar"
+                                chart-data="overviewCtrl.mainLandingCategories.data"
+                                chart-labels="overviewCtrl.mainLandingCategories.labels"
+                                chart-series="overviewCtrl.mainLandingCategories.series"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
+        </div>
+
+        <div class="row fourth-line">
+            <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Main DropOff Pages - Top 10</div>
                     <div class="panel-body">
-                        <canvas class="chart chart-bar" data="overviewCtrl.mainDropOffCategories.data"
-                                labels="overviewCtrl.mainDropOffCategories.labels"></canvas>
+                        <canvas class="chart chart-bar"
+                                chart-data="overviewCtrl.mainDropOffCategories.data"
+                                chart-labels="overviewCtrl.mainDropOffCategories.labels"></canvas>
                     </div>
                 </div>
             </div>
