@@ -117,17 +117,13 @@ public class OverviewService {
         return builder.build();
     }
 
-    /**
-     *
-     * @param limit is the result you want to returned
-     * @return [{name:"XXX", dup:"XXX"}]
-     */
-    public JsonArray getTopCountriesFlow(int limit) {
+    public JsonArray getTopCountriesByDate(String date, int limit) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = countryDAO.getGeoDistribution(limit);
+                List<DBObject> list = countryDAO.getGeoDistributionByDate(date, limit);
         for (DBObject object : list) {
             builder.add(Json.createObjectBuilder()
                             .add("name", (String) object.get("name"))
+                            .add("date", (String) object.get("date"))
                             .add("dup", (Integer) object.get("value")));
         }
         return builder.build();

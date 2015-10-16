@@ -87,6 +87,12 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
+        vm.getCountriesContributionByDate = function (date) {
+            $http.get(baseUrl + 'sessions/distribution/sources/countries/' + date).success(function (data) {
+                vm.countryContribution = data;
+            });
+        };
+
         // 响应按钮事件：在图形中增加新的对比数据
         vm.handleNewAnalysisRangeBtn = function (newDate) {
             if (angular.isDefined(newDate)) {
@@ -94,13 +100,8 @@ angular.module('vislog.overview', ['chart.js'])
                 vm.getSessionDistributionByDate(newDate);
                 vm.getCategoryDistributionByDate(newDate);
                 vm.getSearchEngineContributionByDate(newDate);
+                vm.getCountriesContributionByDate(newDate);
             }
-        };
-
-        vm.getCountriesContribution = function () {
-            $http.get(baseUrl + 'sessions/overview/sources/countries').success(function (data) {
-                vm.countryContribution = data;
-            });
         };
 
         vm.getHotPages = function () {
@@ -137,8 +138,8 @@ angular.module('vislog.overview', ['chart.js'])
         vm.getSessionDistributionByDate(vm.date);
         vm.getCategoryDistributionByDate(vm.date);
         vm.getSearchEngineContributionByDate(vm.date);
+        vm.getCountriesContributionByDate(vm.date);
 
-        vm.getCountriesContribution();
         vm.getHotPages();
         //vm.getHotCategories();
         vm.getMainLandingCategories();

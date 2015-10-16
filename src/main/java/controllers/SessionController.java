@@ -70,11 +70,11 @@ public class SessionController {
         return overviewService.getTopSearchEnginesByDate(date, 10);
     }
 
-    @Path("/overview/sources/countries")
+    @Path("/distribution/sources/countries/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getTopCountriesFlowContribution() {
-        return overviewService.getTopCountriesFlow(10);
+    public JsonArray getTopCountriesFlowContribution(@PathParam("date") String date) {
+        return overviewService.getTopCountriesByDate(date, 10);
     }
 
     @Path("/overview/frequent/pages")

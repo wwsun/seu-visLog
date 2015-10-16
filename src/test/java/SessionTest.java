@@ -64,14 +64,23 @@ public class SessionTest extends TestCase {
      */
     public void testSearchEngineRefersByDate() {
         System.out.println(overviewService.getTopSearchEnginesByDate("2015-06-30", 10));
-        System.out.println(overviewService.getTopSearchEnginesByDate("2015-07-01", 10));
-        System.out.println(overviewService.getTopSearchEnginesByDate("2015-07-02", 10));
-        System.out.println(overviewService.getTopSearchEnginesByDate("2015-07-03", 10));
-        System.out.println(overviewService.getTopSearchEnginesByDate("2015-07-04", 10));
+//        System.out.println(overviewService.getTopSearchEnginesByDate("2015-07-01", 10));
+//        System.out.println(overviewService.getTopSearchEnginesByDate("2015-07-02", 10));
+//        System.out.println(overviewService.getTopSearchEnginesByDate("2015-07-03", 10));
+//        System.out.println(overviewService.getTopSearchEnginesByDate("2015-07-04", 10));
     }
 
-    public void testTopCountaries() {
-        overviewService.getTopCountriesFlow(10);
+    /**
+     * 测试指定日期会话流量的国家分布
+     * 测试来源：country表
+     * 测试结果：全部通过
+     */
+    public void testTopCountriesByDate() {
+        System.out.println(overviewService.getTopCountriesByDate("2015-06-30", 10));
+        System.out.println(overviewService.getTopCountriesByDate("2015-07-01", 10));
+        System.out.println(overviewService.getTopCountriesByDate("2015-07-02", 10));
+        System.out.println(overviewService.getTopCountriesByDate("2015-07-03", 10));
+        System.out.println(overviewService.getTopCountriesByDate("2015-07-04", 10));
     }
 
     public void testHotPages() {
