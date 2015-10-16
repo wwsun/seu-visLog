@@ -83,10 +83,6 @@ public class SessionTest extends TestCase {
         System.out.println(overviewService.getTopCountriesByDate("2015-07-04", 10));
     }
 
-    public void testHotPages() {
-        System.out.println(overviewService.getFrequentVisitedPages(10));
-    }
-
     /**
      * 测试指定日期会话在不同时段的分布情况(24h)
      * 数据来源：Nodes表
@@ -126,9 +122,23 @@ public class SessionTest extends TestCase {
         System.out.println(overviewService.getMainLandingCategoriesByDate("2015-07-04", 10));
     }
 
-    public void testMainDropOff() {
-        System.out.println(overviewService.getMainDropOffCategories(10));
+    /**
+     * 测试指定日期会话在跳出时的在网站上的主要类别分布
+     * 测试来源：leave表
+     * 测试结果：全部通过
+     */
+    public void testMainDropOffCategoriesByDate() {
+        System.out.println(overviewService.getMainDropOffCategoriesByDate("2015-06-30", 10));
+        System.out.println(overviewService.getMainDropOffCategoriesByDate("2015-07-01", 10));
+        System.out.println(overviewService.getMainDropOffCategoriesByDate("2015-07-02", 10));
+        System.out.println(overviewService.getMainDropOffCategoriesByDate("2015-07-03", 10));
+        System.out.println(overviewService.getMainDropOffCategoriesByDate("2015-07-04", 10));
     }
+
+    public void testHotPages() {
+        System.out.println(overviewService.getFrequentVisitedPages(10));
+    }
+
 
     public void testSankeyGraph() throws ParseException, IOException {
 

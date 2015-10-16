@@ -131,16 +131,20 @@ public class OverviewService {
         return builder.build();
     }
 
-    public JsonArray getMainDropOffCategories(int limit) {
+    public JsonArray getMainDropOffCategoriesByDate(String date, int limit) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = leaveDAO.getMainDropoffCategories(limit);
+        List<DBObject> list = leaveDAO.getMainDropoffCategoriesByDate(date, limit);
 
         for (DBObject object : list) {
             String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("leaveID")));
 
             builder.add(Json.createObjectBuilder()
-                    .add("name", cate).add("dup", (Integer) object.get("sum")));
+                    .add("name", cate)
+                    .add("date", sdf.format(object.get("date")))
+                    .add("dup", (Integer) object.get("sum")));
         }
         return builder.build();
     }

@@ -108,27 +108,9 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
-        // 响应按钮事件：在图形中增加新的对比数据
-        vm.handleNewAnalysisRangeBtn = function (newDate) {
-            if (angular.isDefined(newDate)) {
-                vm.getKeyIndexByDate(newDate);
-                vm.getSessionDistributionByDate(newDate);
-                vm.getCategoryDistributionByDate(newDate);
-                vm.getSearchEngineContributionByDate(newDate);
-                vm.getCountriesContributionByDate(newDate);
-                vm.getMainLandingCategoriesByDate(newDate);
-
-            }
-        };
-
-        vm.getHotPages = function () {
-            $http.get(baseUrl + 'sessions/overview/frequent/pages').success(function (data) {
-                vm.hotPages = data;
-            });
-        };
-
-        vm.getMainDropOffCategories = function () {
-            $http.get(baseUrl + 'sessions/overview/dropoff/categories').success(function (data) {
+        // 按日期获取当日流量在跳出时在类别上的分布情况
+        vm.getMainDropOffCategoriesByDate = function (date) {
+            $http.get(baseUrl + 'sessions/distribution/dropoff/categories/' + date).success(function (data) {
                 var dups = [];
                 var i, n;
                 for (i = 0, n = data.length; i < n; i++) {
@@ -139,6 +121,26 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
+        // 响应按钮事件：在图形中增加新的对比数据
+        vm.handleNewAnalysisRangeBtn = function (newDate) {
+            if (angular.isDefined(newDate)) {
+                vm.getKeyIndexByDate(newDate);
+                vm.getSessionDistributionByDate(newDate);
+                vm.getCategoryDistributionByDate(newDate);
+                vm.getSearchEngineContributionByDate(newDate);
+                vm.getCountriesContributionByDate(newDate);
+                vm.getMainLandingCategoriesByDate(newDate);
+                vm.getMainDropOffCategoriesByDate(newDate);
+
+            }
+        };
+
+        vm.getHotPages = function () {
+            $http.get(baseUrl + 'sessions/overview/frequent/pages').success(function (data) {
+                vm.hotPages = data;
+            });
+        };
+
         // 数据初始化
         vm.getKeyIndexByDate(vm.date);
         vm.getSessionDistributionByDate(vm.date);
@@ -146,10 +148,11 @@ angular.module('vislog.overview', ['chart.js'])
         vm.getSearchEngineContributionByDate(vm.date);
         vm.getCountriesContributionByDate(vm.date);
         vm.getMainLandingCategoriesByDate(vm.date);
+        vm.getMainDropOffCategoriesByDate(vm.date);
+
 
 
         vm.getHotPages();
         //vm.getHotCategories();
-        vm.getMainDropOffCategories();
 
     });
