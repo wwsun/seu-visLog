@@ -16,12 +16,22 @@ import java.util.List;
 public class NodesDAO {
 
     private DBCollection nodes;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public NodesDAO(final DB siteDatabase) {
         nodes = siteDatabase.getCollection("nodes");
     }
 
-    public List<DBObject> getHotPages(int topk) {
+    public List<DBObject> getHotPagesByDate(String date, int topk) {
+
+        // $match
+        DBObject matchFields = null;
+        try {
+             matchFields = new BasicDBObject("date", sdf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        DBObject match = new BasicDBObject("$match", matchFields);
 
         // $project
         DBObject fields = new BasicDBObject("url", 1);
@@ -33,10 +43,10 @@ public class NodesDAO {
         DBObject group = new BasicDBObject("$group", groupFields);
         // $sort
         DBObject sort = new BasicDBObject("$sort", new BasicDBObject("nums", -1));
-        //limit,ȡtop20
+        //limit, top20
         DBObject limit = new BasicDBObject("$limit", topk);
         //run
-        List<DBObject> pipeline = Arrays.asList(project, group, sort, limit);
+        List<DBObject> pipeline = Arrays.asList(match, project, group, sort, limit);
         //allowDiskUse
         AggregationOptions options = AggregationOptions.builder().allowDiskUse(true).build();
         Cursor cursor = nodes.aggregate(pipeline, options);

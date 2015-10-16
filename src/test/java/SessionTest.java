@@ -135,8 +135,17 @@ public class SessionTest extends TestCase {
         System.out.println(overviewService.getMainDropOffCategoriesByDate("2015-07-04", 10));
     }
 
-    public void testHotPages() {
-        System.out.println(overviewService.getFrequentVisitedPages(10));
+    /**
+     * 测试指定日期用户频繁访问的页面
+     * 测试来源：nodes表
+     * 测试结果：全部通过
+     */
+    public void testHotPagesByDate() {
+        System.out.println(overviewService.getFrequentVisitedPagesByDate("2015-06-30", 10));
+        System.out.println(overviewService.getFrequentVisitedPagesByDate("2015-07-01", 10));
+        System.out.println(overviewService.getFrequentVisitedPagesByDate("2015-07-02", 10));
+        System.out.println(overviewService.getFrequentVisitedPagesByDate("2015-07-03", 10));
+        System.out.println(overviewService.getFrequentVisitedPagesByDate("2015-07-04", 10));
     }
 
 

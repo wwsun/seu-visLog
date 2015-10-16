@@ -35,7 +35,6 @@ public class OverviewService {
     }
 
     /**
-     *
      * @param date 日期
      * @return 返回指定日期不同时段的会话分布情况
      */
@@ -44,7 +43,6 @@ public class OverviewService {
     }
 
     /**
-     *
      * @param date 指定的日期
      * @return 返回指定日期数据的关键指标
      * 返回数据的格式为：{"total":"COUNT", "bounce_rate":"PERCENT", "inquiry_rate":"PERCENT"}
@@ -58,8 +56,7 @@ public class OverviewService {
     }
 
     /**
-     *
-     * @param date 日期
+     * @param date  日期
      * @param limit 返回结果的个数
      * @return 返回指定日期数据的主要搜索引擎贡献
      */
@@ -68,8 +65,7 @@ public class OverviewService {
     }
 
     /**
-     *
-     * @param date 查询的日期，e.g. 2015-06-30
+     * @param date  查询的日期，e.g. 2015-06-30
      * @param limit 返回的结果个数
      * @return 返回指定日期会话在类别上的分布
      */
@@ -77,38 +73,34 @@ public class OverviewService {
         JsonArrayBuilder builder = Json.createArrayBuilder();
         List<DBObject> list = nodesDAO.getHotCategoriesByDate(date, limit);
         for (DBObject object : list) {
-            String cate = levelDAO.getCategoryById((Integer)object.get("_id"));
+            String cate = levelDAO.getCategoryById((Integer) object.get("_id"));
             builder.add(Json.createObjectBuilder()
                     .add("name", cate)
-                    .add("dup", (Integer)object.get("nums")));
+                    .add("dup", (Integer) object.get("nums")));
         }
         return builder.build();
     }
 
-    /**
-     *
-     * @param limit is the most number of results that returned
-     * @return an array of the most frequent visited pages
-     */
-    public JsonArray getFrequentVisitedPages(int limit) {
+    public JsonArray getFrequentVisitedPagesByDate(String date, int limit) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = nodesDAO.getHotPages(limit);
+        List<DBObject> list = nodesDAO.getHotPagesByDate(date, limit);
+
         for (DBObject object : list) {
             builder.add(Json.createObjectBuilder()
-            .add("name", (String) object.get("_id"))
-            .add("dup", (Integer) object.get("nums")));
+                    .add("name", (String) object.get("_id"))
+                    .add("dup", (Integer) object.get("nums")));
         }
         return builder.build();
     }
 
     public JsonArray getTopCountriesByDate(String date, int limit) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
-                List<DBObject> list = countryDAO.getGeoDistributionByDate(date, limit);
+        List<DBObject> list = countryDAO.getGeoDistributionByDate(date, limit);
         for (DBObject object : list) {
             builder.add(Json.createObjectBuilder()
-                            .add("name", (String) object.get("name"))
-                            .add("date", (String) object.get("date"))
-                            .add("dup", (Integer) object.get("value")));
+                    .add("name", (String) object.get("name"))
+                    .add("date", (String) object.get("date"))
+                    .add("dup", (Integer) object.get("value")));
         }
         return builder.build();
     }
@@ -121,7 +113,7 @@ public class OverviewService {
         List<DBObject> list = landsDAO.getMainLandingCategoriesByDate(date, limit);
 
         for (DBObject object : list) {
-            String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("landID")));
+            String cate = levelDAO.getCategoryById(Integer.parseInt((String) object.get("landID")));
 
             builder.add(Json.createObjectBuilder()
                     .add("name", cate)
@@ -139,7 +131,7 @@ public class OverviewService {
         List<DBObject> list = leaveDAO.getMainDropoffCategoriesByDate(date, limit);
 
         for (DBObject object : list) {
-            String cate = levelDAO.getCategoryById(Integer.parseInt((String)object.get("leaveID")));
+            String cate = levelDAO.getCategoryById(Integer.parseInt((String) object.get("leaveID")));
 
             builder.add(Json.createObjectBuilder()
                     .add("name", cate)

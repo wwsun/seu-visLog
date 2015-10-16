@@ -91,14 +91,14 @@ public class SessionController {
         return overviewService.getMainDropOffCategoriesByDate(date, 10);
     }
 
-    @Path("/overview/frequent/pages")
+    @Path("/distribution/frequent/pages/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getFrequentVisitedPages() {
-        return overviewService.getFrequentVisitedPages(20);
+    public JsonArray getFrequentVisitedPages(@PathParam("date") String date) {
+        return overviewService.getFrequentVisitedPagesByDate(date, 20);
     }
 
-    @Path("/path/{date}") //2014-10-22
+    @Path("/path/{date}")
     @GET
     @Produces("application/json")
     public JsonObject getSessionPath(@PathParam("date") String date) throws ParseException, UnknownHostException {

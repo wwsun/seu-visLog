@@ -121,6 +121,13 @@ angular.module('vislog.overview', ['chart.js'])
             });
         };
 
+        // 按日期获取当日用户的频繁访问页面
+        vm.getHotPagesByDate = function (date) {
+            $http.get(baseUrl + 'sessions/distribution/frequent/pages/' + date).success(function (data) {
+                vm.hotPages = data;
+            });
+        };
+
         // 响应按钮事件：在图形中增加新的对比数据
         vm.handleNewAnalysisRangeBtn = function (newDate) {
             if (angular.isDefined(newDate)) {
@@ -131,14 +138,8 @@ angular.module('vislog.overview', ['chart.js'])
                 vm.getCountriesContributionByDate(newDate);
                 vm.getMainLandingCategoriesByDate(newDate);
                 vm.getMainDropOffCategoriesByDate(newDate);
-
+                vm.getHotPagesByDate(newDate);
             }
-        };
-
-        vm.getHotPages = function () {
-            $http.get(baseUrl + 'sessions/overview/frequent/pages').success(function (data) {
-                vm.hotPages = data;
-            });
         };
 
         // 数据初始化
@@ -149,10 +150,5 @@ angular.module('vislog.overview', ['chart.js'])
         vm.getCountriesContributionByDate(vm.date);
         vm.getMainLandingCategoriesByDate(vm.date);
         vm.getMainDropOffCategoriesByDate(vm.date);
-
-
-
-        vm.getHotPages();
-        //vm.getHotCategories();
-
+        vm.getHotPagesByDate(vm.date);
     });
