@@ -63,11 +63,11 @@ public class SessionController {
         return overviewService.getSessionCountsAndBounceRateByDate(date);
     }
 
-    @Path("/overview/sources/se")
+    @Path("/distribution/sources/se/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getSearchEngineContribution() {
-        return overviewService.getTopSearchEngines(10);
+    public JsonArray getSearchEngineContribution(@PathParam("date") String date) {
+        return overviewService.getTopSearchEnginesByDate(date, 10);
     }
 
     @Path("/overview/sources/countries")

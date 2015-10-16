@@ -44,7 +44,9 @@ public class OverviewService {
 
     /**
      *
-     * @return {"total":"COUNT", "bounce_rate":"PERCENT", "inquiry_rate":"PERCENT"}
+     * @param date 指定的日期
+     * @return 返回指定日期数据的关键指标
+     * 返回数据的格式为：{"total":"COUNT", "bounce_rate":"PERCENT", "inquiry_rate":"PERCENT"}
      */
     public JsonObject getSessionCountsAndBounceRateByDate(String date) {
         return Json.createObjectBuilder()
@@ -56,11 +58,12 @@ public class OverviewService {
 
     /**
      *
-     * @param limit is the most number of results that returned
-     * @return an array of main reference search engines as json format
+     * @param date 日期
+     * @param limit 返回结果的个数
+     * @return 返回指定日期数据的主要搜索引擎贡献
      */
-    public JsonArray getTopSearchEngines(int limit) {
-        return sourceDAO.getTopSearchEngines(limit);
+    public JsonArray getTopSearchEnginesByDate(String date, int limit) {
+        return sourceDAO.getTopSearchEnginesByDate(date, limit);
     }
 
     /**
