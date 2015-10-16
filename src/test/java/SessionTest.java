@@ -87,10 +87,6 @@ public class SessionTest extends TestCase {
         System.out.println(overviewService.getFrequentVisitedPages(10));
     }
 
-    public void testHotCategories() {
-        System.out.println(overviewService.getTopCategories(7));
-    }
-
     /**
      * 测试指定日期会话在不同时段的分布情况(24h)
      * 数据来源：Nodes表

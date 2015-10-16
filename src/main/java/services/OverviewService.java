@@ -67,23 +67,6 @@ public class OverviewService {
     }
 
     /**
-     * todo: obsolete
-     * @param limit is the most number of results that returned
-     * @return an array of main categories that user flow retained
-     */
-    public JsonArray getTopCategories(int limit) {
-        JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<DBObject> list = nodesDAO.getHotCategory(limit);
-        for (DBObject object : list) {
-            String cate = levelDAO.getCategoryById((Integer)object.get("_id"));
-            builder.add(Json.createObjectBuilder()
-                            .add("name", cate)
-                            .add("dup", (Integer)object.get("nums")));
-        }
-        return builder.build();
-    }
-
-    /**
      *
      * @param date 查询的日期，e.g. 2015-06-30
      * @param limit 返回的结果个数

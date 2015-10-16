@@ -84,13 +84,6 @@ public class SessionController {
         return overviewService.getFrequentVisitedPages(20);
     }
 
-    @Path("/overview/frequent/categories")
-    @GET
-    @Produces("application/json")
-    public JsonArray getFrequentVisitedCategory() {
-        return overviewService.getTopCategories(7);
-    }
-
     @Path("/overview/landings/categories")
     @GET
     @Produces("application/json")
