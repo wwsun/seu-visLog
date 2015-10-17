@@ -1,17 +1,18 @@
 angular.module('vislog.path', ['chart.js'])
 
-    //.constant('baseUrl', 'http://localhost:8080/vislog-restful/api/')
-
     .controller('PathCtrl', function ($http, sessionPathData) {
 
         var vm = this;
 
+        vm.progressData = 10; // test
+
         vm.dateRange = {
-            start: '2014-10-22',
-            end: '2014-10-23'
+            startDate: '2015-07-01',
+            endDate: '2015-07-02',
+            edgeValue: 4.5
         };
 
-        vm.pathData = sessionPathData.pathData;
+        //vm.pathData = sessionPathData.pathData;
 
         vm.orderedAttribute = null;
 
@@ -21,9 +22,7 @@ angular.module('vislog.path', ['chart.js'])
             out_degree: 1
         };
 
-        vm.orderBy = function(item) {
+        vm.orderBy = function (item) {
             vm.orderedAttribute = item;
         }
-
-
     });
