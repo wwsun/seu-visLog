@@ -21,8 +21,14 @@ angular.module('vislog.overview', ['chart.js'])
             series: []
         };
 
-        vm.searchEngines = null;
-        vm.countryContribution = [];
+        vm.searchEngines = {
+            labels: [],
+            data: []
+        };
+        vm.countryContribution = {
+            labels: [],
+            data: []
+        };
         vm.hotPages = null;
         vm.mainLandingCategories = {
             labels: [],
@@ -88,14 +94,37 @@ angular.module('vislog.overview', ['chart.js'])
         // 按日期获取搜索引擎贡献
         vm.getSearchEngineContributionByDate = function (date) {
             $http.get(baseUrl + 'sessions/distribution/sources/se/' + date).success(function (data) {
-                vm.searchEngines = data;
+
+                // data init
+                vm.searchEngines.labels.length = 0;
+                vm.searchEngines.data.length = 0;
+
+                var i;
+                var n;
+
+                for (i = 0, n = data.length; i < n; i++) {
+                    vm.searchEngines.labels.push(data[i].name);
+                    vm.searchEngines.data.push(data[i].dup);
+                }
+
             });
         };
 
         // 按日期获取主要流量的国家分布
         vm.getCountriesContributionByDate = function (date) {
             $http.get(baseUrl + 'sessions/distribution/sources/countries/' + date).success(function (data) {
-                vm.countryContribution = data;
+
+                // data init
+                vm.countryContribution.data.length = 0;
+                vm.countryContribution.labels.length = 0;
+
+                var i;
+                var n;
+
+                for (i = 0, n = data.length; i < n; i++) {
+                    vm.countryContribution.labels.push(data[i].name);
+                    vm.countryContribution.data.push(data[i].dup);
+                }
             });
         };
 

@@ -20,7 +20,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
-            <div class="panel-heading">Session Distribution By Date</div>
+            <div class="panel-heading">Session Trend</div>
             <div class="panel-body">
                 <div class="col-md-6">
                     <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
@@ -46,7 +46,7 @@
         <div class="row first-line">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Key Index By Date</div>
+                    <div class="panel-heading">Key Index of [{{overviewCtrl.date}}]</div>
                     <div class="panel-body">
                         <div class="col-md-4">
                             <h1>{{overviewCtrl.keyIndex.total}}</h1>
@@ -73,23 +73,27 @@
             <div class="col-md-6">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Flow Contribution - Top 10</div>
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="item in overviewCtrl.countryContribution">
-                            {{item.name}} <span class="badge">{{item.dup}}</span>
-                        </li>
+                    <div class="panel-heading">Flow Contribution [{{overviewCtrl.date}}]</div>
+                    <ul class="panel-body">
+                        <canvas class="chart chart-pie"
+                                chart-data="overviewCtrl.countryContribution.data"
+                                chart-labels="overviewCtrl.countryContribution.labels"
+                                chart-legend="true">
+                        </canvas>
                     </ul>
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Search Engine Contribution - Top 10</div>
-                    <ul class="list-group">
+                    <div class="panel-heading">Search Engine Contribution [{{overviewCtrl.date}}]</div>
+                    <ul class="panel-body">
 
-                        <li class="list-group-item" ng-repeat="item in overviewCtrl.searchEngines">
-                            {{item.name}} <span class="badge">{{item.dup}}</span>
-                        </li>
+                        <canvas class="chart chart-pie"
+                                chart-data="overviewCtrl.searchEngines.data"
+                                chart-labels="overviewCtrl.searchEngines.labels"
+                                chart-legend="true">
+                        </canvas>
 
                     </ul>
                 </div>
@@ -101,7 +105,7 @@
             <div class="col-md-12">
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Main Landing Categories - Top 10</div>
+                    <div class="panel-heading">Main Landing Categories</div>
                     <div class="panel-body">
                         <canvas class="chart chart-bar"
                                 chart-data="overviewCtrl.mainLandingCategories.data"
@@ -116,11 +120,12 @@
         <div class="row fourth-line">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Main DropOff Pages - Top 10</div>
+                    <div class="panel-heading">Main DropOff Pages</div>
                     <div class="panel-body">
                         <canvas class="chart chart-bar"
                                 chart-data="overviewCtrl.mainDropOffCategories.data"
-                                chart-labels="overviewCtrl.mainDropOffCategories.labels"></canvas>
+                                chart-labels="overviewCtrl.mainDropOffCategories.labels"
+                                chart-series="overviewCtrl.mainDropOffCategories.series"></canvas>
                     </div>
                 </div>
             </div>
@@ -132,7 +137,7 @@
         <div class="row frequent-pages">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Frequent Visited Pages</div>
+                    <div class="panel-heading">Frequent Visited Pages [{{overviewCtrl.date}}]</div>
                     <div class="list-group">
                         <a ng-repeat="item in overviewCtrl.hotPages" class="list-group-item" href="http://{{item.name}}"
                            target="_blank">
