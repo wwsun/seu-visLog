@@ -23,9 +23,10 @@
             <div class="panel-heading">Session Trend</div>
             <div class="panel-body">
                 <div class="col-md-6">
-                    <canvas class="chart chart-line" data="overviewCtrl.distribution.data"
-                            labels="overviewCtrl.distribution.labels"
-                            series="overviewCtrl.distribution.series"></canvas>
+                    <canvas class="chart chart-line"
+                            chart-data="overviewCtrl.distribution.data"
+                            chart-labels="overviewCtrl.distribution.labels"
+                            chart-series="overviewCtrl.distribution.series"></canvas>
                 </div>
                 <div class="col-md-6">
                     <canvas class="chart chart-radar"
@@ -42,7 +43,6 @@
 
 <div class="row">
     <div class="col-md-8">
-
         <div class="row first-line">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -50,17 +50,14 @@
                     <div class="panel-body">
                         <div class="col-md-4">
                             <h1>{{overviewCtrl.keyIndex.total}}</h1>
-
                             <p>Sessions this day</p>
                         </div>
                         <div class="col-md-4">
                             <h1>{{overviewCtrl.keyIndex.bounce_rate}}%</h1>
-
                             <p>First visit bounce rate</p>
                         </div>
                         <div class="col-md-4">
                             <h1>{{overviewCtrl.keyIndex.inquiry_rate}}%</h1>
-
                             <p>Overall inquiry rate</p>
                         </div>
                     </div>
@@ -69,9 +66,7 @@
         </div>
 
         <div class="row second-line">
-
             <div class="col-md-6">
-
                 <div class="panel panel-default">
                     <div class="panel-heading">Flow Contribution [{{overviewCtrl.date}}]</div>
                     <ul class="panel-body">
@@ -92,9 +87,7 @@
                         <canvas class="chart chart-pie"
                                 chart-data="overviewCtrl.searchEngines.data"
                                 chart-labels="overviewCtrl.searchEngines.labels"
-                                chart-legend="true">
-                        </canvas>
-
+                                chart-legend="true"></canvas>
                     </ul>
                 </div>
             </div>
