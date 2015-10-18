@@ -11,23 +11,29 @@
                         <input type="input"
                                class="form-control"
                                id="startDate"
-                               ng-model="pathCtrl.dateRange.startDate">
+                               ng-model="pathCtrl.postData.startDate">
                     </div>
                     <div class="form-group">
                         <label for="endDate">End Date</label>
                         <input type="input"
                                class="form-control"
                                id="endDate"
-                               ng-model="pathCtrl.dateRange.endDate">
+                               ng-model="pathCtrl.postData.endDate">
                     </div>
                     <div class="form-group">
                         <label for="edgeValue">Edge Value</label>
                         <input type="input"
                                class="form-control"
                                id="edgeValue"
-                               ng-model="pathCtrl.dateRange.edgeValue">
+                               ng-model="pathCtrl.postData.pathWeight">
                     </div>
-                    <button class="btn btn-primary">Query</button>
+                    <button class="btn btn-primary"
+                            ng-click="pathCtrl.handleNewUserFlowPath(pathCtrl.postData)">Query
+                    </button>
+                    <button class="btn btn-primary"
+                            ng-click=""
+                            ng-disabled="pathCtrl.displayOption.isDisabled">Display
+                    </button>
                 </form>
             </div>
         </div>
