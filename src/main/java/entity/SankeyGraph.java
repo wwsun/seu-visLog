@@ -171,17 +171,20 @@ public class SankeyGraph extends Graph {
      * @return
      */
     public static int partition(double[] a, int low, int high) {
-        double key = a[low];
-        while (low < high) {
-            while (low < high && a[high] >= key)
-                high--;
-            a[low] = a[high];
-            while (low < high && a[low] <= key)
-                low++;
-            a[high] = a[low];
+        if(low<=high){
+            double key = a[low];
+            while (low < high) {
+                while (low < high && a[high] >= key)
+                    high--;
+                a[low] = a[high];
+                while (low < high && a[low] <= key)
+                    low++;
+                a[high] = a[low];
+            }
+            a[low] = key;
+            return low;
         }
-        a[low] = key;
-        return low;
+        return -1;
     }
 
     public static double quickSelect(double[] a, int low, int high, int k) {
