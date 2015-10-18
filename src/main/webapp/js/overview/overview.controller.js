@@ -1,6 +1,5 @@
 angular.module('vislog.overview', ['chart.js'])
 
-    .constant('baseUrl', 'http://localhost:8080/vislog_restful/api/')
     .controller('OverviewCtrl', function ($http, baseUrl) {
 
         var vm = this;
