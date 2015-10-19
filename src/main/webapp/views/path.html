@@ -1,135 +1,152 @@
 <div class="row">
-
-    <div class="col-md-8 left-side">
-
-        <div class="row first-line">
-            <div class="col-md-12 user-path">
-                <div class="panel panel-default">
-                    <div class="panel-heading">User Path</div>
-                    <div class="panel-body">
-                        <path-chart data="pathCtrl.pathData" clicked-point="pathCtrl.clickedNode"></path-chart>
-                    </div>
-                </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">用户路径图  [{{pathCtrl.selectedGraph}}]</div>
+            <div class="panel-body" id="path-chart">
+                <path-chart data="pathCtrl.selectedGraph"
+                            name="url"
+                            width="1500"
+                            height="850"
+                            node-label="name"
+                            clicked-point="pathCtrl.clickedNode">
+                </path-chart>
             </div>
         </div>
+        <!--</div>-->
+    </div>
+</div><!--Graph Panel-->
 
-        <div class="row second-line">
+<div class="row">
+    <div class="col-md-4">
 
-            <div class="col-md-12 nodes-list">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Nodes list of this graph</div>
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th><a ng-click="pathCtrl.orderBy('-url')">url</a></th>
-                            <th><a ng-click="pathCtrl.orderBy('-semantics')">semantics</a></th>
-                            <th><a ng-click="pathCtrl.orderBy('-out_degree')">out</a></th>
-                            <th><a ng-click="pathCtrl.orderBy('-in_degree')">int</a></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="item in pathCtrl.pathData.nodes | orderBy: pathCtrl.orderedAttribute">
-                                <td>{{$index}}</td>
-                                <td>{{item.url}}</td>
-                                <td>{{item.semantics}}</td>
-                                <td>{{item.out_degree}}</td>
-                                <td>{{item.in_degree}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="col-md-6 top-landing">
-
-            </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">路径生成算法核心参数说明</div>
+            <ul class="list-group">
+                <li class="list-group-item">StartDate: 起始日期</li>
+                <li class="list-group-item">EndDate: 截止日期</li>
+                <li class="list-group-item">GraphDepth: 图的深度</li>
+                <li class="list-group-item">PathWeight: 边的权值</li>
+            </ul>
         </div>
-
     </div>
 
-    <div class="col-md-4 right-side">
-
-        <div class="row">
-            <div class="col-md-12 configuration-console">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Overview</div>
-                    <div class="panel-body">
-                        <div class="col-md-6">
-                            <h1>{{pathCtrl.pathData.nodes.length}}</h1>
-                            <p>Nodes</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h1>{{pathCtrl.pathData.links.length}}</h1>
-
-                            <p>Links</p>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-
-                        <p>Change the analysis date range: </p>
-
-                        <form class="form-inline">
-                            <div class="form-group">
-                                <label class="sr-only" for="startDate">Start Date</label>
-                                <input type="input" class="form-control" id="startDate" placeholder="Start Date"
-                                       ng-model="pathCtrl.dateRange.start">
-                            </div>
-                            <div class="form-group">
-                                <label class="sr-only" for="endDate">End Date</label>
-                                <input type="date" class="form-control" id="endDate" placeholder="End Date" disabled>
-                            </div>
-                            <button class="btn btn-primary">Refresh Data</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <div class="col-md-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">Click Node detail</div>
+            <table class="table table-hover">
+                <caption>{{pathCtrl.clickedNode.url}}</caption>
+                <tr>
+                    <th width="25%">Info</th>
+                    <th width="25%">Value</th>
+                    <th width="50%" rowspan="4">
+                        <canvas id="pie" class="chart chart-pie"
+                                chart-data="[pathCtrl.clickedNode.in_degree, pathCtrl.clickedNode.in_degree-pathCtrl.clickedNode.out_degree]"
+                                chart-labels="pathCtrl.clickedNode.labels"
+                                chart-colours="['#FF6666', '#0066CC']"></canvas>
+                    </th>
+                </tr>
+                <tr>
+                    <th>Through</th>
+                    <td>{{pathCtrl.clickedNode.in_degree}}</td>
+                </tr>
+                <tr>
+                    <th>Drop-off</th>
+                    <td>{{pathCtrl.clickedNode.in_degree - pathCtrl.clickedNode.out_degree}}
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <td>{{pathCtrl.clickedNode.in_degree + pathCtrl.clickedNode.out_degree}}</td>
+                </tr>
+            </table>
         </div>
-
-        <div class="row">
-            <div class="col-md-12 selected-node-detail">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Click Node detail</div>
-                    <table class="table table-hover">
-                        <caption>{{pathCtrl.clickedNode.url}}</caption>
-                        <tr>
-                            <th width="25%">Info</th>
-                            <th width="25%">Value</th>
-                            <th width="50%" rowspan="4">
-                                <canvas id="pie" class="chart chart-pie"
-                                        data="[pathCtrl.clickedNode.in_degree, pathCtrl.clickedNode.in_degree-pathCtrl.clickedNode.out_degree]"
-                                        labels="pathCtrl.clickedNode.labels" colours="['#FF6666', '#0066CC']"></canvas>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>Through</th>
-                            <td>{{pathCtrl.clickedNode.in_degree}}</td>
-                        </tr>
-                        <tr>
-                            <th>Drop-off</th>
-                            <td>{{pathCtrl.clickedNode.in_degree - pathCtrl.clickedNode.out_degree}}
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>Total</th>
-                            <td>{{pathCtrl.clickedNode.in_degree + pathCtrl.clickedNode.out_degree}}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12 top-high-and-low-drop-off">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Dropoff</div>
-                    <div class="panel-body">
-                        High and low dropoff in current path graph
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
+
+<!--obsolete codes for reference-->
+<!--<div class="row">-->
+    <!--<div class="col-md-4">-->
+
+    <!--<div class="row">-->
+    <!--<div class="panel panel-primary">-->
+    <!--<div class="panel-heading">Step 2: Progress Status</div>-->
+    <!--<div class="panel-body">-->
+    <!--<h2>{{pathCtrl.displayOption.progressInfo}}s</h2>-->
+    <!--<p>{{pathCtrl.errorMsg}}</p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="row">-->
+    <!--<div class="panel panel-primary">-->
+    <!--<div class="panel-heading">Graph Info</div>-->
+    <!--<div class="panel-body">-->
+    <!--<div class="form-group">-->
+    <!--<select class="form-control"-->
+    <!--ng-model="pathCtrl.selectedGraph"-->
+    <!--ng-options="c.path as c.date for c in pathCtrl.graphList"></select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+    <!--<button class="btn btn-primary" ng-click='pathCtrl.refreshGraphBtn()'>Refresh</button>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div class="panel-body">-->
+    <!--<div class="alert alert-info" role="alert">-->
+    <!--<strong>Selected Graph:</strong> {{pathCtrl.selectedGraph}}-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--</div>-->
+
+    <!--<div class="col-md-8">-->
+<!--</div>-->
+
+<!--<div class="row">-->
+<!--<div class="col-md-12">-->
+<!--<div class="panel panel-primary">-->
+<!--<div class="panel-heading">Step 1: Query by Date</div>-->
+<!--<div class="panel-body">-->
+<!--<p>Change the analysis date range: </p>-->
+
+<!--<form class="form-inline">-->
+<!--<div class="form-group">-->
+<!--<label for="startDate">Start Date</label>-->
+<!--<input type="input"-->
+<!--class="form-control"-->
+<!--id="startDate"-->
+<!--ng-model="pathCtrl.postData.startDate">-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label for="endDate">End Date</label>-->
+<!--<input type="input"-->
+<!--class="form-control"-->
+<!--id="endDate"-->
+<!--ng-model="pathCtrl.postData.endDate">-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label for="graphDepth">Graph Depth</label>-->
+<!--<input type="input"-->
+<!--class="form-control"-->
+<!--id="graphDepth"-->
+<!--ng-model="pathCtrl.postData.graphDepth">-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label for="edgeValue">Edge Value</label>-->
+<!--<input type="input"-->
+<!--class="form-control"-->
+<!--id="edgeValue"-->
+<!--ng-model="pathCtrl.postData.pathWeight">-->
+<!--</div>-->
+<!--<button class="btn btn-primary"-->
+<!--ng-click="pathCtrl.handleNewUserFlowPath(pathCtrl.postData)">Query-->
+<!--</button>-->
+<!--<button class="btn btn-primary"-->
+<!--ng-click="pathCtrl.handleDisplayNewGraph()"-->
+<!--ng-disabled="pathCtrl.displayOption.isDisabled">Display-->
+<!--</button>-->
+<!--</form>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>&lt;!&ndash;Query Panel&ndash;&gt;-->

@@ -1,6 +1,6 @@
 {
   "name": "vislog-client",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "homepage": "https://github.com/wwsun/seu-visLog",
   "authors": [
     "Weiwei SUN <ww.sun@outlook.com>"
@@ -11,12 +11,12 @@
   ],
   "dependencies": {
     "bootstrap": "latest",
-    "angular": "latest",
+    "angular": "~1.4.7",
     "angular-ui-router": "latest",
     "bootstrap-material-design": "~0.2.2",
     "d3": "~3.5.5",
-    "angular-chart.js": "~0.5.3",
-    "fontawesome": "~4.3.0"
+    "fontawesome": "~4.3.0",
+    "angular-chart.js": "~0.8.4"
   },
   "license": "MIT",
   "ignore": [

@@ -10,10 +10,12 @@ import services.OverviewService;
 import services.PathService;
 
 import javax.json.*;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.text.ParseException;
@@ -25,7 +27,7 @@ import java.util.List;
 @Path("/sessions")
 public class SessionController {
 
-    final String mongoURI = "mongodb://223.3.80.243:27017";
+    final String mongoURI = "mongodb://localhost:27017";
     final MongoClient mongoClient;
     final DB siteDatabase;
     final OverviewService overviewService;
@@ -38,7 +40,7 @@ public class SessionController {
         pathService = new PathService(siteDatabase);
     }
 
-    @Path("/distribution/{date}") //2014-10-22
+    @Path("/distribution/trend/{date}")
     @GET
     @Produces("application/json")
     public JsonObject getDistribution(@PathParam("date") String date) {
@@ -49,86 +51,117 @@ public class SessionController {
         return json;
     }
 
-    @Path("/overview/status")
+    @Path("/distribution/category/{date}")
     @GET
     @Produces("application/json")
-    public JsonObject getSessionStatus() {
-        return overviewService.getSessionCountsAndBounceRate();
+    public JsonArray getCategoriesDistributionByDate(@PathParam("date") String date) {
+        return overviewService.getTopCategoriesByDate(date, 7);
     }
 
-    @Path("/overview/sources/se")
+    @Path("/distribution/index/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getSearchEngineContribution() {
-        return overviewService.getTopSearchEngines(10);
+    public JsonObject getSessionStatus(@PathParam("date") String date) {
+        return overviewService.getSessionCountsAndBounceRateByDate(date);
     }
 
-    @Path("/overview/sources/countries")
+    @Path("/distribution/sources/se/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getTopCountriesFlowContribution() {
-        return overviewService.getTopCountriesFlow(10);
+    public JsonArray getSearchEngineContribution(@PathParam("date") String date) {
+        return overviewService.getTopSearchEnginesByDate(date, 10);
     }
 
-    @Path("/overview/frequent/pages")
+    @Path("/distribution/sources/countries/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getFrequentVisitedPages() {
-        return overviewService.getFrequentVisitedPages(20);
+    public JsonArray getTopCountriesFlowContribution(@PathParam("date") String date) {
+        return overviewService.getTopCountriesByDate(date, 10);
     }
 
-    @Path("/overview/frequent/categories")
+    @Path("/distribution/landings/categories/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getFrequentVisitedCategory() {
-        return overviewService.getTopCategories(7);
+    public JsonArray getMainLandingCategories(@PathParam("date") String date) {
+        return overviewService.getMainLandingCategoriesByDate(date, 10);
     }
 
-    @Path("/overview/landings/categories")
+    @Path("/distribution/dropoff/categories/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getMainLandingCategories() {
-        return overviewService.getMainLandingCategories(10);
+    public JsonArray getMainDropOffCategories(@PathParam("date") String date) {
+        return overviewService.getMainDropOffCategoriesByDate(date, 10);
     }
 
-    @Path("/overview/dropoff/categories")
+    @Path("/distribution/frequent/pages/{date}")
     @GET
     @Produces("application/json")
-    public JsonArray getMainDropOffCategories() {
-        return overviewService.getMainDropOffCategories(10);
+    public JsonArray getFrequentVisitedPages(@PathParam("date") String date) {
+        return overviewService.getFrequentVisitedPagesByDate(date, 20);
     }
 
-    @Path("/path/{date}") //2014-10-22
+    @Path("/path/flow")
     @GET
     @Produces("application/json")
-    public JsonObject getSessionPath(@PathParam("date") String date) throws ParseException, UnknownHostException {
+    @Consumes("application/json")
+    public JsonObject getSessionPath(@QueryParam("startDate") String startDate, // èµ·å§‹æ—¥æœŸ
+                                     @QueryParam("endDate") String endDate, // ç»“æŸæ—¥æœŸ
+                                     @QueryParam("graphDepth") int graphDepth, // å›¾çš„æ·±åº¦
+                                     @QueryParam("pathWeight") double pathWeight // è¾¹æƒé‡è¿‡æ»¤
+    ){
+        // todo: get session path
 
-        // todo: the computation efficiency is too bad!
-
-        String[] arr = date.split("-");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Calendar startCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
-                Integer.parseInt(arr[2]),0,0,0);
-        Calendar endCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
-                Integer.parseInt(arr[2])+1, 0,0,0);  // analysis one day by default
-
-        //´«ÈëÈÕÆÚ²ÎÊıºÍdepth²ÎÊı(Â·¾¶Éî¶È)
-        SankeyGraph sankeyGraph = pathService.getGraph(7, startCal.getTime().toString(), endCal.getTime().toString());
-
-        //´«Èë±ßµÄÈ¨Öµ
-        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  //   ¸ù¾İ±ßµÄÈ¨Öµ¹ıÂË
-
-        //¶ÔÊı¾İ½øÒ»²½´¦ÀíµÃµ½
-        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  //  topK ¸ßÌø³öÂÊµÄÒ³Ãæ
-        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   // topK ×ÅÂ½Ò³
-
-        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  //×îÖÕ½á¹û
-
-        // format transfer
-        JsonReader reader = Json.createReader(new StringReader(result));
-        JsonObject json = reader.readObject();
-        reader.close();
-
-        return json;
+//        final String formatStartDate = startDate + " 0:0:0";
+//        final String formatEndDate = endDate + " 0:0:0";
+//
+//        SankeyGraph sankeyGraph = pathService.getGraph(graphDepth, formatStartDate, formatEndDate); // ç”Ÿæˆç”¨æˆ·è·¯å¾„å›¾
+//        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(pathWeight);  // æ ¹æ®è¾¹çš„æƒå€¼è¿‡æ»¤
+//
+//        // å¯¹æ•°æ®è¿›ä¸€æ­¥å¤„ç†å¾—åˆ°
+//        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  // topK é«˜è·³å‡ºç‡çš„é¡µé¢
+//        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   // topK ç€é™†é¡µ
+//
+//        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  // æœ€ç»ˆç»“æœ
+//
+////         change to JSON format
+//        JsonReader reader = Json.createReader(new StringReader(result));
+//        JsonObject responseJson = reader.readObject();
+//
+//        reader.close();
+//
+//        boolean isGraphGenerated = false; // æ–‡ä»¶æ˜¯å¦ç”Ÿæˆ
+////        String result = "{xxx}";
+////
+////        BufferedWriter bw;
+////        try {
+//////            bw = new BufferedWriter(new FileWriter("classes/artifacts/vislog_restful/data/" + startDate + ".json"));
+////            bw = new BufferedWriter(new FileWriter("graph2.json"));
+////            bw.write(result);
+////            bw.close();
+////            isGraphGenerated = true;
+////        } catch (IOException e) {
+//////            isGraphGenerated = false;
+////            e.printStackTrace();
+////        }
+//
+//        JsonObject responseJson; // è¿”å›ç»“æœ
+//
+//        if (isGraphGenerated) {
+//            responseJson = Json.createObjectBuilder()
+//                    .add("startDate", startDate)
+//                    .add("endDate", endDate)
+//                    .add("graphDepth", graphDepth)
+//                    .add("pathWeight", pathWeight)
+//                    .add("file", startDate + ".json")
+//                    .add("result", "success")
+//                    .build();
+//        } else {
+//            responseJson = Json.createObjectBuilder()
+//                    .add("result", "failed")
+//                    .build();
+//        }
+//
+//        return responseJson;
+        return null;
     }
 }

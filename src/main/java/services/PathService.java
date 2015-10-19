@@ -10,10 +10,7 @@ import entity.URLNode;
 
 import java.net.UnknownHostException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,48 +21,48 @@ public class PathService {
 
     public PathService(DB db) {
         pathDAO = new PathDAO(db);
-        levelDAO = new LevelDAO(db);  //ĞèÒªÓÃµ½regex,name
+        levelDAO = new LevelDAO(db);  //éœ€è¦ç”¨åˆ°regex,name
     }
 
     public SankeyGraph getGraph(int depth, String startTime, String endTime) throws UnknownHostException, ParseException {
 
         List<URLNode> nodes;
-        //´øsession±ê¼ÇµÄÂ·¶ÎÊı¾İ£¬ÓÃÓÚ¼ÆËãÃ¿¸ö½ÚµãµÄout_degreeºÍin_degree
+        // å¸¦sessionæ ‡è®°çš„è·¯æ®µæ•°æ®ï¼Œç”¨äºè®¡ç®—æ¯ä¸ªèŠ‚ç‚¹çš„out_degreeå’Œin_degree
         List<StreamEdge> links;
-        //²»´øsession±ê¼ÇµÄÂ·¶ÎÊı¾İ£¬´øÃ¿Ìõ±ßµÄÈ¨Öµ£¬ÓÃÓÚÏÔÊ¾
+        // ä¸å¸¦sessionæ ‡è®°çš„è·¯æ®µæ•°æ®ï¼Œå¸¦æ¯æ¡è¾¹çš„æƒå€¼ï¼Œç”¨äºæ˜¾ç¤º
         List<StreamEdge> noSessionLinksList;
 
         SankeyGraph graph = null;
-        int node_index = 0;   //½«À´µÄname
+        int node_index = 0;   //å°†æ¥çš„name
 
         nodes = new ArrayList<URLNode>();
         links = new ArrayList<StreamEdge>();
         noSessionLinksList = new ArrayList<StreamEdge>();
 
-        //Á½¸ömapÓÃÓÚ´æ·Å£¨Æğµã->index£©£¬£¨ÖÕµã->index£©µÄÓ³Éä
+        // ä¸¤ä¸ªmapç”¨äºå­˜æ”¾ï¼ˆèµ·ç‚¹->indexï¼‰ï¼Œï¼ˆç»ˆç‚¹->indexï¼‰çš„æ˜ å°„
         Map<String, Integer> startMap = null;
         Map<String, Integer> endMap = null;
 
-        //depthmapÓÃÓÚ´æ·ÅÃ¿¸ö½Úµã£¨ÓÃname±êÊ¶£©ºÍÔÚÂ·¾¶ÖĞÉî¶ÈµÄ¶ÔÓ¦¹ØÏµ
+        // depthmapç”¨äºå­˜æ”¾æ¯ä¸ªèŠ‚ç‚¹ï¼ˆç”¨nameæ ‡è¯†ï¼‰å’Œåœ¨è·¯å¾„ä¸­æ·±åº¦çš„å¯¹åº”å…³ç³»
         Map<Integer, Integer> depthMap = new HashMap<Integer, Integer>();
 
-        //°´Éî¶È È¡ ±ßÊı¾İ
+        //æŒ‰æ·±åº¦ å– è¾¹æ•°æ®
         for (int i = 0; i < depth; i++) {
-            //´æ·Å²»Í¬sessionÏàÍ¬ÆğµãºÍÖÕµãµÄÂ·¶ÎµÄln(count)Ö®ºÍ
+            //å­˜æ”¾ä¸åŒsessionç›¸åŒèµ·ç‚¹å’Œç»ˆç‚¹çš„è·¯æ®µçš„ln(count)ä¹‹å’Œ
             Map<String, Double> segCount = new HashMap<String, Double>();
-            //³õÊ¼»¯map
+            //åˆå§‹åŒ–map
             if (i == 0) {
                 startMap = new HashMap<String, Integer>();
             } else {
                 startMap = endMap;
             }
             endMap = new HashMap<String, Integer>();
-            //Ò»´ÎÈ¡Êı¾İ
+            //ä¸€æ¬¡å–æ•°æ®
             List<DBObject> pathGroupList = pathDAO.groupByFour(i + 1, i + 2, startTime, endTime);
 
-            //È¡µÃµÄÊı¾İ°üº¬ _id(start,end,session),nums
+            //å–å¾—çš„æ•°æ®åŒ…å« _id(start,end,session),nums
             for (DBObject obj : pathGroupList) {
-                int count = (Integer) obj.get("nums");  //»ñµÃ±ßµÄcount
+                int count = (Integer) obj.get("nums");  //è·å¾—è¾¹çš„count
                 DBObject idObject = (DBObject) obj.get("_id");
                 String start_url = (String) idObject.get("P" + (i + 1));
                 String end_url = (String) idObject.get("P" + (i + 2));
@@ -73,14 +70,14 @@ public class PathService {
 
                 if (!(start_url.equals("null")) && !(end_url.equals("null"))) {
                     if (i == 0) {
-                        //startMapÖĞ<start_url,node_index>
+                        //startMapä¸­<start_url,node_index>
                         if (!startMap.containsKey(start_url)) {
                             startMap.put(start_url, node_index);
                             depthMap.put(node_index, i);
                             node_index++;
                         }
                     }
-                    //endMapÖĞ<end_url,node_index>
+                    //endMapä¸­<end_url,node_index>
                     if (!endMap.containsKey(end_url)) {
                         endMap.put(end_url, node_index);
                         depthMap.put(node_index, i + 1);
@@ -131,58 +128,150 @@ public class PathService {
             }
 
         }
-        //½«nodes°´ÕÕnameÅÅĞò
-        for (URLNode node : nodes) {
-            //Á½¸ömapÓÃÓÚ¼ÇÂ¼Í¬Ò»¸ösessionÖĞÒÔµ±Ç°½ÚµãµÄÎªÆğµãµÄ±ßµÄvalueÖ®ºÍ
-            Map<String, Double> in_session = new HashMap<String, Double>();
-            Map<String, Double> out_session = new HashMap<String, Double>();
-            //¼ÆËãÃ¿¸önodeµÄ³ö¶ÈºÍÈë¶È
-            double out = 0;
-            double in = 0;
-            for (StreamEdge link : links) {
-                if (link.getSource() == node.getName()) {
-                    if (out_session.containsKey(link.getSession())) {
-                        double value = out_session.get(link.getSession());
-                        out_session.put(link.getSession(), value + link.getValue());
-                    } else
-                        out_session.put(link.getSession(), link.getValue());
-                }
-                if (link.getTarget() == node.getName()) {
-                    if (in_session.containsKey(link.getSession())) {
-                        double value = in_session.get(link.getSession());
-                        in_session.put(link.getSession(), value + link.getValue());
-                    } else
-                        in_session.put(link.getSession(), link.getValue());
-                }
-            }
-            for (Map.Entry<String, Double> entry : out_session.entrySet()) {
-                out += Math.log(entry.getValue()) + 1;
-            }
-            for (Map.Entry<String, Double> entry : in_session.entrySet()) {
-                in += Math.log(entry.getValue()) + 1;
-            }
-            node.setIn_degree(in);
-            node.setOut_degree(out);
 
-            //ÉèÖÃÃ¿¸önodeµÄurlµÄÓïÒåĞÅÏ¢
+        // nodeOutå­˜æ”¾nodeçš„nameå’Œå…¶outDegree
+        // nodeInå­˜æ”¾nodeçš„nameå’Œå…¶InDegree
+        Map<Integer,Double> nodeOut=new HashMap<>();
+        Map<Integer,Double> nodeIn=new HashMap<>();
+
+        // å°†linksæŒ‰ç…§sourceæ’åº
+        Collections.sort(links, new Comparator<StreamEdge>() {
+            @Override
+            public int compare(StreamEdge o1, StreamEdge o2) {
+                if(o1.getSource()<o2.getSource())
+                    return -1;
+                else if(o1.getSource()>o2.getSource())
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        int curSource=0;
+        int preSource=links.get(0).getSource();
+        String curSession=null;
+        Map<String,Double> outSession=new HashMap<>();
+        outSession.put(links.get(0).getSession(),links.get(0).getValue());
+
+        for(int i=1;i<links.size();i++) {
+            curSource = links.get(i).getSource();
+            curSession = links.get(i).getSession();
+            double curValue = links.get(i).getValue();
+            if (curSource != preSource) {
+                double count = 0;
+                for (Map.Entry<String, Double> entry : outSession.entrySet()) {
+                    count += Math.log(entry.getValue()) + 1;
+                }
+                nodeOut.put(preSource, count);
+                outSession = new HashMap<>();
+                outSession.put(curSession, curValue);
+            } else {
+                if (outSession.containsKey(curSession))
+                    outSession.put(curSession, outSession.get(curSession) + curValue);
+                else
+                    outSession.put(curSession, curValue);
+            }
+            preSource = curSource;
+            if (i == links.size() - 1) {
+                double count = 0;
+                for (Map.Entry<String, Double> entry : outSession.entrySet()) {
+                    count += Math.log(entry.getValue()) + 1;
+                }
+                nodeOut.put(preSource, count);
+                outSession = null;
+            }
+        }
+
+        // å°†linksæŒ‰ç…§targetæ’åº
+        Collections.sort(links, new Comparator<StreamEdge>() {
+            @Override
+            public int compare(StreamEdge o1, StreamEdge o2) {
+                if(o1.getTarget()<o2.getTarget())
+                    return -1;
+                else if(o1.getTarget()>o2.getTarget())
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+
+        int curTarget=0;
+        int preTarget=links.get(0).getTarget();
+        curSession=null;
+        Map<String,Double> inSession=new HashMap<>();
+        inSession.put(links.get(0).getSession(),links.get(0).getValue());
+
+        for(int i=1;i<links.size();i++){
+            curTarget=links.get(i).getTarget();
+            curSession=links.get(i).getSession();
+            double curValue=links.get(i).getValue();
+            if(curTarget!=preTarget){
+                double count=0;
+                for(Map.Entry<String,Double> entry : inSession.entrySet()){
+                    count+=Math.log(entry.getValue()) + 1;
+                }
+                nodeIn.put(preTarget,count);
+                inSession=new HashMap<>();
+                inSession.put(curSession,curValue);
+            }
+            else {
+                if(inSession.containsKey(curSession))
+                    inSession.put(curSession,inSession.get(curSession)+curValue);
+                else
+                    inSession.put(curSession,curValue);
+            }
+            preTarget=curTarget;
+            if(i==links.size()-1){
+                double count=0;
+                for(Map.Entry<String,Double> entry : inSession.entrySet()){
+                    count+=Math.log(entry.getValue()) + 1;
+                }
+                nodeIn.put(preTarget,count);
+                inSession=null;
+            }
+        }
+
+        Collections.sort(nodes, new Comparator<URLNode>() {
+            @Override
+            public int compare(URLNode o1, URLNode o2) {
+                if(o1.getName()<o2.getName())
+                    return -1;
+                else if(o1.getName()>o2.getName())
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        for (URLNode node : nodes) {
+            int name=node.getName();
+            if(nodeIn.containsKey(name))
+                node.setIn_degree(nodeIn.get(name));
+            if(nodeOut.containsKey(name))
+                node.setOut_degree(nodeOut.get(name));
+
+            // è®¾ç½®æ¯ä¸ªnodeçš„urlçš„è¯­ä¹‰ä¿¡æ¯
             String[][] RegexName = levelDAO.getRegexName();
             for (int j = 0; j < RegexName.length; j++) {
                 Matcher m = Pattern.compile(RegexName[j][0]).matcher(node.getUrl());
-                while (m.find()) {
-                    node.setSemantics(RegexName[j][1]);  //
+                if(m.matches()) {
+                    node.setSemantics(RegexName[j][1]);
+                    break;
                 }
             }
         }
-        //depth´ÎÅÜÍêÒÔºó
-        //¼ÆËãdepthÎª0µÄ½ÚµãµÄÈë¶È
+
+        // depthæ¬¡è·‘å®Œä»¥å
+        // è®¡ç®—depthä¸º0çš„èŠ‚ç‚¹çš„å…¥åº¦
         Map<String, Double> Startout_session = new HashMap<String, Double>();
         List<DBObject> path0List = pathDAO.getDepth0(startTime, endTime);
-        //È¡µÃµÄÊı¾İ°üº¬ _id(start,session),nums
+        // å–å¾—çš„æ•°æ®åŒ…å« _id(start,session),nums
         for (DBObject obj : path0List) {
             int count = (Integer) obj.get("nums");
             DBObject idObject = (DBObject) obj.get("_id");
             String start_url = (String) idObject.get("P1");
-            //  String session = (String) idObject.get("session");
+            // String session = (String) idObject.get("session");
 
             if (Startout_session.containsKey(start_url)) {
                 double value = Startout_session.get(start_url);
@@ -190,13 +279,13 @@ public class PathService {
             } else
                 Startout_session.put(start_url, Math.log((double) count) + 1);
         }
-        //ÉèÖÃstart_urlµÄÈë¶È
+        // è®¾ç½®start_urlçš„å…¥åº¦
         for (URLNode node : nodes) {
             if (node.getDepth() == 0) {
                 node.setIn_degree(Startout_session.get(node.getUrl()));
             }
         }
-        //ÉèÖÃÃ¿¸ö½ÚµãµÄÌø³öÂÊ
+        // è®¾ç½®æ¯ä¸ªèŠ‚ç‚¹çš„è·³å‡ºç‡
         for (URLNode node : nodes) {
             double in = node.getIn_degree();
             double out = node.getOut_degree();

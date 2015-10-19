@@ -1,4 +1,4 @@
-angular.module("vislog",[
+angular.module("vislog", [
     'ui.router',
     'chart.js',
 
@@ -6,4 +6,5 @@ angular.module("vislog",[
 
     'vislog.overview',
     'vislog.path'
-]);
+])
+    .constant('baseUrl', 'http://localhost:8080/vislog_restful/api/');

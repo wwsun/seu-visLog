@@ -2,22 +2,27 @@ package dao;
 
 import com.mongodb.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LandsDAO {
 
     private DBCollection land;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public LandsDAO(final DB db) { land = db.getCollection("land"); }
+    public LandsDAO(final DB db) {
+        land = db.getCollection("land");
+    }
 
-    /**
-     * get main landing categories
-     * @param LIMIT is the number of results you want to returned
-     * @return the main landing categories
-     */
-    public List<DBObject> getMainLandingCategories(final int LIMIT) {
-        QueryBuilder builder = QueryBuilder.start();
+    public List<DBObject> getMainLandingCategoriesByDate(String date, final int LIMIT) {
+        QueryBuilder builder = null;
+        try {
+            builder = QueryBuilder.start("date").is(sdf.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         DBCursor cursor = land.find(builder.get(), new BasicDBObject("_id", false))
                 .sort(new BasicDBObject("sum", -1)).limit(LIMIT);
 
