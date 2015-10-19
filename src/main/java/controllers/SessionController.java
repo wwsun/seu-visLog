@@ -10,10 +10,12 @@ import services.OverviewService;
 import services.PathService;
 
 import javax.json.*;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringReader;
 import java.net.UnknownHostException;
 import java.text.ParseException;
@@ -98,37 +100,68 @@ public class SessionController {
         return overviewService.getFrequentVisitedPagesByDate(date, 20);
     }
 
-    @Path("/path/{date}")
+    @Path("/path/flow")
     @GET
     @Produces("application/json")
-    public JsonObject getSessionPath(@PathParam("date") String date) throws ParseException, UnknownHostException {
+    @Consumes("application/json")
+    public JsonObject getSessionPath(@QueryParam("startDate") String startDate, // 起始日期
+                                     @QueryParam("endDate") String endDate, // 结束日期
+                                     @QueryParam("graphDepth") int graphDepth, // 图的深度
+                                     @QueryParam("pathWeight") double pathWeight // 边权重过滤
+    ){
+        // todo: get session path
 
-        // todo: the computation efficiency is too worse!
-
-        String[] arr = date.split("-");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Calendar startCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
-                Integer.parseInt(arr[2]),0,0,0);
-        Calendar endCal = new GregorianCalendar(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]),
-                Integer.parseInt(arr[2])+1, 0,0,0);  // analysis one day by default
-
-        // 传入日期参数和depth参数(路径深度)
-        SankeyGraph sankeyGraph = pathService.getGraph(7, startCal.getTime().toString(), endCal.getTime().toString());
-
-        // 传入边的权值
-        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(4.5);  // 根据边的权值过滤
-
-        // 对数据进一步处理得到
-        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  // topK 高跳出率的页面
-        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   // topK 着陆页
-
-        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  // 最终结果
-
-        // format transfer
-        JsonReader reader = Json.createReader(new StringReader(result));
-        JsonObject json = reader.readObject();
-        reader.close();
-
-        return json;
+//        final String formatStartDate = startDate + " 0:0:0";
+//        final String formatEndDate = endDate + " 0:0:0";
+//
+//        SankeyGraph sankeyGraph = pathService.getGraph(graphDepth, formatStartDate, formatEndDate); // 生成用户路径图
+//        SankeyGraph FiltedGraph = sankeyGraph.FilterByEdgeValue(pathWeight);  // 根据边的权值过滤
+//
+//        // 对数据进一步处理得到
+//        List<URLNode> highDropPage = sankeyGraph.topKDropPage(10);  // topK 高跳出率的页面
+//        List<URLNode> topKLandPage = sankeyGraph.topKLandPage(10);   // topK 着陆页
+//
+//        String result = new SankeyGraphJsonObj(FiltedGraph, highDropPage, topKLandPage).toJson();  // 最终结果
+//
+////         change to JSON format
+//        JsonReader reader = Json.createReader(new StringReader(result));
+//        JsonObject responseJson = reader.readObject();
+//
+//        reader.close();
+//
+//        boolean isGraphGenerated = false; // 文件是否生成
+////        String result = "{xxx}";
+////
+////        BufferedWriter bw;
+////        try {
+//////            bw = new BufferedWriter(new FileWriter("classes/artifacts/vislog_restful/data/" + startDate + ".json"));
+////            bw = new BufferedWriter(new FileWriter("graph2.json"));
+////            bw.write(result);
+////            bw.close();
+////            isGraphGenerated = true;
+////        } catch (IOException e) {
+//////            isGraphGenerated = false;
+////            e.printStackTrace();
+////        }
+//
+//        JsonObject responseJson; // 返回结果
+//
+//        if (isGraphGenerated) {
+//            responseJson = Json.createObjectBuilder()
+//                    .add("startDate", startDate)
+//                    .add("endDate", endDate)
+//                    .add("graphDepth", graphDepth)
+//                    .add("pathWeight", pathWeight)
+//                    .add("file", startDate + ".json")
+//                    .add("result", "success")
+//                    .build();
+//        } else {
+//            responseJson = Json.createObjectBuilder()
+//                    .add("result", "failed")
+//                    .build();
+//        }
+//
+//        return responseJson;
+        return null;
     }
 }
