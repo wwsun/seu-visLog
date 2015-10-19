@@ -10,10 +10,7 @@ import entity.URLNode;
 
 import java.net.UnknownHostException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,56 +21,48 @@ public class PathService {
 
     public PathService(DB db) {
         pathDAO = new PathDAO(db);
-        levelDAO = new LevelDAO(db);  // 需要用到regex,name
-    }
-
-    /**
-     *
-     * @return JSON文件是否计算完成
-     */
-    public boolean isGraphGenerated() {
-
-
-        return false;
+        levelDAO = new LevelDAO(db);  //需要用到regex,name
     }
 
     public SankeyGraph getGraph(int depth, String startTime, String endTime) throws UnknownHostException, ParseException {
 
         List<URLNode> nodes;
-        List<StreamEdge> links; // 带session标记的路段数据，用于计算每个节点的out_degree和in_degree
-        List<StreamEdge> noSessionLinksList; // 不带session标记的路段数据，带每条边的权值，用于显示
+        // 带session标记的路段数据，用于计算每个节点的out_degree和in_degree
+        List<StreamEdge> links;
+        // 不带session标记的路段数据，带每条边的权值，用于显示
+        List<StreamEdge> noSessionLinksList;
 
-        SankeyGraph graph;
-        int node_index = 0;   // 将来的name
+        SankeyGraph graph = null;
+        int node_index = 0;   //将来的name
 
-        nodes = new ArrayList<>();
-        links = new ArrayList<>();
-        noSessionLinksList = new ArrayList<>();
+        nodes = new ArrayList<URLNode>();
+        links = new ArrayList<StreamEdge>();
+        noSessionLinksList = new ArrayList<StreamEdge>();
 
         // 两个map用于存放（起点->index），（终点->index）的映射
-        Map<String, Integer> startMap;
+        Map<String, Integer> startMap = null;
         Map<String, Integer> endMap = null;
 
         // depthmap用于存放每个节点（用name标识）和在路径中深度的对应关系
-        Map<Integer, Integer> depthMap = new HashMap<>();
+        Map<Integer, Integer> depthMap = new HashMap<Integer, Integer>();
 
-        // 按深度 取 边数据
+        //按深度 取 边数据
         for (int i = 0; i < depth; i++) {
-            // 存放不同session相同起点和终点的路段的ln(count)之和
-            Map<String, Double> segCount = new HashMap<>();
-            // 初始化map
+            //存放不同session相同起点和终点的路段的ln(count)之和
+            Map<String, Double> segCount = new HashMap<String, Double>();
+            //初始化map
             if (i == 0) {
-                startMap = new HashMap<>();
+                startMap = new HashMap<String, Integer>();
             } else {
                 startMap = endMap;
             }
-            endMap = new HashMap<>();
-            // 一次取数据
+            endMap = new HashMap<String, Integer>();
+            //一次取数据
             List<DBObject> pathGroupList = pathDAO.groupByFour(i + 1, i + 2, startTime, endTime);
 
-            // 取得的数据包含 _id(start,end,session),nums
+            //取得的数据包含 _id(start,end,session),nums
             for (DBObject obj : pathGroupList) {
-                int count = (Integer) obj.get("nums");  // 获得边的count
+                int count = (Integer) obj.get("nums");  //获得边的count
                 DBObject idObject = (DBObject) obj.get("_id");
                 String start_url = (String) idObject.get("P" + (i + 1));
                 String end_url = (String) idObject.get("P" + (i + 2));
@@ -81,14 +70,14 @@ public class PathService {
 
                 if (!(start_url.equals("null")) && !(end_url.equals("null"))) {
                     if (i == 0) {
-                        // startMap中<start_url,node_index>
+                        //startMap中<start_url,node_index>
                         if (!startMap.containsKey(start_url)) {
                             startMap.put(start_url, node_index);
                             depthMap.put(node_index, i);
                             node_index++;
                         }
                     }
-                    // endMap中<end_url,node_index>
+                    //endMap中<end_url,node_index>
                     if (!endMap.containsKey(end_url)) {
                         endMap.put(end_url, node_index);
                         depthMap.put(node_index, i + 1);
@@ -110,7 +99,7 @@ public class PathService {
 
                 }
             }
-
+            //
             for (Map.Entry<String, Double> entry : segCount.entrySet()) {
                 String key = entry.getKey();
                 double count = entry.getValue();
@@ -139,62 +128,150 @@ public class PathService {
             }
 
         }
-        // 将nodes按照name排序
+
+        // nodeOut存放node的name和其outDegree
+        // nodeIn存放node的name和其InDegree
+        Map<Integer,Double> nodeOut=new HashMap<>();
+        Map<Integer,Double> nodeIn=new HashMap<>();
+
+        // 将links按照source排序
+        Collections.sort(links, new Comparator<StreamEdge>() {
+            @Override
+            public int compare(StreamEdge o1, StreamEdge o2) {
+                if(o1.getSource()<o2.getSource())
+                    return -1;
+                else if(o1.getSource()>o2.getSource())
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        int curSource=0;
+        int preSource=links.get(0).getSource();
+        String curSession=null;
+        Map<String,Double> outSession=new HashMap<>();
+        outSession.put(links.get(0).getSession(),links.get(0).getValue());
+
+        for(int i=1;i<links.size();i++) {
+            curSource = links.get(i).getSource();
+            curSession = links.get(i).getSession();
+            double curValue = links.get(i).getValue();
+            if (curSource != preSource) {
+                double count = 0;
+                for (Map.Entry<String, Double> entry : outSession.entrySet()) {
+                    count += Math.log(entry.getValue()) + 1;
+                }
+                nodeOut.put(preSource, count);
+                outSession = new HashMap<>();
+                outSession.put(curSession, curValue);
+            } else {
+                if (outSession.containsKey(curSession))
+                    outSession.put(curSession, outSession.get(curSession) + curValue);
+                else
+                    outSession.put(curSession, curValue);
+            }
+            preSource = curSource;
+            if (i == links.size() - 1) {
+                double count = 0;
+                for (Map.Entry<String, Double> entry : outSession.entrySet()) {
+                    count += Math.log(entry.getValue()) + 1;
+                }
+                nodeOut.put(preSource, count);
+                outSession = null;
+            }
+        }
+
+        // 将links按照target排序
+        Collections.sort(links, new Comparator<StreamEdge>() {
+            @Override
+            public int compare(StreamEdge o1, StreamEdge o2) {
+                if(o1.getTarget()<o2.getTarget())
+                    return -1;
+                else if(o1.getTarget()>o2.getTarget())
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+
+        int curTarget=0;
+        int preTarget=links.get(0).getTarget();
+        curSession=null;
+        Map<String,Double> inSession=new HashMap<>();
+        inSession.put(links.get(0).getSession(),links.get(0).getValue());
+
+        for(int i=1;i<links.size();i++){
+            curTarget=links.get(i).getTarget();
+            curSession=links.get(i).getSession();
+            double curValue=links.get(i).getValue();
+            if(curTarget!=preTarget){
+                double count=0;
+                for(Map.Entry<String,Double> entry : inSession.entrySet()){
+                    count+=Math.log(entry.getValue()) + 1;
+                }
+                nodeIn.put(preTarget,count);
+                inSession=new HashMap<>();
+                inSession.put(curSession,curValue);
+            }
+            else {
+                if(inSession.containsKey(curSession))
+                    inSession.put(curSession,inSession.get(curSession)+curValue);
+                else
+                    inSession.put(curSession,curValue);
+            }
+            preTarget=curTarget;
+            if(i==links.size()-1){
+                double count=0;
+                for(Map.Entry<String,Double> entry : inSession.entrySet()){
+                    count+=Math.log(entry.getValue()) + 1;
+                }
+                nodeIn.put(preTarget,count);
+                inSession=null;
+            }
+        }
+
+        Collections.sort(nodes, new Comparator<URLNode>() {
+            @Override
+            public int compare(URLNode o1, URLNode o2) {
+                if(o1.getName()<o2.getName())
+                    return -1;
+                else if(o1.getName()>o2.getName())
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
         for (URLNode node : nodes) {
-
-            // 两个map用于记录同一个session中以当前节点的为起点的边的value之和
-            Map<String, Double> in_session = new HashMap<>();
-            Map<String, Double> out_session = new HashMap<>();
-
-            // 计算每个node的出度和入度
-            double out = 0;
-            double in = 0;
-            for (StreamEdge link : links) {
-                if (link.getSource() == node.getName()) {
-                    if (out_session.containsKey(link.getSession())) {
-                        double value = out_session.get(link.getSession());
-                        out_session.put(link.getSession(), value + link.getValue());
-                    } else
-                        out_session.put(link.getSession(), link.getValue());
-                }
-                if (link.getTarget() == node.getName()) {
-                    if (in_session.containsKey(link.getSession())) {
-                        double value = in_session.get(link.getSession());
-                        in_session.put(link.getSession(), value + link.getValue());
-                    } else
-                        in_session.put(link.getSession(), link.getValue());
-                }
-            }
-            for (Map.Entry<String, Double> entry : out_session.entrySet()) {
-                out += Math.log(entry.getValue()) + 1;
-            }
-            for (Map.Entry<String, Double> entry : in_session.entrySet()) {
-                in += Math.log(entry.getValue()) + 1;
-            }
-            node.setIn_degree(in);
-            node.setOut_degree(out);
+            int name=node.getName();
+            if(nodeIn.containsKey(name))
+                node.setIn_degree(nodeIn.get(name));
+            if(nodeOut.containsKey(name))
+                node.setOut_degree(nodeOut.get(name));
 
             // 设置每个node的url的语义信息
             String[][] RegexName = levelDAO.getRegexName();
             for (int j = 0; j < RegexName.length; j++) {
                 Matcher m = Pattern.compile(RegexName[j][0]).matcher(node.getUrl());
-                while (m.find()) {
-                    node.setSemantics(RegexName[j][1]);  //
+                if(m.matches()) {
+                    node.setSemantics(RegexName[j][1]);
+                    break;
                 }
             }
         }
 
         // depth次跑完以后
         // 计算depth为0的节点的入度
-        Map<String, Double> Startout_session = new HashMap<>();
+        Map<String, Double> Startout_session = new HashMap<String, Double>();
         List<DBObject> path0List = pathDAO.getDepth0(startTime, endTime);
-
         // 取得的数据包含 _id(start,session),nums
         for (DBObject obj : path0List) {
             int count = (Integer) obj.get("nums");
             DBObject idObject = (DBObject) obj.get("_id");
             String start_url = (String) idObject.get("P1");
-            //  String session = (String) idObject.get("session");
+            // String session = (String) idObject.get("session");
 
             if (Startout_session.containsKey(start_url)) {
                 double value = Startout_session.get(start_url);
@@ -202,7 +279,6 @@ public class PathService {
             } else
                 Startout_session.put(start_url, Math.log((double) count) + 1);
         }
-
         // 设置start_url的入度
         for (URLNode node : nodes) {
             if (node.getDepth() == 0) {
