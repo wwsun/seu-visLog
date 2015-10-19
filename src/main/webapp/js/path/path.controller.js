@@ -6,7 +6,7 @@ angular.module('vislog.path', ['chart.js'])
         var vm = this;
 
         vm.errorMsg = '';
-        vm.selectedGraph = 'data/2015-07-01.json';
+        vm.selectedGraph = 'data/2015-07-02.json';
 
         vm.clickedNode = {
             labels: ["Through", "Drop-off"],

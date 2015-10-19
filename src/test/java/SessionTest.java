@@ -155,8 +155,8 @@ public class SessionTest extends TestCase {
      */
     public void testUserFlowPath() throws ParseException, IOException {
 
-        final String startDate = "2015-07-02"; // 起始日期
-        final String endDate = "2015-07-03";  // 结束日期
+        final String startDate = "2015-07-03"; // 起始日期
+        final String endDate = "2015-07-04";  // 结束日期
         final Double pathWeight = 100.0; // 路径权重阈值，低于该阈值的路径不显示
         final int graphDepth = 6; // 图的深度
 
