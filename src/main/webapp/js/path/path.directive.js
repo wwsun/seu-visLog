@@ -31,7 +31,7 @@ function pathChart() {
 
         var path = sankey.link();
 
-        var graphFilePath = $attrs.data;
+        var graphFilePath = $scope.data;
 
         d3.json(graphFilePath, callback);
 
